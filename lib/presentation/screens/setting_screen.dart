@@ -28,20 +28,24 @@ class SettingScreen extends HookConsumerWidget {
     const Icon(
       Icons.list_alt,
       size: 30,
+      color: Colors.grey,
     ),
     const Icon(
       Icons.privacy_tip_outlined,
       size: 30,
+      color: Colors.grey,
     ),
     Image.asset(width: 30, height: 30, "assets/images/twitter.png"),
     Image.asset(width: 30, height: 30, "assets/images/instagram.png"),
     const Icon(
       Icons.bookmark_outline,
       size: 30,
+      color: Colors.grey,
     ),
     const Icon(
       Icons.logout,
       size: 30,
+      color: Colors.grey,
     )
   ];
 
