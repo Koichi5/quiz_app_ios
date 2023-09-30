@@ -112,6 +112,7 @@ class AuthRepository implements BaseAuthRepository {
         // final user = userCredential.user;
         user = userCredential.user;
       } on FirebaseAuthException catch (e) {
+        print(e.toString());
         GlobalNavigator.showErrorDialog("Googleでのサインインに失敗しました", "再度お試しください");
         // throw CustomException(message: e.message);
       }
@@ -139,6 +140,7 @@ class AuthRepository implements BaseAuthRepository {
       user = userCredential.user;
       return user;
     } on FirebaseException catch (e) {
+      print(e.toString());
       GlobalNavigator.showErrorDialog("Appleでのサインインに失敗しました", "再度お試しください");
     }
     return null;

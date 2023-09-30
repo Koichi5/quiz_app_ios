@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final timeLimitDangerProvider = StateProvider((ref) => false);
 
+// ignore: must_be_immutable
 class TimeIndicator extends HookConsumerWidget {
   final int duration;
   final int progress;

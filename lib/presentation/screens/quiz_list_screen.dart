@@ -9,6 +9,7 @@ import '../../domain/question/question.dart';
 import '../../domain/quiz/quiz.dart';
 import '../controller/quiz_controller.dart';
 
+// ignore: must_be_immutable
 class QuizListScreen extends HookConsumerWidget {
   QuizListScreen({this.category, this.questionList, this.quizList, Key? key})
       : super(key: key);
