@@ -26,7 +26,7 @@ class QuizEngine {
   bool takeNewQuestion = true;
   DateTime examStartTime = DateTime.now();
   DateTime questionStartTime = DateTime.now();
-  Reader reader;
+  WidgetRef ref;
 
   Category? category;
   final List<Question> questionList;
@@ -38,7 +38,7 @@ class QuizEngine {
   OnQuizStop onStop;
 
   QuizEngine(
-      {required this.reader,
+      {required this.ref,
       this.category,
       required this.questionList,
       required this.onNext,
@@ -67,7 +67,7 @@ class QuizEngine {
             questionStartTime = DateTime.now();
             onNext(question);
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              reader(optionGestureProvider.notifier).state = false;
+              ref.watch(optionGestureProvider.notifier).state = false;
             });
           }
         }
@@ -92,7 +92,7 @@ class QuizEngine {
               var takenTime = examStartTime.difference(DateTime.now());
               onCompleted(context, category, totalCorrect, takenTime,
                   takenQuestions, questionAnswer.values.toList());
-              reader(currentQuestionIndexProvider.notifier).state = 1;
+              ref.watch(currentQuestionIndexProvider.notifier).state = 1;
             } else {
               takeNewQuestion = true;
             }
@@ -111,7 +111,7 @@ class QuizEngine {
           var takenTime = examStartTime.difference(DateTime.now());
           onCompleted(context, category, totalCorrect, takenTime,
               takenQuestions, questionAnswer.values.toList());
-          reader(currentQuestionIndexProvider.notifier).state = 1;
+          ref.watch(currentQuestionIndexProvider.notifier).state = 1;
         }
         await Future.delayed(const Duration(milliseconds: 500));
       } while (question != null && isRunning);
@@ -133,7 +133,7 @@ class QuizEngine {
     var question = questionList[questionIndex];
     if (answer == null) {
       questionAnswer[questionIndex] = false;
-      reader(currentQuestionIndexProvider.notifier).state++;
+      ref.watch(currentQuestionIndexProvider.notifier).state++;
       return questionAnswer;
     } else {
       questionAnswer[questionIndex] = question.options[answer].isCorrect;

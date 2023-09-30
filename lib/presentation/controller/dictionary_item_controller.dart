@@ -12,14 +12,14 @@ final dictionaryItemControllerProvider = StateNotifierProvider
     .autoDispose<DictionaryItemController, AsyncValue<List<DictionaryItem>>>(
         (ref) {
       final user = ref.watch(authControllerProvider);
-      return DictionaryItemController(ref.read, user?.uid);
+      return DictionaryItemController(ref, user?.uid);
     });
 
 class DictionaryItemController extends StateNotifier<AsyncValue<List<DictionaryItem>>> {
-  final Reader _reader;
+  final Ref ref;
   final String? _userId;
 
-  DictionaryItemController(this._reader, this._userId)
+  DictionaryItemController(this.ref, this._userId)
       : super(const AsyncValue.loading()) {
     if (_userId != null) {
       retrieveDictionaryItemList();
@@ -28,7 +28,7 @@ class DictionaryItemController extends StateNotifier<AsyncValue<List<DictionaryI
 
   Future<void> retrieveDictionaryItemList() async {
     try {
-      final dictionaryItemList = await _reader(dictionaryItemRepositoryProvider)
+      final dictionaryItemList = await ref.watch(dictionaryItemRepositoryProvider)
           .retrieveDictionaryItem();
       if (mounted) {
         state = AsyncValue.data(dictionaryItemList);

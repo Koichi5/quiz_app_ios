@@ -15,14 +15,14 @@ final quizHistoryControllerProvider =
     StateNotifierProvider<QuizHistoryController, AsyncValue<List<QuizHistory>>>(
         (ref) {
   final user = ref.watch(authControllerProvider);
-  return QuizHistoryController(ref.read, user?.uid);
+  return QuizHistoryController(ref, user?.uid);
 });
 
 class QuizHistoryController
     extends StateNotifier<AsyncValue<List<QuizHistory>>> {
-  final Reader _reader;
+  final Ref ref;
   final String? _userId;
-  QuizHistoryController(this._reader, this._userId)
+  QuizHistoryController(this.ref, this._userId)
       : super(const AsyncValue.loading()) {
     if (_userId != null) {
       retrieveQuizHistoryList();
@@ -31,7 +31,7 @@ class QuizHistoryController
 
   Future<List<QuizHistory>> retrieveQuizHistoryList() async {
     try {
-      final quizHistoryList = await _reader(quizHistoryRepositoryProvider)
+      final quizHistoryList = await ref.watch(quizHistoryRepositoryProvider)
           .retrieveQuizHistoryList();
       if (mounted) {
         state = AsyncValue.data(quizHistoryList);
@@ -71,7 +71,7 @@ class QuizHistoryController
       answerIsCorrectList: answerIsCorrectList,
       questionList: questionList,
     );
-    final quizHistoryDocRef = await _reader(quizHistoryRepositoryProvider)
+    final quizHistoryDocRef = await ref.watch(quizHistoryRepositoryProvider)
         .addQuizHistory(quizHistory: quizHistory, user: user);
     state.whenData((categoryList) => state = AsyncValue.data(
         categoryList..add(quizHistory.copyWith(id: quizHistoryDocRef))));

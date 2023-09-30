@@ -15,18 +15,18 @@ abstract class BaseOriginalQuestionRepository {
 }
 
 final originalQuestionRepositoryProvider = Provider<OriginalQuestionRepository>(
-    (ref) => OriginalQuestionRepository(ref.read));
+    (ref) => OriginalQuestionRepository(ref));
 
 class OriginalQuestionRepository implements BaseOriginalQuestionRepository {
-  final Reader _reader;
+  final Ref ref;
 
-  OriginalQuestionRepository(this._reader);
+  OriginalQuestionRepository(this.ref);
 
   @override
   Future<Question> addOriginalQuestion(
       {required String userId, required Question question}) async {
     try {
-      final originalQuestionRef = _reader(firebaseFirestoreProvider)
+      final originalQuestionRef = ref.watch(firebaseFirestoreProvider)
           .collection("user")
           .doc(userId)
           .collection("originalQuestion");
@@ -60,7 +60,7 @@ class OriginalQuestionRepository implements BaseOriginalQuestionRepository {
   Future<List<Question>> retrieveOriginalQuestionList(
       {required String userId}) async {
     try {
-      final snap = await _reader(firebaseFirestoreProvider)
+      final snap = await ref.watch(firebaseFirestoreProvider)
           .collection("user")
           .doc(userId)
           .collection("originalQuestion")
@@ -75,7 +75,7 @@ class OriginalQuestionRepository implements BaseOriginalQuestionRepository {
   Future<void> deleteOriginalQuestion(
       {required String userId, required String originalQuestionDocRef}) async {
     try {
-      await _reader(firebaseFirestoreProvider)
+      await ref.watch(firebaseFirestoreProvider)
           .collection("user")
           .doc(userId)
           .collection("originalQuestion")
@@ -90,7 +90,7 @@ class OriginalQuestionRepository implements BaseOriginalQuestionRepository {
   // Future<Question> retrieveOriginalQuestionById(
   //     {required String userId, required String originalQuestionDocRef}) async {
   //   try {
-  //     final snap = await _reader(firebaseFirestoreProvider)
+  //     final snap = await ref.watch(firebaseFirestoreProvider)
   //         .collection("user")
   //         .doc(userId)
   //         .collection("originalQuestion")

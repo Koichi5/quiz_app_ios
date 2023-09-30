@@ -14,12 +14,12 @@ abstract class BaseDictionaryItemRepository {
 }
 
 final dictionaryItemRepositoryProvider = Provider<DictionaryItemRepository>(
-    (ref) => DictionaryItemRepository(ref.read));
+    (ref) => DictionaryItemRepository(ref));
 
 class DictionaryItemRepository implements BaseDictionaryItemRepository {
-  final Reader _read;
+  final Ref ref;
 
-  DictionaryItemRepository(this._read);
+  DictionaryItemRepository(this.ref);
 
   @override
   Future addDictionaryItem({
@@ -29,7 +29,7 @@ class DictionaryItemRepository implements BaseDictionaryItemRepository {
   }) async {
     try {
       for (int i = 0; i < dictionaryWordList.length; i++) {
-        await _read(firebaseFirestoreProvider).collection("dictionary").add({
+        await ref.watch(firebaseFirestoreProvider).collection("dictionary").add({
           "dictionaryWord": dictionaryWordList[i],
           "dictionaryDescription": dictionaryDescriptionList[i],
           "dictionaryUrl": dictionaryWordUrlList[i],
@@ -44,7 +44,7 @@ class DictionaryItemRepository implements BaseDictionaryItemRepository {
   Future<List<DictionaryItem>> retrieveDictionaryItem() async {
     try {
       final snap =
-          await _read(firebaseFirestoreProvider).collection("dictionary").orderBy("dictionaryWord").get();
+          await ref.watch(firebaseFirestoreProvider).collection("dictionary").orderBy("dictionaryWord").get();
       return snap.docs.map((doc) => DictionaryItem.fromDocument(doc)).toList();
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);

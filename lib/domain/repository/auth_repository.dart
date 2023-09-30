@@ -20,24 +20,23 @@ abstract class BaseAuthRepository {
 }
 
 final authRepositoryProvider =
-    Provider<AuthRepository>((ref) => AuthRepository(ref.read));
+    Provider<AuthRepository>((ref) => AuthRepository(ref));
 
 class AuthRepository implements BaseAuthRepository {
-  //_read to _reader
-  final Reader _reader;
+  final Ref ref;
 
-  const AuthRepository(this._reader);
+  const AuthRepository(this.ref);
 
   @override
   Stream<User?> get authStateChanges =>
-      _reader(firebaseAuthProvider).authStateChanges();
+      ref.watch(firebaseAuthProvider).authStateChanges();
 
   @override
   Future<UserCredential?> createUserWithEmailAndPassword(
       String email, String password) async {
     try {
       final result =
-          await _reader(firebaseAuthProvider).createUserWithEmailAndPassword(
+          await ref.watch(firebaseAuthProvider).createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -63,7 +62,7 @@ class AuthRepository implements BaseAuthRepository {
       String email, String password) async {
     User? user;
     try {
-      user = (await _reader(firebaseAuthProvider)
+      user = (await ref.watch(firebaseAuthProvider)
               .signInWithEmailAndPassword(email: email, password: password))
           .user;
     } on FirebaseAuthException catch (e) {
@@ -105,7 +104,7 @@ class AuthRepository implements BaseAuthRepository {
 
       try {
         final UserCredential userCredential =
-            await _reader(firebaseAuthProvider)
+            await ref.watch(firebaseAuthProvider)
                 .signInWithCredential(credential);
 
         //User を返す場合
@@ -149,7 +148,7 @@ class AuthRepository implements BaseAuthRepository {
   @override
   User? getCurrentUser() {
     try {
-      final user = _reader(firebaseAuthProvider).currentUser;
+      final user = ref.watch(firebaseAuthProvider).currentUser;
       return user;
     } on FirebaseAuthException catch (e) {
       throw CustomException(message: e.message);
@@ -163,7 +162,7 @@ class AuthRepository implements BaseAuthRepository {
       if (!kIsWeb) {
         await googleSignIn.signOut();
       }
-      await _reader(firebaseAuthProvider).signOut();
+      await ref.watch(firebaseAuthProvider).signOut();
     } on FirebaseAuthException catch (e) {
       throw CustomException(message: e.message);
     }

@@ -29,13 +29,13 @@ class QuizScreen extends StatefulHookConsumerWidget {
   Category? category;
   Quiz? quiz;
   final List<Question> questionList;
-  final Reader reader;
+  final WidgetRef ref;
 
   QuizScreen(
       {this.category,
       this.quiz,
       required this.questionList,
-      required this.reader,
+      required this.ref,
       Key? key})
       : super(key: key);
 
@@ -46,7 +46,7 @@ class QuizScreen extends StatefulHookConsumerWidget {
           category: category,
           quiz: quiz,
           questionList: questionList,
-          reader: reader);
+          stateRef: ref);
 }
 
 class _QuizScreenState extends ConsumerState<QuizScreen>
@@ -61,16 +61,16 @@ class _QuizScreenState extends ConsumerState<QuizScreen>
   Question? question;
   Timer? progressTimer;
   AppLifecycleState? appState;
-  Reader reader;
+  WidgetRef stateRef;
 
   _QuizScreenState({
-    required this.reader,
+    required this.stateRef,
     required this.category,
     required this.quiz,
     required this.questionList,
   }) {
     engine = QuizEngine(
-        reader: reader,
+        ref: stateRef,
         category: category,
         questionList: questionList,
         onNext: onNextQuestion,
@@ -134,7 +134,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen>
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Text(
-                    "${reader(currentQuestionIndexProvider)} / ${questionList.length}"),
+                    "${ref.watch(currentQuestionIndexProvider)} / ${questionList.length}"),
               ),
               Align(
                 alignment: Alignment.centerLeft,
@@ -188,7 +188,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen>
                               progressTimer!.cancel();
                             }
                             engine.next();
-                            reader(currentQuestionIndexProvider.notifier)
+                            ref.watch(currentQuestionIndexProvider.notifier)
                                 .state++;
                           },
                         );

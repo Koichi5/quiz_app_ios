@@ -21,7 +21,7 @@ class OriginalSegmentedButton extends HookConsumerWidget {
           borderColor: Theme.of(context).colorScheme.tertiary,
           borderRadius: 50,
           verticalOffset: 8.0,
-          onSegmentChosen: (int index) {
+          onSegmentTapped: (int index) {
             ref.watch(currentSelectedIndexProvider.notifier).state = index;
           },
         ),

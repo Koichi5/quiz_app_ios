@@ -64,7 +64,7 @@ class HomeScreen extends HookConsumerWidget {
                                   title: const Text("苦手問題"),
                                 ),
                                 body: QuizScreen(
-                                  reader: ref.watch,
+                                  ref: ref,
                                   questionList: weakQuestionList,
                                 ),
                               ),

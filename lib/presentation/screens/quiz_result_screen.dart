@@ -125,7 +125,7 @@ class QuizResultScreen extends HookConsumerWidget {
                       ),
                       body: QuizScreen(
                         questionList: result.questionList,
-                        reader: ref.watch,
+                        ref: ref,
                       ),
                     ),
                   ),

@@ -50,7 +50,7 @@ class QuizListScreen extends HookConsumerWidget {
                                   child: Text("問題が用意されていません"),
                                 )
                               : QuizScreen(
-                                  reader: ref.watch,
+                                  ref: ref,
                                   category: category,
                                   quiz: quizzes.first,
                                   questionList: questions),
@@ -121,7 +121,7 @@ class QuizListScreen extends HookConsumerWidget {
           ),
         ),
         body: QuizScreen(
-          reader: ref.watch,
+          ref: ref,
           questionList: questionList!,
         ),
       );

@@ -156,7 +156,7 @@ class OriginalQuestionListScreen extends HookConsumerWidget {
                           title: const Text("オリジナル問題"),
                         ),
                         body: QuizScreen(
-                            reader: ref.watch,
+                            ref: ref,
                             questionList: originalQuestionState.asData!.value),
                       ),
                     ),

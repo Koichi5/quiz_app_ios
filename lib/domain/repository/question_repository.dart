@@ -14,17 +14,17 @@ abstract class BaseQuestionRepository {
 }
 
 final questionRepositoryProvider =
-    Provider<QuestionRepository>((ref) => QuestionRepository(ref.read));
+    Provider<QuestionRepository>((ref) => QuestionRepository(ref));
 
 class QuestionRepository implements BaseQuestionRepository {
-  final Reader _reader;
-  QuestionRepository(this._reader);
+  final Ref ref;
+  QuestionRepository(this.ref);
 
   @override
   Future<Question> addQuestion(
       {required Quiz quiz, required Question question}) async {
     try {
-      final questionRef = _reader(firebaseFirestoreProvider)
+      final questionRef = ref.watch(firebaseFirestoreProvider)
           .collection("category")
           .doc(quiz.categoryDocRef)
           .collection("quiz")
@@ -71,7 +71,7 @@ class QuestionRepository implements BaseQuestionRepository {
       // await questionRef.doc(quiz.questionDocRef).collection("options")
       //     .add(Option.empty().toDocument());
 
-      // await _reader(firebaseFirestoreProvider)
+      // await ref.watch(firebaseFirestoreProvider)
       //     .collection("category")
       //     .doc(quiz.categoryDocRef)
       //     .collection("quiz")
@@ -98,10 +98,10 @@ class QuestionRepository implements BaseQuestionRepository {
   //
   // @override
   // Future<Question> addWeakQuestion({required Question question}) async {
-  //   final User? currentUser = _reader(firebaseAuthProvider).currentUser;
+  //   final User? currentUser = ref.watch(firebaseAuthProvider).currentUser;
   //   try {
   //     print(question);
-  //     final questionRef = _reader(firebaseFirestoreProvider)
+  //     final questionRef = ref.watch(firebaseFirestoreProvider)
   //         .collection("user")
   //         .doc(currentUser!.uid)
   //         .collection("weakQuestion");
@@ -134,7 +134,7 @@ class QuestionRepository implements BaseQuestionRepository {
   @override
   Future<List<Question>> retrieveQuestionList({required Quiz quiz}) async {
     try {
-      final snap = await _reader(firebaseFirestoreProvider)
+      final snap = await ref.watch(firebaseFirestoreProvider)
           .collection("category")
           .doc(quiz.categoryDocRef)
           .collection("quiz")
@@ -150,8 +150,8 @@ class QuestionRepository implements BaseQuestionRepository {
   // @override
   // Future<List<Question>> retrieveWeakQuestionList() async {
   //   try {
-  //     final User? currentUser = _reader(firebaseAuthProvider).currentUser;
-  //     final snap = await _reader(firebaseFirestoreProvider)
+  //     final User? currentUser = ref.watch(firebaseAuthProvider).currentUser;
+  //     final snap = await ref.watch(firebaseFirestoreProvider)
   //         .collection("user")
   //         .doc(currentUser!.uid)
   //         .collection("weakQuestion")
@@ -164,9 +164,9 @@ class QuestionRepository implements BaseQuestionRepository {
   //
   // @override
   // Future<void> deleteWeakQuestion({required String weakQuestionDocRef}) async {
-  //   final User? currentUser = _reader(firebaseAuthProvider).currentUser;
+  //   final User? currentUser = ref.watch(firebaseAuthProvider).currentUser;
   //   try {
-  //     await _reader(firebaseFirestoreProvider)
+  //     await ref.watch(firebaseFirestoreProvider)
   //         .collection('user')
   //         .doc(currentUser!.uid)
   //         .collection("weakQuestion")
@@ -179,12 +179,12 @@ class QuestionRepository implements BaseQuestionRepository {
   // @override
   // Future<List<Question>> retrieveWeakQuestionList() async {
   //   try {
-  //     final weakQuestionList = await _reader(weakQuestionRepositoryProvider)
+  //     final weakQuestionList = await ref.watch(weakQuestionRepositoryProvider)
   //         .retrieveWeakQuestionList();
   //     final List<Question> questionList = [];
   //     for (int i = 0; i < weakQuestionList.length; i++) {
   //       final weakQuestion = weakQuestionList[i];
-  //       final snap = await _reader(firebaseFirestoreProvider)
+  //       final snap = await ref.watch(firebaseFirestoreProvider)
   //           .collection("category")
   //           .doc(weakQuestion.categoryDocRef)
   //           .collection("quiz")
@@ -209,18 +209,18 @@ abstract class BaseWeakQuestionRepository {
 }
 
 final weakQuestionRepositoryProvider =
-Provider<WeakQuestionRepository>((ref) => WeakQuestionRepository(ref.read));
+Provider<WeakQuestionRepository>((ref) => WeakQuestionRepository(ref));
 
 class WeakQuestionRepository implements BaseWeakQuestionRepository {
-  final Reader _reader;
-  WeakQuestionRepository(this._reader);
+  final Ref ref;
+  WeakQuestionRepository(this.ref);
 
   @override
   Future<Question> addWeakQuestion({required Question question}) async {
-    final User? currentUser = _reader(firebaseAuthProvider).currentUser;
+    final User? currentUser = ref.watch(firebaseAuthProvider).currentUser;
     try {
       print(question);
-      final questionRef = _reader(firebaseFirestoreProvider)
+      final questionRef = ref.watch(firebaseFirestoreProvider)
           .collection("user")
           .doc(currentUser!.uid)
           .collection("weakQuestion");
@@ -253,8 +253,8 @@ class WeakQuestionRepository implements BaseWeakQuestionRepository {
   @override
   Future<List<Question>> retrieveWeakQuestionList() async {
     try {
-      final User? currentUser = _reader(firebaseAuthProvider).currentUser;
-      final snap = await _reader(firebaseFirestoreProvider)
+      final User? currentUser = ref.watch(firebaseAuthProvider).currentUser;
+      final snap = await ref.watch(firebaseFirestoreProvider)
           .collection("user")
           .doc(currentUser!.uid)
           .collection("weakQuestion")
@@ -267,9 +267,9 @@ class WeakQuestionRepository implements BaseWeakQuestionRepository {
 
   @override
   Future<void> deleteWeakQuestion({required String weakQuestionDocRef}) async {
-    final User? currentUser = _reader(firebaseAuthProvider).currentUser;
+    final User? currentUser = ref.watch(firebaseAuthProvider).currentUser;
     try {
-      await _reader(firebaseFirestoreProvider)
+      await ref.watch(firebaseFirestoreProvider)
           .collection('user')
           .doc(currentUser!.uid)
           .collection("weakQuestion")

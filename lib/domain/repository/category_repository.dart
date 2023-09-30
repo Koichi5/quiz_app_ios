@@ -16,18 +16,18 @@ abstract class BaseCategoryRepository {
 }
 
 final categoryRepositoryProvider =
-    Provider<CategoryRepository>((ref) => CategoryRepository(ref.read));
+    Provider<CategoryRepository>((ref) => CategoryRepository(ref));
 
 class CategoryRepository implements BaseCategoryRepository {
-  final Reader _reader;
+  final Ref ref;
 
-  CategoryRepository(this._reader);
+  CategoryRepository(this.ref);
 
   @override
   Future<Category> addCategory({required Category category}) async {
     try {
       final categoryRef =
-          _reader(firebaseFirestoreProvider).collection("category");
+          ref.watch(firebaseFirestoreProvider).collection("category");
 
       final categoryDocRef = categoryRef.doc().id;
 
@@ -60,7 +60,7 @@ class CategoryRepository implements BaseCategoryRepository {
   @override
   Future<List<Category>> retrieveCategoryList() async {
     try {
-      final snap = await _reader(firebaseFirestoreProvider)
+      final snap = await ref.watch(firebaseFirestoreProvider)
           .collection("category")
           .orderBy("createdAt")
           .get();
@@ -74,7 +74,7 @@ class CategoryRepository implements BaseCategoryRepository {
   Future<Category> retrieveCategoryById(
       {required String quizCategoryDocRef}) async {
     try {
-      final snap = await _reader(firebaseFirestoreProvider)
+      final snap = await ref.watch(firebaseFirestoreProvider)
           .collection("category")
           .doc(quizCategoryDocRef)
           .get();
@@ -91,7 +91,7 @@ class CategoryRepository implements BaseCategoryRepository {
       required String categoryDocRef}) async {
     try {
       final categoryRef =
-          _reader(firebaseFirestoreProvider).collection("category");
+          ref.watch(firebaseFirestoreProvider).collection("category");
 
       await categoryRef
           .doc(categoryDocRef)

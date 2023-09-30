@@ -55,14 +55,14 @@ class CategoryCard extends HookConsumerWidget {
               bottom: 20,
               left: 20,
               child: BorderedText(
-                strokeWidth: 1.2,
+                strokeWidth: 2,
                 strokeColor: Colors.black,
                 child: Text(
                   category.name,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
-                    fontSize: 20,
+                    fontSize: 22,
                   ),
                 ),
               ),

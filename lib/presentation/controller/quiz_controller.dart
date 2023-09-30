@@ -13,15 +13,15 @@ final quizControllerProvider = StateNotifierProvider.family
     .autoDispose<QuizController, AsyncValue<List<Quiz>>, Category>(
         (ref, category) {
   final user = ref.watch(authControllerProvider);
-  return QuizController(ref.read, user?.uid, category);
+  return QuizController(ref, user?.uid, category);
 });
 
 class QuizController extends StateNotifier<AsyncValue<List<Quiz>>> {
-  final Reader _reader;
+  final Ref ref;
   final String? _userId;
   final Category category;
 
-  QuizController(this._reader, this._userId, this.category)
+  QuizController(this.ref, this._userId, this.category)
       : super(const AsyncValue.loading()) {
     if (_userId != null) {
       retrieveQuiz(category: category);
@@ -30,7 +30,7 @@ class QuizController extends StateNotifier<AsyncValue<List<Quiz>>> {
 
   Future<List<Quiz>> retrieveQuiz({required Category category}) async {
     try {
-      final quiz = await _reader(quizRepositoryProvider)
+      final quiz = await ref.watch(quizRepositoryProvider)
           .retrieveQuiz(category: category);
       if (mounted) {
         state = AsyncValue.data(quiz);
@@ -60,7 +60,7 @@ class QuizController extends StateNotifier<AsyncValue<List<Quiz>>> {
             "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png",
         categoryId: categoryId,
         questions: []);
-    final quizWithDocRef = await _reader(quizRepositoryProvider)
+    final quizWithDocRef = await ref.watch(quizRepositoryProvider)
         .addQuiz(category: category, quiz: quiz);
     state.whenData((quizList) =>
         state = AsyncValue.data(quizList..add(quiz.copyWith(id: quizWithDocRef.quizDocRef))));

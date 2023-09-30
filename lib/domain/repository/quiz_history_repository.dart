@@ -15,18 +15,18 @@ abstract class BaseQuizHistoryRepository {
 }
 
 final quizHistoryRepositoryProvider =
-    Provider<QuizHistoryRepository>((ref) => QuizHistoryRepository(ref.read));
+    Provider<QuizHistoryRepository>((ref) => QuizHistoryRepository(ref));
 
 class QuizHistoryRepository implements BaseQuizHistoryRepository {
-  final Reader _reader;
+  final Ref ref;
 
-  QuizHistoryRepository(this._reader);
+  QuizHistoryRepository(this.ref);
 
   @override
   Future<String> addQuizHistory(
       {required User user, required QuizHistory quizHistory}) async {
     try {
-      final quizHistoryRef = _reader(firebaseFirestoreProvider)
+      final quizHistoryRef = ref.watch(firebaseFirestoreProvider)
           .collection("user")
           .doc(user.uid)
           .collection("quizHistory");
@@ -60,9 +60,9 @@ class QuizHistoryRepository implements BaseQuizHistoryRepository {
   }
 
   Future<List<String?>> retrieveUserCompletedCategoryList() async {
-    final User? currentUser = _reader(firebaseAuthProvider).currentUser;
+    final User? currentUser = ref.watch(firebaseAuthProvider).currentUser;
     try {
-      final snap = _reader(firebaseFirestoreProvider)
+      final snap = ref.watch(firebaseFirestoreProvider)
           .collection("user")
           .doc(currentUser!.uid)
           .get();
@@ -75,10 +75,10 @@ class QuizHistoryRepository implements BaseQuizHistoryRepository {
 
   @override
   Future<List<QuizHistory>> retrieveQuizHistoryList() async {
-    final User? currentUser = _reader(firebaseAuthProvider).currentUser;
+    final User? currentUser = ref.watch(firebaseAuthProvider).currentUser;
     const int quizHistoryLimitCount = 10;
     try {
-      final snap = await _reader(firebaseFirestoreProvider)
+      final snap = await ref.watch(firebaseFirestoreProvider)
           .collection("user")
           .doc(currentUser!.uid)
           .collection("quizHistory")
@@ -93,9 +93,9 @@ class QuizHistoryRepository implements BaseQuizHistoryRepository {
 
   @override
   Future<List<String>> retrieveUserCompletedCategoryNameList() async {
-    final User? currentUser = _reader(firebaseAuthProvider).currentUser;
+    final User? currentUser = ref.watch(firebaseAuthProvider).currentUser;
     try {
-      final snap = await _reader(firebaseFirestoreProvider)
+      final snap = await ref.watch(firebaseFirestoreProvider)
           .collection("user")
           .doc(currentUser!.uid)
           .get();

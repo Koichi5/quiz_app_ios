@@ -13,16 +13,16 @@ final originalQuestionExceptionProvider =
 
 final originalQuestionControllerProvider = StateNotifierProvider.autoDispose<
     OriginalQuestionController, AsyncValue<List<Question>>>((ref) {
-  final user = ref.watch(authControllerProvider);
-  return OriginalQuestionController(ref.read, user?.uid);
+  final user = ref.read(authControllerProvider);
+  return OriginalQuestionController(ref, user?.uid);
 });
 
 class OriginalQuestionController
     extends StateNotifier<AsyncValue<List<Question>>> {
-  final Reader _reader;
+  final Ref ref;
   final String? _userId;
 
-  OriginalQuestionController(this._reader, this._userId)
+  OriginalQuestionController(this.ref, this._userId)
       : super(const AsyncValue.loading()) {
     if (_userId != null) {
       retrieveOriginalQuestionList();
@@ -32,7 +32,7 @@ class OriginalQuestionController
   Future<void> retrieveOriginalQuestionList() async {
     try {
       final originalQuestionList =
-          await _reader(originalQuestionRepositoryProvider)
+          await ref.read(originalQuestionRepositoryProvider)
               .retrieveOriginalQuestionList(userId: _userId!);
       if (mounted) {
         state = AsyncValue.data(originalQuestionList);
@@ -55,29 +55,29 @@ class OriginalQuestionController
       optionsShuffled: optionsShuffled,
       options: [
         Option(
-            text: _reader(firstOptionTextControllerProvider).text,
-            isCorrect: _reader(firstOptionIsCorrectProvider),
+            text: ref.read(firstOptionTextControllerProvider).text,
+            isCorrect: ref.read(firstOptionIsCorrectProvider),
             isSelected: false),
         Option(
-            text: _reader(secondOptionTextControllerProvider).text,
-            isCorrect: _reader(secondOptionIsCorrectProvider),
+            text: ref.read(secondOptionTextControllerProvider).text,
+            isCorrect: ref.read(secondOptionIsCorrectProvider),
             isSelected: false),
         Option(
-            text: _reader(thirdOptionTextControllerProvider).text,
-            isCorrect: _reader(thirdOptionIsCorrectProvider),
+            text: ref.read(thirdOptionTextControllerProvider).text,
+            isCorrect: ref.read(thirdOptionIsCorrectProvider),
             isSelected: false),
         Option(
-            text: _reader(fourthOptionTextControllerProvider).text,
-            isCorrect: _reader(fourthOptionIsCorrectProvider),
+            text: ref.read(fourthOptionTextControllerProvider).text,
+            isCorrect: ref.read(fourthOptionIsCorrectProvider),
             isSelected: false),
       ],
     );
-    if (_reader(firstOptionIsCorrectProvider) ||
-        _reader(secondOptionIsCorrectProvider) ||
-        _reader(thirdOptionIsCorrectProvider) ||
-        _reader(fourthOptionIsCorrectProvider)) {
+    if (ref.read(firstOptionIsCorrectProvider) ||
+        ref.read(secondOptionIsCorrectProvider) ||
+        ref.read(thirdOptionIsCorrectProvider) ||
+        ref.read(fourthOptionIsCorrectProvider)) {
       final originalQuestionWithDocRef =
-          await _reader(originalQuestionRepositoryProvider).addOriginalQuestion(
+          await ref.read(originalQuestionRepositoryProvider).addOriginalQuestion(
               userId: _userId!, question: originalQuestion);
       state.whenData((originalQuestionList) => state = AsyncValue.data(
           originalQuestionList
@@ -92,7 +92,7 @@ class OriginalQuestionController
   Future<void> deleteOriginalQuestion(
       {required String originalQuestionDocRef}) async {
     try {
-      await _reader(originalQuestionRepositoryProvider).deleteOriginalQuestion(
+      await ref.read(originalQuestionRepositoryProvider).deleteOriginalQuestion(
           userId: _userId!, originalQuestionDocRef: originalQuestionDocRef);
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
