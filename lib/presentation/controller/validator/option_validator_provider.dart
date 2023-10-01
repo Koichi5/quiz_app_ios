@@ -1,8 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quiz_app/domain/entity/option_form_entity/option_form_entity.dart';
 import 'package:quiz_app/domain/field/field.dart';
-
-import '../../../domain/entity/option_form_entity/option_form_entity.dart';
-import '../../../domain/option_form_state/option_form_state.dart';
+import 'package:quiz_app/domain/option_form_state/option_form_state.dart';
 
 final optionValidatorProvider =
 StateNotifierProvider<OptionValidatorProvider, OptionFormState>(

@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../entity/option_form_entity/option_form_entity.dart';
+import 'package:quiz_app/domain/entity/option_form_entity/option_form_entity.dart';
 
 part 'option_form_state.freezed.dart';
 

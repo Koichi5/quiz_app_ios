@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quiz_app/domain/category/category.dart';
+import 'package:quiz_app/domain/repository/category_repository.dart';
 
 import 'package:quiz_app/general/custom_exception.dart';
 import 'package:quiz_app/presentation/controller/auth_controller.dart';
-
-import '../../domain/category/category.dart';
-import '../../domain/repository/category_repository.dart';
 
 final categoryExceptionProvider = StateProvider<CustomException?>((_) => null);
 

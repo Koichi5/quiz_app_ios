@@ -1,10 +1,9 @@
 import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quiz_app/domain/category/category.dart';
 import 'package:quiz_app/domain/repository/question_repository.dart';
 import 'package:quiz_app/presentation/screens/category_detail_screen.dart';
-
-import '../../domain/category/category.dart';
 
 class CategoryCard extends HookConsumerWidget {
   const CategoryCard({required this.category, Key? key}) : super(key: key);

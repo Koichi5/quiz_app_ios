@@ -1,8 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quiz_app/domain/category_form_state/category_form_state.dart';
+import 'package:quiz_app/domain/entity/category_form_entity/category_form_entity.dart';
 import 'package:quiz_app/domain/field/field.dart';
-
-import '../../../domain/category_form_state/category_form_state.dart';
-import '../../../domain/entity/category_form_entity/category_form_entity.dart';
 
 final categoryValidatorProvider =
     StateNotifierProvider<CategoryValidatorProvider, CategoryFormState>(

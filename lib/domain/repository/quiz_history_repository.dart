@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../general/custom_exception.dart';
-import '../../general/general_provider.dart';
-import '../quiz_history/quiz_history.dart';
+import 'package:quiz_app/domain/quiz_history/quiz_history.dart';
+import 'package:quiz_app/general/custom_exception.dart';
+import 'package:quiz_app/general/general_provider.dart';
 
 final userCompletedCategoryListProvider = StateProvider((ref) => []);
 

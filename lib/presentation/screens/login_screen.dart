@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quiz_app/presentation/controller/login_text_controller.dart';
+import 'package:quiz_app/presentation/controller/validator/login_validator_provider.dart';
 import 'package:quiz_app/presentation/screens/signup_screen.dart';
+import 'package:quiz_app/presentation/widgets/apple_signin_button.dart';
+import 'package:quiz_app/presentation/widgets/custom_text_field.dart';
+import 'package:quiz_app/presentation/widgets/google_signin_button.dart';
 import 'package:quiz_app/presentation/widgets/login_button.dart';
-
-import '../controller/login_text_controller.dart';
-import '../controller/validator/login_validator_provider.dart';
-import '../widgets/apple_signin_button.dart';
-import '../widgets/custom_text_field.dart';
-import '../widgets/google_signin_button.dart';
 
 class LoginScreen extends HookConsumerWidget {
   const LoginScreen({Key? key}) : super(key: key);

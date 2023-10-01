@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottie/lottie.dart';
+import 'package:quiz_app/domain/dto/quiz_result.dart';
+import 'package:quiz_app/domain/question/question.dart';
 import 'package:quiz_app/presentation/screens/quiz_screen.dart';
 import 'package:quiz_app/presentation/widgets/result_question_list_card.dart';
-
-import '../../domain/dto/quiz_result.dart';
-import '../../domain/question/question.dart';
 import 'home_screen.dart';
 
 class QuizResultScreen extends HookConsumerWidget {
@@ -14,7 +13,7 @@ class QuizResultScreen extends HookConsumerWidget {
   final List<int> takenQuestions;
   final List<bool> answerIsCorrectList;
   final List<Question> questionList;
-  QuizResultScreen(
+  const QuizResultScreen(
       {required this.result,
       required this.takenQuestions,
       required this.answerIsCorrectList,

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../option/option.dart';
+import 'package:quiz_app/domain/option/option.dart';
 
 part 'question.freezed.dart';
 part 'question.g.dart';

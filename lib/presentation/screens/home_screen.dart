@@ -3,12 +3,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quiz_app/presentation/controller/question_controller.dart';
 import 'package:quiz_app/presentation/screens/category_list_screen.dart';
+import 'package:quiz_app/presentation/screens/original_question_list_screen.dart';
 import 'package:quiz_app/presentation/screens/quiz_screen.dart';
 import 'package:quiz_app/presentation/screens/review_screen.dart';
 import 'package:quiz_app/presentation/widgets/bottom_nav_bar.dart';
-
-import '../widgets/segmented_button.dart';
-import 'original_question_list_screen.dart';
+import 'package:quiz_app/presentation/widgets/segmented_button.dart';
 import 'setting_screen.dart';
 
 final List homePageList = [

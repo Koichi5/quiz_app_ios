@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quiz_app/domain/quiz/quiz.dart';
 import 'package:quiz_app/presentation/controller/option_text_controller.dart';
+import 'package:quiz_app/presentation/controller/question_text_controller.dart';
+import 'package:quiz_app/presentation/controller/validator/option_validator_provider.dart';
+import 'package:quiz_app/presentation/controller/validator/question_validator_provider.dart';
+import 'package:quiz_app/presentation/widgets/custom_text_field.dart';
 import 'package:quiz_app/presentation/widgets/question_set_button.dart';
-
-import '../../domain/quiz/quiz.dart';
-import '../controller/question_text_controller.dart';
-import '../controller/validator/option_validator_provider.dart';
-import '../controller/validator/question_validator_provider.dart';
-import '../widgets/custom_text_field.dart';
 
 class QuestionSetScreen extends HookConsumerWidget {
   const QuestionSetScreen({required this.quiz, Key? key}) : super(key: key);

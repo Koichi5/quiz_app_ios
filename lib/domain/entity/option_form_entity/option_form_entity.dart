@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../field/field.dart';
+import 'package:quiz_app/domain/field/field.dart';
 
 part 'option_form_entity.freezed.dart';
 

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quiz_app/domain/quiz/quiz.dart';
 import 'package:quiz_app/presentation/controller/category_controller.dart';
-
-import '../../domain/quiz/quiz.dart';
-import '../controller/question_controller.dart';
-import '../controller/validator/question_validator_provider.dart';
+import 'package:quiz_app/presentation/controller/question_controller.dart';
+import 'package:quiz_app/presentation/controller/validator/question_validator_provider.dart';
 
 class QuestionSetButton extends HookConsumerWidget {
   const QuestionSetButton(

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../controller/option_text_controller.dart';
-import '../controller/question_text_controller.dart';
-import '../controller/validator/option_validator_provider.dart';
-import '../controller/validator/question_validator_provider.dart';
-import '../widgets/custom_text_field.dart';
-import '../widgets/original_question_set_button.dart';
+import 'package:quiz_app/presentation/controller/option_text_controller.dart';
+import 'package:quiz_app/presentation/controller/question_text_controller.dart';
+import 'package:quiz_app/presentation/controller/validator/option_validator_provider.dart';
+import 'package:quiz_app/presentation/controller/validator/question_validator_provider.dart';
+import 'package:quiz_app/presentation/widgets/custom_text_field.dart';
+import 'package:quiz_app/presentation/widgets/original_question_set_button.dart';
 
 class OriginalQuestionSetScreen extends HookConsumerWidget {
   const OriginalQuestionSetScreen({Key? key}) : super(key: key);
@@ -49,9 +48,9 @@ class OriginalQuestionSetScreen extends HookConsumerWidget {
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.9,
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 15.0),
                       child: Text("選択肢"),
@@ -79,7 +78,6 @@ class OriginalQuestionSetScreen extends HookConsumerWidget {
                         onChanged: (optionText) {
                           optionValidatorNotifier.setOptionText(optionText);
                         },
-                        // helperText: "１つ目の選択肢を入力してください",
                       ),
                     ),
                     Switch(
@@ -111,7 +109,6 @@ class OriginalQuestionSetScreen extends HookConsumerWidget {
                         onChanged: (optionText) {
                           optionValidatorNotifier.setOptionText(optionText);
                         },
-                        // helperText: "２つ目の選択肢を入力してください",
                       ),
                     ),
                     Switch(
@@ -143,7 +140,6 @@ class OriginalQuestionSetScreen extends HookConsumerWidget {
                         onChanged: (optionText) {
                           optionValidatorNotifier.setOptionText(optionText);
                         },
-                        // helperText: "３つ目の選択肢を入力してください",
                       ),
                     ),
                     Switch(
@@ -175,7 +171,6 @@ class OriginalQuestionSetScreen extends HookConsumerWidget {
                         onChanged: (optionText) {
                           optionValidatorNotifier.setOptionText(optionText);
                         },
-                        // helperText: "４つ目の選択肢を入力してください",
                       ),
                     ),
                     Switch(
@@ -192,9 +187,7 @@ class OriginalQuestionSetScreen extends HookConsumerWidget {
                 height: MediaQuery.of(context).size.height * 0.02,
               ),
               OriginalQuestionSetButton(
-                // id: idControllerProvider.text,
                 text: textControllerProvider.text,
-                // duration: durationControllerProvider.text,
                 duration: "10",
               ),
               SizedBox(

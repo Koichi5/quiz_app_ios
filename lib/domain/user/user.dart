@@ -5,14 +5,11 @@ import 'package:flutter/foundation.dart';
 part 'user.freezed.dart';
 part 'user.g.dart';
 
-// terminal code : flutter pub run build_runner build --delete-conflicting-outputs
-
 @freezed
 abstract class User implements _$User {
   const User._();
   const factory User({
     String? id,
-    // required String name,
     required String email,
     required String password,
   }) = _User;

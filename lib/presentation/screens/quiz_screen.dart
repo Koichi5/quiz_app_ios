@@ -3,19 +3,18 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:quiz_app/application/quiz_engine.dart';
+import 'package:quiz_app/domain/category/category.dart';
 import 'package:quiz_app/domain/dto/quiz_result.dart';
+import 'package:quiz_app/domain/option/option.dart';
+import 'package:quiz_app/domain/question/question.dart';
+import 'package:quiz_app/domain/quiz/quiz.dart';
 import 'package:quiz_app/general/custom_exception.dart';
+import 'package:quiz_app/general/general_provider.dart';
+import 'package:quiz_app/presentation/controller/quiz_history_controller.dart';
 import 'package:quiz_app/presentation/screens/quiz_result_screen.dart';
 import 'package:quiz_app/presentation/widgets/question_option.dart';
 import 'package:quiz_app/presentation/widgets/time_indicator.dart';
-
-import '../../application/quiz_engine.dart';
-import '../../domain/category/category.dart';
-import '../../domain/option/option.dart';
-import '../../domain/question/question.dart';
-import '../../domain/quiz/quiz.dart';
-import '../../general/general_provider.dart';
-import '../controller/quiz_history_controller.dart';
 
 final questionAnswerProvider =
     StateProvider<Map<int, bool>>((ref) => {0: false});

@@ -1,7 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../entity/question_form_entity/question_form_entity.dart';
-
+import 'package:quiz_app/domain/entity/question_form_entity/question_form_entity.dart';
 
 part 'question_form_state.freezed.dart';
 

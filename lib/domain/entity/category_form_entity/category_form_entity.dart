@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../field/field.dart';
+import 'package:quiz_app/domain/field/field.dart';
 
 part 'category_form_entity.freezed.dart';
 
@@ -18,6 +18,5 @@ class CategoryFormEntity with _$CategoryFormEntity {
         name: Field(value: ""),
         description: Field(value: ""),
       );
-  // bool get isValid => id.isValid && name.isValid && description.isValid;
   bool get isValid => true;
 }

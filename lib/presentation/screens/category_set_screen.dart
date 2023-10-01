@@ -3,8 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/presentation/controller/category_text_controller.dart';
 import 'package:quiz_app/presentation/controller/validator/category_validator_provider.dart';
 import 'package:quiz_app/presentation/widgets/category_set_button.dart';
-
-import '../widgets/custom_text_field.dart';
+import 'package:quiz_app/presentation/widgets/custom_text_field.dart';
 
 class CategorySetScreen extends HookConsumerWidget {
   const CategorySetScreen({Key? key}) : super(key: key);

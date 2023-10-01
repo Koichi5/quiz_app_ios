@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quiz_app/presentation/controller/question_controller.dart';
-
-import '../widgets/weak_question_card.dart';
+import 'package:quiz_app/presentation/widgets/weak_question_card.dart';
 
 class WeakQuestionScreen extends HookConsumerWidget {
   const WeakQuestionScreen({Key? key}) : super(key: key);

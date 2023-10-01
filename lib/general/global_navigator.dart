@@ -20,35 +20,6 @@ class GlobalNavigator {
         ],
       );
     });
-    // Navigator.of(navigatorKey.currentContext!).push(
-    //   PageRouteBuilder<void>(
-    //     opaque: false,
-    //     transitionDuration: const Duration(milliseconds: 100),
-    //     pageBuilder: (
-    //         BuildContext context,
-    //         Animation<double> animation,
-    //         Animation<double> secondaryAnimation,
-    //         ) {
-    //       return FullScreenErrorView(
-    //         title: title,
-    //         description: description,
-    //         buttonText: buttonText,
-    //         onTap: onButtonPressed,
-    //       );
-    //     },
-    //     transitionsBuilder: (
-    //         BuildContext context,
-    //         Animation<double> animation,
-    //         Animation<double> secondaryAnimation,
-    //         Widget child,
-    //         ) {
-    //       return FadeTransition(
-    //         opacity: animation,
-    //         child: child,
-    //       );
-    //     },
-    //   ),
-    // );
   }
 
   static void pop() {

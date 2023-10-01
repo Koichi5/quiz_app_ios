@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../entity/login_form_entity/login_form_entity.dart';
+import 'package:quiz_app/domain/entity/login_form_entity/login_form_entity.dart';
 
 part 'login_form_state.freezed.dart';
 

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quiz_app/presentation/controller/category_controller.dart';
-
-import '../widgets/category_card.dart';
+import 'package:quiz_app/presentation/widgets/category_card.dart';
 
 class CategoryListScreen extends HookConsumerWidget {
   const CategoryListScreen({Key? key}) : super(key: key);

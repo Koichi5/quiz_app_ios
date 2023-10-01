@@ -1,8 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quiz_app/domain/entity/question_form_entity/question_form_entity.dart';
 import 'package:quiz_app/domain/field/field.dart';
-
-import '../../../domain/entity/question_form_entity/question_form_entity.dart';
-import '../../../domain/question_form_state/question_form_state.dart';
+import 'package:quiz_app/domain/question_form_state/question_form_state.dart';
 
 final questionValidatorProvider =
     StateNotifierProvider<QuestionValidatorProvider, QuestionFormState>(

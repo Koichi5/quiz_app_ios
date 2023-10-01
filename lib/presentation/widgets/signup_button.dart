@@ -1,11 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quiz_app/domain/repository/auth_repository.dart';
+import 'package:quiz_app/presentation/controller/auth_controller.dart';
+import 'package:quiz_app/presentation/controller/validator/signup_validator_provider.dart';
 import 'package:quiz_app/presentation/screens/home_screen.dart';
-
-import '../../domain/repository/auth_repository.dart';
-import '../controller/auth_controller.dart';
-import '../controller/validator/signup_validator_provider.dart';
 
 class SignUpButton extends HookConsumerWidget {
   const SignUpButton(this.email, this.password, {super.key});

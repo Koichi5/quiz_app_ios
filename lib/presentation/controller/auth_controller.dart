@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../domain/repository/auth_repository.dart';
+import 'package:quiz_app/domain/repository/auth_repository.dart';
 
 final authControllerProvider = StateNotifierProvider<AuthController, User?>(
     (ref) => AuthController(ref)..appStarted());

@@ -4,8 +4,7 @@ import 'package:quiz_app/general/general_provider.dart';
 import 'package:quiz_app/presentation/controller/auth_controller.dart';
 import 'package:quiz_app/presentation/screens/dictionary_screen.dart';
 import 'package:quiz_app/presentation/screens/login_screen.dart';
-
-import '../widgets/link_button.dart';
+import 'package:quiz_app/presentation/widgets/link_button.dart';
 
 class SettingScreen extends HookConsumerWidget {
   SettingScreen({Key? key}) : super(key: key);

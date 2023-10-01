@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quiz_app/domain/category/category.dart';
+import 'package:quiz_app/domain/quiz/quiz.dart';
 import 'package:quiz_app/general/custom_exception.dart';
 import 'package:quiz_app/general/general_provider.dart';
-
-import '../category/category.dart';
-import '../quiz/quiz.dart';
 
 abstract class BaseCategoryRepository {
   Future<Category> addCategory({required Category category});

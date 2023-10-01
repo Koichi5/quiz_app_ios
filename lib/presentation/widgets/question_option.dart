@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../domain/option/option.dart';
-import '../../general/general_provider.dart';
-import '../screens/quiz_screen.dart';
+import 'package:quiz_app/domain/option/option.dart';
+import 'package:quiz_app/general/general_provider.dart';
+import 'package:quiz_app/presentation/screens/quiz_screen.dart';
 
 class QuestionOption extends HookConsumerWidget {
   final Option option;
