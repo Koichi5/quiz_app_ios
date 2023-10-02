@@ -43,11 +43,13 @@ class CategoryCard extends HookConsumerWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Ink(
-              height: 240,
-              child: Image.asset(
-                category.imagePath,
-                fit: BoxFit.fitHeight,
+            Container(
+              height: MediaQuery.of(context).size.height * 0.27,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(category.imagePath),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             Positioned(

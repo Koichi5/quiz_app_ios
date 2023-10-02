@@ -9,6 +9,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 abstract class BaseAuthRepository {
   Stream<User?> get authStateChanges;
+  Future<User?> signInAnnonymously();
   Future<UserCredential?> createUserWithEmailAndPassword(
       String email, String password);
   Future<User?> signInWithEmailAndPassword(String email, String password);
@@ -16,6 +17,7 @@ abstract class BaseAuthRepository {
   Future<User?> signInWithApple();
   User? getCurrentUser();
   Future<void> signOut();
+  Future<void> deleteUser();
 }
 
 final authRepositoryProvider =
@@ -36,9 +38,9 @@ class AuthRepository implements BaseAuthRepository {
     try {
       final result =
           await ref.watch(firebaseAuthProvider).createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+                email: email,
+                password: password,
+              );
       return result;
     } on FirebaseAuthException catch (e) {
       if (e.toString() ==
@@ -57,11 +59,23 @@ class AuthRepository implements BaseAuthRepository {
   }
 
   @override
+  Future<User?> signInAnnonymously() async {
+    User? user;
+    try {
+      user = (await ref.watch(firebaseAuthProvider).signInAnonymously()).user;
+    } on FirebaseException catch (e) {
+      CustomException(message: e.message);
+    }
+    return user;
+  }
+
+  @override
   Future<User?> signInWithEmailAndPassword(
       String email, String password) async {
     User? user;
     try {
-      user = (await ref.watch(firebaseAuthProvider)
+      user = (await ref
+              .watch(firebaseAuthProvider)
               .signInWithEmailAndPassword(email: email, password: password))
           .user;
     } on FirebaseAuthException catch (e) {
@@ -102,9 +116,9 @@ class AuthRepository implements BaseAuthRepository {
       );
 
       try {
-        final UserCredential userCredential =
-            await ref.watch(firebaseAuthProvider)
-                .signInWithCredential(credential);
+        final UserCredential userCredential = await ref
+            .watch(firebaseAuthProvider)
+            .signInWithCredential(credential);
 
         //User を返す場合
         // final user = userCredential.user;
@@ -162,6 +176,16 @@ class AuthRepository implements BaseAuthRepository {
         await googleSignIn.signOut();
       }
       await ref.watch(firebaseAuthProvider).signOut();
+    } on FirebaseAuthException catch (e) {
+      throw CustomException(message: e.message);
+    }
+  }
+
+  @override
+  Future<void> deleteUser() async {
+    try {
+      await ref.watch(firebaseAuthProvider).currentUser!.delete();
+      
     } on FirebaseAuthException catch (e) {
       throw CustomException(message: e.message);
     }

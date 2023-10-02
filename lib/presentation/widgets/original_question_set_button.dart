@@ -6,10 +6,7 @@ import 'package:quiz_app/presentation/controller/validator/question_validator_pr
 
 class OriginalQuestionSetButton extends HookConsumerWidget {
   const OriginalQuestionSetButton(
-      {
-      required this.text,
-      required this.duration,
-      Key? key})
+      {required this.text, required this.duration, Key? key})
       : super(key: key);
   final String text;
   final String duration;
@@ -39,28 +36,33 @@ class OriginalQuestionSetButton extends HookConsumerWidget {
                       optionsShuffled: false,
                     );
                 if (originalQuestion == null) {
-                  if(!mounted) return;
-                  showDialog(context: context, builder: (context) {
-                    return SimpleDialog(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Center(
-                              child: Text(
+                  if (!mounted) return;
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return SimpleDialog(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: Center(
+                                  child: Text(
                                 "問題を追加できませんでした",
                                 textAlign: TextAlign.center,
                               )),
-                        ),
-                        TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text("戻る"))
-                      ],
-                    );
-                  });
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text(
+                                "戻る",
+                              ),
+                            ),
+                          ],
+                        );
+                      });
                 }
-                if(!mounted) return;
+                if (!mounted) return;
                 Navigator.pop(context);
               }
             }

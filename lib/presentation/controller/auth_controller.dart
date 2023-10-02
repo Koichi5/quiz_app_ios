@@ -13,7 +13,8 @@ class AuthController extends StateNotifier<User?> {
 
   AuthController(this.ref) : super(null) {
     _authStateChangesSubscription?.cancel();
-    _authStateChangesSubscription = ref.watch(authRepositoryProvider)
+    _authStateChangesSubscription = ref
+        .watch(authRepositoryProvider)
         .authStateChanges
         .listen((user) => state = user);
   }
@@ -31,15 +32,22 @@ class AuthController extends StateNotifier<User?> {
     }
   }
 
+  Future<User?> signInAnnonymously() async {
+    User? user = await ref.watch(authRepositoryProvider).signInAnnonymously();
+    return user;
+  }
+
   Future<void> createUserWithEmailAndPassword(
       String email, String password) async {
-    await ref.watch(authRepositoryProvider)
+    await ref
+        .watch(authRepositoryProvider)
         .createUserWithEmailAndPassword(email, password);
   }
 
   Future<User?> signInWithEmailAndPassword(
       String email, String password) async {
-    User? user = await ref.watch(authRepositoryProvider)
+    User? user = await ref
+        .watch(authRepositoryProvider)
         .signInWithEmailAndPassword(email, password);
     return user;
   }
@@ -51,12 +59,15 @@ class AuthController extends StateNotifier<User?> {
 
   // Apple sign in
   Future<User?> signInWithApple() async {
-    User? user =
-        await ref.watch(authRepositoryProvider).signInWithApple();
+    User? user = await ref.watch(authRepositoryProvider).signInWithApple();
     return user;
   }
 
   Future<void> signOut() async {
     await ref.watch(authRepositoryProvider).signOut();
+  }
+
+  Future<void> deleteUser() async {
+    await ref.watch(authRepositoryProvider).deleteUser();
   }
 }

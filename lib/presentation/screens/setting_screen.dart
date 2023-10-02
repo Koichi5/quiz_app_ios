@@ -16,6 +16,7 @@ class SettingScreen extends HookConsumerWidget {
     "Instagram",
     "単語集",
     "ログアウト",
+    "アカウント削除",
   ];
   final List<String> _linkURLList = [
     "https://terms-of-service-tech.web.app/",
@@ -45,7 +46,12 @@ class SettingScreen extends HookConsumerWidget {
       Icons.logout,
       size: 30,
       color: Colors.grey,
-    )
+    ),
+    const Icon(
+      Icons.person_remove,
+      size: 30,
+      color: Colors.grey,
+    ),
   ];
 
   final _linkButton = LinkButton();
@@ -93,6 +99,58 @@ class SettingScreen extends HookConsumerWidget {
                         await ref
                             .watch(authControllerProvider.notifier)
                             .signOut();
+                        if (ref.watch(firebaseAuthProvider).currentUser ==
+                            null) {
+                          if (!mounted) return;
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginScreen()));
+                        }
+                      },
+                      child: const Text(
+                        "はい",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        );
+      },
+      () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return SimpleDialog(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Center(
+                    child: Text(
+                      "アカウントを削除しますか？",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        "いいえ",
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: ([bool mounted = true]) async {
+                        await ref
+                            .watch(authControllerProvider.notifier)
+                            .deleteUser();
                         if (ref.watch(firebaseAuthProvider).currentUser ==
                             null) {
                           if (!mounted) return;
