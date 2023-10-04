@@ -1,19 +1,16 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
+import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
+admin.initializeApp();
 
-import {onRequest} from "firebase-functions/v2/https";
-import * as logger from "firebase-functions/logger";
+// 削除するユーザーを登録するコレクションが作成されたら、FirebaseAuthenticatonのユーザーデータを削除する.
+// リージョンは、asia-northeast1を設定。自分の設定したリージョンに合わせる。
+exports.deleteUser = functions
+  .region("asia-northeast1")
+  .firestore
+  .document("deleted_users/{docId}")
+  .onCreate(async (snap) => {
+    const deleteDocument = snap.data();
+    const uid = deleteDocument.deletedUserUid;
 
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
-
-// export const helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+    await admin.auth().deleteUser(uid);
+  });

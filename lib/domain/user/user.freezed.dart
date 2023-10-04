@@ -20,7 +20,7 @@ User _$UserFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$User {
-  String? get id => throw _privateConstructorUsedError; // required String name,
+  String? get id => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   String get password => throw _privateConstructorUsedError;
 
@@ -120,7 +120,6 @@ class _$_User extends _User with DiagnosticableTreeMixin {
 
   @override
   final String? id;
-// required String name,
   @override
   final String email;
   @override
@@ -181,7 +180,7 @@ abstract class _User extends User {
 
   @override
   String? get id;
-  @override // required String name,
+  @override
   String get email;
   @override
   String get password;

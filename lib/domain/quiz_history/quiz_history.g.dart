@@ -25,7 +25,7 @@ _$_QuizHistory _$$_QuizHistoryFromJson(Map<String, dynamic> json) =>
           .map((e) => e as bool)
           .toList(),
       questionList: (json['questionList'] as List<dynamic>)
-          .map((e) => Question.fromJson(e))
+          .map(Question.fromJson)
           .toList(),
     );
 

@@ -57,7 +57,6 @@ class AuthController extends StateNotifier<User?> {
     return user;
   }
 
-  // Apple sign in
   Future<User?> signInWithApple() async {
     User? user = await ref.watch(authRepositoryProvider).signInWithApple();
     return user;
@@ -65,9 +64,5 @@ class AuthController extends StateNotifier<User?> {
 
   Future<void> signOut() async {
     await ref.watch(authRepositoryProvider).signOut();
-  }
-
-  Future<void> deleteUser() async {
-    await ref.watch(authRepositoryProvider).deleteUser();
   }
 }

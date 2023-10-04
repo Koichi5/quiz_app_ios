@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/general/general_provider.dart';
 import 'package:quiz_app/presentation/controller/auth_controller.dart';
+import 'package:quiz_app/presentation/controller/deleted_user_controller.dart';
 import 'package:quiz_app/presentation/screens/dictionary_screen.dart';
 import 'package:quiz_app/presentation/screens/login_screen.dart';
 import 'package:quiz_app/presentation/widgets/link_button.dart';
@@ -149,16 +150,18 @@ class SettingScreen extends HookConsumerWidget {
                     TextButton(
                       onPressed: ([bool mounted = true]) async {
                         await ref
-                            .watch(authControllerProvider.notifier)
-                            .deleteUser();
-                        if (ref.watch(firebaseAuthProvider).currentUser ==
-                            null) {
-                          if (!mounted) return;
-                          Navigator.pushReplacement(
+                            .watch(deletedUserControllerProvider.notifier)
+                            .deleteUser()
+                            .then(
+                          (value) {
+                            Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const LoginScreen()));
-                        }
+                                builder: (context) => const LoginScreen(),
+                              ),
+                            );
+                          },
+                        );
                       },
                       child: const Text(
                         "はい",

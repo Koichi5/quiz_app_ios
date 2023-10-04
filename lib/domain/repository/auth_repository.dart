@@ -17,7 +17,6 @@ abstract class BaseAuthRepository {
   Future<User?> signInWithApple();
   User? getCurrentUser();
   Future<void> signOut();
-  Future<void> deleteUser();
 }
 
 final authRepositoryProvider =
@@ -176,16 +175,6 @@ class AuthRepository implements BaseAuthRepository {
         await googleSignIn.signOut();
       }
       await ref.watch(firebaseAuthProvider).signOut();
-    } on FirebaseAuthException catch (e) {
-      throw CustomException(message: e.message);
-    }
-  }
-
-  @override
-  Future<void> deleteUser() async {
-    try {
-      await ref.watch(firebaseAuthProvider).currentUser!.delete();
-      
     } on FirebaseAuthException catch (e) {
       throw CustomException(message: e.message);
     }

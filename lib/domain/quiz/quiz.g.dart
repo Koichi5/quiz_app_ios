@@ -17,7 +17,7 @@ _$_Quiz _$$_QuizFromJson(Map<String, dynamic> json) => _$_Quiz(
       questionsShuffled: json['questionsShuffled'] as bool,
       imagePath: json['imagePath'] as String?,
       questions: (json['questions'] as List<dynamic>?)
-          ?.map((e) => Question.fromJson(e))
+          ?.map(Question.fromJson)
           .toList(),
     );
 

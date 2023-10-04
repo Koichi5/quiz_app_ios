@@ -1,8 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quiz_app/domain/repository/auth_repository.dart';
+import 'package:quiz_app/presentation/controller/auth_controller.dart';
 import 'package:quiz_app/presentation/controller/signup_text_controller.dart';
 import 'package:quiz_app/presentation/controller/validator/signup_validator_provider.dart';
+import 'package:quiz_app/presentation/screens/home_screen.dart';
 import 'package:quiz_app/presentation/widgets/apple_signin_button.dart';
 import 'package:quiz_app/presentation/widgets/custom_text_field.dart';
 import 'package:quiz_app/presentation/widgets/google_signin_button.dart';
@@ -38,7 +42,7 @@ class SignupScreen extends HookConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.05,
+                  height: MediaQuery.of(context).size.height * 0.025,
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
@@ -81,6 +85,40 @@ class SignupScreen extends HookConsumerWidget {
                 ),
                 SignUpButton(emailControllerProvider.text,
                     passwordControllerProvider.text),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.04,
+                ),
+                // sign up annonymously button
+                SizedBox(
+                  height: 40,
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary),
+                      onPressed: ([bool mounted = true]) async {
+                        await ref
+                            .watch(authControllerProvider.notifier)
+                            .signInAnnonymously();
+                        User? user =
+                            ref.watch(authRepositoryProvider).getCurrentUser();
+                        if (user != null) {
+                          if (!mounted) return;
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => const HomeScreen(),
+                            ),
+                          );
+                        } else {
+                          null;
+                        }
+                      },
+                      child: Text(
+                        "アカウントなしで登録",
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary),
+                      )),
+                ),
                 Divider(
                   height: MediaQuery.of(context).size.height * 0.05,
                   thickness: 0.5,
@@ -121,7 +159,8 @@ class SignupScreen extends HookConsumerWidget {
                       ),
                       TextSpan(
                           text: '利用規約',
-                          style: const TextStyle(color: Colors.blue, fontSize: 12),
+                          style:
+                              const TextStyle(color: Colors.blue, fontSize: 12),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               linkButton.launchUriWithString(context,
@@ -133,7 +172,8 @@ class SignupScreen extends HookConsumerWidget {
                       ),
                       TextSpan(
                           text: 'プライバシーポリシー',
-                          style: const TextStyle(color: Colors.blue, fontSize: 12),
+                          style:
+                              const TextStyle(color: Colors.blue, fontSize: 12),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               linkButton.launchUriWithString(
@@ -142,8 +182,14 @@ class SignupScreen extends HookConsumerWidget {
                     ],
                   ),
                 ),
-                const Text("に同意したことになります", style: TextStyle(fontSize: 12),),
-                const Text("ご利用になる前に必ずお読みください", style: TextStyle(fontSize: 12),)
+                const Text(
+                  "に同意したことになります",
+                  style: TextStyle(fontSize: 12),
+                ),
+                const Text(
+                  "ご利用になる前に必ずお読みください",
+                  style: TextStyle(fontSize: 12),
+                )
               ],
             ),
           ),

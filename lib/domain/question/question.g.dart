@@ -15,9 +15,7 @@ _$_Question _$$_QuestionFromJson(Map<String, dynamic> json) => _$_Question(
       text: json['text'] as String,
       duration: json['duration'] as int,
       optionsShuffled: json['optionsShuffled'] as bool,
-      options: (json['options'] as List<dynamic>)
-          .map((e) => Option.fromJson(e))
-          .toList(),
+      options: (json['options'] as List<dynamic>).map(Option.fromJson).toList(),
     );
 
 Map<String, dynamic> _$$_QuestionToJson(_$_Question instance) =>
