@@ -38,10 +38,10 @@ class QuestionRepository implements BaseQuestionRepository {
         optionsShuffled: question.optionsShuffled,
         options: [],
       );
-
+      // changed update to set
       await questionRef
           .doc(quiz.questionDocRef)
-          .update(questionWithDocRef.toDocument());
+          .set(questionWithDocRef.toDocument());
 
       await questionRef.doc(quiz.questionDocRef).update({
         "options":

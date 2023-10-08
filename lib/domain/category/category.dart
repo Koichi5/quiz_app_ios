@@ -17,10 +17,9 @@ abstract class Category implements _$Category {
     required String description,
     required int categoryQuestionCount,
     required String imagePath,
-    required DateTime createdAt,
   }) = _Category;
 
-  factory Category.empty() => Category(categoryId: 0, name: "", description: "", categoryQuestionCount: 0, imagePath: "", createdAt: DateTime.now(),);
+  factory Category.empty() => Category(categoryId: 0, name: "", description: "", categoryQuestionCount: 0, imagePath: "");
 
   factory Category.fromJson(json) => _$CategoryFromJson(json);
 

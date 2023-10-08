@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quiz_app/domain/repository/auth_repository.dart';
 import 'package:quiz_app/general/general_provider.dart';
 import 'package:quiz_app/presentation/controller/auth_controller.dart';
 import 'package:quiz_app/presentation/screens/home_screen.dart';
@@ -13,7 +12,6 @@ class AppleSignInButton extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authControllerProviderNotifier =
         ref.watch(authControllerProvider.notifier);
-    final authRepositoryProviderNotifier = ref.watch(authRepositoryProvider);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
@@ -28,8 +26,9 @@ class AppleSignInButton extends HookConsumerWidget {
               ),
             ),
             onPressed: () async {
-              await authControllerProviderNotifier.signInWithApple();
-              User? user = authRepositoryProviderNotifier.getCurrentUser();
+              User? user =
+                  await authControllerProviderNotifier.signInWithApple();
+              print("current apple user: $user");
               if (user != null) {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const HomeScreen()));

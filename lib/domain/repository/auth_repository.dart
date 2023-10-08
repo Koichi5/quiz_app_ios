@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quiz_app/general/custom_exception.dart';
 import 'package:quiz_app/general/general_provider.dart';
 import 'package:quiz_app/general/global_navigator.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
@@ -27,6 +26,39 @@ class AuthRepository implements BaseAuthRepository {
 
   const AuthRepository(this.ref);
 
+  void _handleAuthErrors(FirebaseAuthException e) {
+    Map<String, Map<String, String>> errorMessages = {
+      '[firebase_auth/invalid-email]': {
+        'title': "メールアドレスの形式が正しくありません",
+        'description': "メールアドレスの形式を直して入力してください"
+      },
+      '[firebase_auth/email-already-in-use]': {
+        'title': "このメールアドレスは既に使用されています",
+        'description': "他のメールアドレスを入力してください"
+      },
+      '[firebase_auth/user-not-found]': {
+        'title': "このメールアドレスは登録されていません",
+        'description': "正しいメールアドレスを入力してください"
+      },
+      '[firebase_auth/wrong-password]': {
+        'title': "パスワードが異なります",
+        'description': "正しいパスワードを入力してください"
+      },
+      '[firebase_auth/user-disabled]': {
+        'title': "アカウントが無効化されています",
+        'description': "サポートにお問い合わせください"
+      },
+      '[firebase_auth/too-many-requests]': {
+        'title': "短時間でのリクエストが多すぎます",
+        'description': "しばらく時間を置いて再試行してください"
+      },
+    };
+    final message = errorMessages[e.toString()] ??
+        {'title': "不明なエラーです", 'description': "時間をおいて再度お試しください"};
+
+    GlobalNavigator.showErrorDialog(message['title']!, message['description']!);
+  }
+
   @override
   Stream<User?> get authStateChanges =>
       ref.watch(firebaseAuthProvider).authStateChanges();
@@ -42,17 +74,7 @@ class AuthRepository implements BaseAuthRepository {
               );
       return result;
     } on FirebaseAuthException catch (e) {
-      if (e.toString() ==
-          '[firebase_auth/invalid-email] The email address is badly formatted.') {
-        GlobalNavigator.showErrorDialog(
-            "メールアドレスの形式が正しくありません", "メールアドレスの形式を直して入力してください");
-      } else if (e.toString() ==
-          '[firebase_auth/email-already-in-use] The email address is already in use by another account.') {
-        GlobalNavigator.showErrorDialog(
-            "このメールアドレスは既に使用されています", "他のメールアドレスを入力してください");
-      } else {
-        GlobalNavigator.showErrorDialog("不明なエラーです", "時間をおいて再度お試しください");
-      }
+      _handleAuthErrors(e);
     }
     return null;
   }
@@ -62,8 +84,8 @@ class AuthRepository implements BaseAuthRepository {
     User? user;
     try {
       user = (await ref.watch(firebaseAuthProvider).signInAnonymously()).user;
-    } on FirebaseException catch (e) {
-      CustomException(message: e.message);
+    } on FirebaseAuthException catch (e) {
+      _handleAuthErrors(e);
     }
     return user;
   }
@@ -78,22 +100,7 @@ class AuthRepository implements BaseAuthRepository {
               .signInWithEmailAndPassword(email: email, password: password))
           .user;
     } on FirebaseAuthException catch (e) {
-      if (e.toString() ==
-          '[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.') {
-        GlobalNavigator.showErrorDialog(
-            "このメールアドレスは登録されていません", "他のメールアドレスでお試しください");
-      }
-      if (e.toString() ==
-          '[firebase_auth/invalid-email] The email address is badly formatted.') {
-        GlobalNavigator.showErrorDialog(
-            "メールアドレスの形式が正しくありません", "メールアドレスの形式を直して入力してください");
-      }
-      if (e.toString() ==
-          '[firebase_auth/wrong-password] The password is invalid or the user does not have a password.') {
-        GlobalNavigator.showErrorDialog("パスワードが異なります", "他のパスワードをお試しください");
-      } else {
-        GlobalNavigator.showErrorDialog("不明なエラーです", "時間をおいて再度お試しください");
-      }
+      _handleAuthErrors(e);
     }
     return user;
   }
@@ -118,14 +125,9 @@ class AuthRepository implements BaseAuthRepository {
         final UserCredential userCredential = await ref
             .watch(firebaseAuthProvider)
             .signInWithCredential(credential);
-
-        //User を返す場合
-        // final user = userCredential.user;
         user = userCredential.user;
       } on FirebaseAuthException catch (e) {
-        print(e.toString());
-        GlobalNavigator.showErrorDialog("Googleでのサインインに失敗しました", "再度お試しください");
-        // throw CustomException(message: e.message);
+        _handleAuthErrors(e);
       }
     }
     return user;
@@ -142,19 +144,21 @@ class AuthRepository implements BaseAuthRepository {
           AppleIDAuthorizationScopes.fullName,
         ],
       );
+      print("apple credential: $appleCredential");
       final oauthCredential = OAuthProvider("apple.com").credential(
         idToken: appleCredential.identityToken,
         rawNonce: rawNonce,
       );
+      print("oauthCredential: $oauthCredential");
       final userCredential =
           await FirebaseAuth.instance.signInWithCredential(oauthCredential);
       user = userCredential.user;
+      print("user in apple sign in func: $user");
       return user;
-    } on FirebaseException catch (e) {
-      print(e.toString());
-      GlobalNavigator.showErrorDialog("Appleでのサインインに失敗しました", "再度お試しください");
+    } on FirebaseAuthException catch (e) {
+      _handleAuthErrors(e);
+      return null;
     }
-    return null;
   }
 
   @override
@@ -163,7 +167,8 @@ class AuthRepository implements BaseAuthRepository {
       final user = ref.watch(firebaseAuthProvider).currentUser;
       return user;
     } on FirebaseAuthException catch (e) {
-      throw CustomException(message: e.message);
+      _handleAuthErrors(e);
+      return null;
     }
   }
 
@@ -176,7 +181,7 @@ class AuthRepository implements BaseAuthRepository {
       }
       await ref.watch(firebaseAuthProvider).signOut();
     } on FirebaseAuthException catch (e) {
-      throw CustomException(message: e.message);
+      _handleAuthErrors(e);
     }
   }
 }

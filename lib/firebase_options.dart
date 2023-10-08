@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -49,21 +46,31 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDWb8xB9aHswlPfjAt4BBeREh5WyrZJ_m4',
+    appId: '1:1091431715641:web:7ceebe07fbabc939344ee8',
+    messagingSenderId: '1091431715641',
+    projectId: 'quiz-app-ios-21ea9',
+    authDomain: 'quiz-app-ios-21ea9.firebaseapp.com',
+    storageBucket: 'quiz-app-ios-21ea9.appspot.com',
+    measurementId: 'G-2ECZ4DJEDM',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAlJlyvrnSWQ_3O3ymeGAQPP0k-L4zGmCU',
-    appId: '1:634671459079:android:531f490b01554ddf60b3a2',
-    messagingSenderId: '634671459079',
-    projectId: 'quiz-app-dc8a1',
-    storageBucket: 'quiz-app-dc8a1.appspot.com',
+    apiKey: 'AIzaSyBjr4LIDaY4i9YhIMA5DCssAGA8NNtR9mU',
+    appId: '1:1091431715641:android:5352fa6e5a66d6a0344ee8',
+    messagingSenderId: '1091431715641',
+    projectId: 'quiz-app-ios-21ea9',
+    storageBucket: 'quiz-app-ios-21ea9.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBqK0mMNv8xAtxZTNi6IoyUacdNtu1_3y4',
-    appId: '1:634671459079:ios:51624534df11706860b3a2',
-    messagingSenderId: '634671459079',
-    projectId: 'quiz-app-dc8a1',
-    storageBucket: 'quiz-app-dc8a1.appspot.com',
-    iosClientId: '634671459079-sn57gjejspg8iqqjl5posr94nggf4uts.apps.googleusercontent.com',
-    iosBundleId: 'com.example.quizApp',
+    apiKey: 'AIzaSyCLXU2zCvC08kY13zxeWSKtseo4p2hc_bg',
+    appId: '1:1091431715641:ios:6a5f50539247f5fa344ee8',
+    messagingSenderId: '1091431715641',
+    projectId: 'quiz-app-ios-21ea9',
+    storageBucket: 'quiz-app-ios-21ea9.appspot.com',
+    iosClientId: '1091431715641-i0u07dpi1lu9mjibg88sb9ik229p3m9b.apps.googleusercontent.com',
+    iosBundleId: 'com.example.quizApp20230113',
   );
 }

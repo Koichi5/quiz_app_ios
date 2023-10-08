@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>634671459079-sn57gjejspg8iqqjl5posr94nggf4uts.apps.googleusercontent.com</string>
+	<string>1091431715641-i0u07dpi1lu9mjibg88sb9ik229p3m9b.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.634671459079-sn57gjejspg8iqqjl5posr94nggf4uts</string>
+	<string>com.googleusercontent.apps.1091431715641-i0u07dpi1lu9mjibg88sb9ik229p3m9b</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBqK0mMNv8xAtxZTNi6IoyUacdNtu1_3y4</string>
+	<string>AIzaSyCLXU2zCvC08kY13zxeWSKtseo4p2hc_bg</string>
 	<key>GCM_SENDER_ID</key>
-	<string>634671459079</string>
+	<string>1091431715641</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.quizApp</string>
+	<string>com.example.quizApp20230113</string>
 	<key>PROJECT_ID</key>
-	<string>quiz-app-dc8a1</string>
+	<string>quiz-app-ios-21ea9</string>
 	<key>STORAGE_BUCKET</key>
-	<string>quiz-app-dc8a1.appspot.com</string>
+	<string>quiz-app-ios-21ea9.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:634671459079:ios:51624534df11706860b3a2</string>
+	<string>1:1091431715641:ios:6a5f50539247f5fa344ee8</string>
 </dict>
 </plist>

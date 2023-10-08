@@ -42,7 +42,8 @@ class CategoryController extends StateNotifier<AsyncValue<List<Category>>> {
   Future<Category> retrieveCategoryById(
       {required String quizCategoryDocRef}) async {
     try {
-      final category = await ref.watch(categoryRepositoryProvider)
+      final category = await ref
+          .watch(categoryRepositoryProvider)
           .retrieveCategoryById(quizCategoryDocRef: quizCategoryDocRef);
       return category;
     } on FirebaseException catch (e) {
@@ -63,11 +64,10 @@ class CategoryController extends StateNotifier<AsyncValue<List<Category>>> {
       name: name,
       description: description,
       categoryQuestionCount: 0,
-      createdAt: createdAt,
-      imagePath:
-          "assets/images/category_images/category_image1.png",
+      imagePath: "assets/images/category_images/category_image1.png",
     );
-    final categoryWithDocRef = await ref.watch(categoryRepositoryProvider)
+    final categoryWithDocRef = await ref
+        .watch(categoryRepositoryProvider)
         .addCategory(category: category);
     state.whenData((categoryList) => state = AsyncValue.data(categoryList
       ..add(category.copyWith(id: categoryWithDocRef.categoryDocRef))));
