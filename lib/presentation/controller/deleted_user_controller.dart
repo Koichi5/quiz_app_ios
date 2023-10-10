@@ -14,11 +14,15 @@ final deletedUserControllerProvider = StateNotifierProvider((ref) {
 
 class DeletedUserController extends StateNotifier {
   final Ref ref;
-  DeletedUserController(this.ref) : super(null);
+  late final DeletedUserRepository _deletedUserRepository;
+
+  DeletedUserController(this.ref) : super(const AsyncValue.data(null)) {
+    _deletedUserRepository = ref.watch(deletedUserRepositoryProvider);
+  }
 
   Future<void> deleteUser() async {
     try {
-      await ref.watch(deletedUserRepositoryProvider).deleteUser();
+      await _deletedUserRepository.deleteUser();
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
     }

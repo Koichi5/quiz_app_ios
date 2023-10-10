@@ -187,7 +187,8 @@ class _QuizScreenState extends ConsumerState<QuizScreen>
                               progressTimer!.cancel();
                             }
                             engine.next();
-                            ref.watch(currentQuestionIndexProvider.notifier)
+                            ref
+                                .watch(currentQuestionIndexProvider.notifier)
                                 .state++;
                           },
                         );
@@ -294,7 +295,6 @@ class _QuizScreenState extends ConsumerState<QuizScreen>
   }
 
   void onQuizComplete(
-    // Quiz quiz,
     BuildContext context,
     Category? category,
     double total,
@@ -322,10 +322,11 @@ class _QuizScreenState extends ConsumerState<QuizScreen>
             quizDocRef: category.quizDocRef!,
             categoryDocRef: category.categoryDocRef!,
             quizTitle: category.name,
-            score: total.round(),
-            questionCount: questionList.length,
-            timeTakenMinutes: timeTakenMinutes,
-            timeTakenSeconds: timeTakenSeconds,
+            performance: QuizPerformance(
+                score: total.round(),
+                questionCount: questionList.length,
+                timeTakenMinutes: timeTakenMinutes,
+                timeTakenSeconds: timeTakenSeconds),
             quizDate: DateTime.now(),
             status: "Complete",
             takenQuestions: takenQuestions,

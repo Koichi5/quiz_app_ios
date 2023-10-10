@@ -18,6 +18,7 @@ class QuizSetScreen extends HookConsumerWidget {
         ref.watch(quizDescriptionControllerProvider);
     final quizValidator = ref.watch(quizValidatorProvider);
     final quizValidatorNotifier = ref.watch(quizValidatorProvider.notifier);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -27,40 +28,23 @@ class QuizSetScreen extends HookConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.1,
+            _buildVerticalSpacer(context, 0.1),
+            _buildCustomTextField(
+              title: "クイズ名",
+              controller: titleControllerProvider,
+              error: quizValidator.form.title.errorMessage,
+              onChanged: quizValidatorNotifier.setQuizTitle,
+              context: context,
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
+            _buildVerticalSpacer(context, 0.02),
+            _buildCustomTextField(
+              title: "クイズ詳細",
+              controller: descriptionControllerProvider,
+              error: quizValidator.form.description.errorMessage,
+              onChanged: quizValidatorNotifier.setQuizDescription,
+              context: context,
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.9,
-              child: CustomTextField(
-                title: "クイズ名",
-                controller: titleControllerProvider,
-                error: quizValidator.form.title.errorMessage,
-                onChanged: (quizTitle) {
-                  quizValidatorNotifier.setQuizTitle(quizTitle);
-                },
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.9,
-              child: CustomTextField(
-                title: "クイズ詳細",
-                controller: descriptionControllerProvider,
-                error: quizValidator.form.description.errorMessage,
-                onChanged: (quizDescribe) {
-                  quizValidatorNotifier.setQuizDescription(quizDescribe);
-                },
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
+            _buildVerticalSpacer(context, 0.02),
             QuizSetButton(
               title: titleControllerProvider.text,
               description: descriptionControllerProvider.text,
@@ -69,6 +53,35 @@ class QuizSetScreen extends HookConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildVerticalSpacer(BuildContext context, double proportion) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * proportion,
+    );
+  }
+
+  Widget _buildCustomTextField({
+    required String title,
+    required TextEditingController controller,
+    required String? error,
+    required void Function(String) onChanged,
+    required BuildContext context,
+  }) {
+    return Column(
+      children: [
+        _buildVerticalSpacer(context, 0.02),
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.9,
+          child: CustomTextField(
+            title: title,
+            controller: controller,
+            error: error,
+            onChanged: onChanged,
+          ),
+        ),
+      ],
     );
   }
 }

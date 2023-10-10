@@ -21,24 +21,24 @@ class BottomNavBar extends HookConsumerWidget {
         ref.watch(bottomNavBarSelectedIndexProvider);
     final bottomNavBarSelectedIndexNotifier =
         ref.watch(bottomNavBarSelectedIndexProvider.notifier);
+
     return BottomNavyBar(
-      items: [
-        for (int i = 0; i < bottomContentList.length; i++) ...{
-          BottomNavyBarItem(
-              title: Text(
-                bottomContentList.keys.toList()[i],
-              ),
-              icon: Icon(bottomContentList.values.toList()[i],
-              ),
-              activeColor: Theme.of(context).colorScheme.primary,
-            inactiveColor: Theme.of(context).colorScheme.inversePrimary,
-          ),
-        }
-      ],
+      items: _buildBottomNavyBarItems(context),
       selectedIndex: bottomNavBarSelectedIndex,
       onItemSelected: (index) {
         bottomNavBarSelectedIndexNotifier.state = index;
       },
     );
+  }
+
+  List<BottomNavyBarItem> _buildBottomNavyBarItems(BuildContext context) {
+    return bottomContentList.entries.map((entry) {
+      return BottomNavyBarItem(
+        title: Text(entry.key),
+        icon: Icon(entry.value),
+        activeColor: Theme.of(context).colorScheme.primary,
+        inactiveColor: Theme.of(context).colorScheme.inversePrimary,
+      );
+    }).toList();
   }
 }

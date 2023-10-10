@@ -7,8 +7,7 @@ import 'package:quiz_app/presentation/controller/validator/question_validator_pr
 
 class QuestionSetButton extends HookConsumerWidget {
   const QuestionSetButton(
-      {
-      required this.text,
+      {required this.text,
       required this.duration,
       required this.quiz,
       Key? key})
@@ -17,18 +16,30 @@ class QuestionSetButton extends HookConsumerWidget {
   final String duration;
   final Quiz quiz;
 
+  Color _getButtonColor(BuildContext context, WidgetRef ref) {
+    return ref.watch(questionValidatorProvider).form.isValid
+        ? Theme.of(context).colorScheme.primary
+        : Theme.of(context).colorScheme.secondary;
+  }
+
+  Color _getTextColor(BuildContext context, WidgetRef ref) {
+    return ref.watch(questionValidatorProvider).form.isValid
+        ? Theme.of(context).colorScheme.onPrimary
+        : Theme.of(context).colorScheme.onSecondary;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final buttonColor = _getButtonColor(context, ref);
+    final textColor = _getTextColor(context, ref);
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
         height: 40,
         width: MediaQuery.of(context).size.width * 0.9,
         child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              backgroundColor: ref.watch(questionValidatorProvider).form.isValid
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.secondary),
+          style: ElevatedButton.styleFrom(backgroundColor: buttonColor),
           onPressed: ([bool mounted = true]) async {
             if (ref.watch(questionValidatorProvider).form.isValid) {
               await ref
@@ -46,10 +57,7 @@ class QuestionSetButton extends HookConsumerWidget {
           },
           child: Text(
             "問題登録",
-            style: TextStyle(
-                color: ref.watch(questionValidatorProvider).form.isValid
-                    ? Theme.of(context).colorScheme.onPrimary
-                    : Theme.of(context).colorScheme.onSecondary),
+            style: TextStyle(color: textColor),
           ),
         ),
       ),

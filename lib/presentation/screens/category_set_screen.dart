@@ -17,6 +17,7 @@ class CategorySetScreen extends HookConsumerWidget {
     final categoryValidator = ref.watch(categoryValidatorProvider);
     final categoryValidatorNotifier =
         ref.watch(categoryValidatorProvider.notifier);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -27,59 +28,63 @@ class CategorySetScreen extends HookConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.1,
+            _verticalSpacer(0.1, context),
+            _buildTextField(
+              context,
+              title: "カテゴリID",
+              controller: idControllerProvider,
+              error: categoryValidator.form.id.errorMessage,
+              onChanged: categoryValidatorNotifier.setCategoryId,
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.9,
-              child: CustomTextField(
-                title: "カテゴリID",
-                controller: idControllerProvider,
-                error: categoryValidator.form.id.errorMessage,
-                onChanged: (categoryId) {
-                  categoryValidatorNotifier.setCategoryId(categoryId);
-                },
-              ),
+            _verticalSpacer(0.02, context),
+            _buildTextField(
+              context,
+              title: "カテゴリ名",
+              controller: nameControllerProvider,
+              error: categoryValidator.form.name.errorMessage,
+              onChanged: categoryValidatorNotifier.setCategoryName,
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
+            _verticalSpacer(0.02, context),
+            _buildTextField(
+              context,
+              title: "カテゴリ詳細",
+              controller: descriptionControllerProvider,
+              error: categoryValidator.form.description.errorMessage,
+              onChanged: categoryValidatorNotifier.setCategoryDescription,
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.9,
-              child: CustomTextField(
-                title: "カテゴリ名",
-                controller: nameControllerProvider,
-                error: categoryValidator.form.name.errorMessage,
-                onChanged: (categoryName) {
-                  categoryValidatorNotifier.setCategoryName(categoryName);
-                },
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.9,
-              child: CustomTextField(
-                title: "カテゴリ詳細",
-                controller: descriptionControllerProvider,
-                error: categoryValidator.form.description.errorMessage,
-                onChanged: (categoryDescription) {
-                  categoryValidatorNotifier
-                      .setCategoryDescription(categoryDescription);
-                },
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
+            _verticalSpacer(0.02, context),
             CategorySetButton(
-                categoryId: idControllerProvider.text,
-                name: nameControllerProvider.text,
-                description: descriptionControllerProvider.text),
+              categoryId: idControllerProvider.text,
+              name: nameControllerProvider.text,
+              description: descriptionControllerProvider.text,
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildTextField(
+    BuildContext context, {
+    required String title,
+    required TextEditingController controller,
+    required String? error,
+    required Function(String) onChanged,
+  }) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.9,
+      child: CustomTextField(
+        title: title,
+        controller: controller,
+        error: error,
+        onChanged: onChanged,
+      ),
+    );
+  }
+
+  Widget _verticalSpacer(double proportion, BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * proportion,
     );
   }
 }

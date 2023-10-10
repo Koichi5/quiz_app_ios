@@ -1,4 +1,3 @@
-// original_question_repository
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/question/question.dart';
@@ -21,11 +20,18 @@ class OriginalQuestionRepository implements BaseOriginalQuestionRepository {
 
   OriginalQuestionRepository(this.ref);
 
+  CollectionReference _userCollection(String userId) => ref
+      .watch(firebaseFirestoreProvider)
+      .collection("user")
+      .doc(userId)
+      .collection("originalQuestion");
+
   @override
   Future<Question> addOriginalQuestion(
       {required String userId, required Question question}) async {
     try {
-      final originalQuestionRef = ref.watch(firebaseFirestoreProvider)
+      final originalQuestionRef = ref
+          .watch(firebaseFirestoreProvider)
           .collection("user")
           .doc(userId)
           .collection("originalQuestion");
@@ -59,11 +65,7 @@ class OriginalQuestionRepository implements BaseOriginalQuestionRepository {
   Future<List<Question>> retrieveOriginalQuestionList(
       {required String userId}) async {
     try {
-      final snap = await ref.watch(firebaseFirestoreProvider)
-          .collection("user")
-          .doc(userId)
-          .collection("originalQuestion")
-          .get();
+      final snap = await _userCollection(userId).get();
       return snap.docs.map((doc) => Question.fromDocument(doc)).toList();
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
@@ -74,30 +76,9 @@ class OriginalQuestionRepository implements BaseOriginalQuestionRepository {
   Future<void> deleteOriginalQuestion(
       {required String userId, required String originalQuestionDocRef}) async {
     try {
-      await ref.watch(firebaseFirestoreProvider)
-          .collection("user")
-          .doc(userId)
-          .collection("originalQuestion")
-          .doc(originalQuestionDocRef)
-          .delete();
+      await _userCollection(userId).doc(originalQuestionDocRef).delete();
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
     }
   }
-  //
-  // @override
-  // Future<Question> retrieveOriginalQuestionById(
-  //     {required String userId, required String originalQuestionDocRef}) async {
-  //   try {
-  //     final snap = await ref.watch(firebaseFirestoreProvider)
-  //         .collection("user")
-  //         .doc(userId)
-  //         .collection("originalQuestion")
-  //         .doc(originalQuestionDocRef)
-  //         .get();
-  //     return Question.fromDocument(snap);
-  //   } on FirebaseException catch (e) {
-  //     throw CustomException(message: e.message);
-  //   }
-  // }
 }

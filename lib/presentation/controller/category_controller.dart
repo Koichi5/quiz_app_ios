@@ -20,8 +20,11 @@ final categoryControllerProvider =
 class CategoryController extends StateNotifier<AsyncValue<List<Category>>> {
   final Ref ref;
   final String? _userId;
+  late final CategoryRepository _categoryRepository;
+
   CategoryController(this.ref, this._userId)
       : super(const AsyncValue.loading()) {
+    _categoryRepository = ref.watch(categoryRepositoryProvider);
     if (_userId != null) {
       retrieveCategoryList();
     }
@@ -29,8 +32,7 @@ class CategoryController extends StateNotifier<AsyncValue<List<Category>>> {
 
   Future<void> retrieveCategoryList() async {
     try {
-      final categoryList =
-          await ref.watch(categoryRepositoryProvider).retrieveCategoryList();
+      final categoryList = await _categoryRepository.retrieveCategoryList();
       if (mounted) {
         state = AsyncValue.data(categoryList);
       }
@@ -42,9 +44,8 @@ class CategoryController extends StateNotifier<AsyncValue<List<Category>>> {
   Future<Category> retrieveCategoryById(
       {required String quizCategoryDocRef}) async {
     try {
-      final category = await ref
-          .watch(categoryRepositoryProvider)
-          .retrieveCategoryById(quizCategoryDocRef: quizCategoryDocRef);
+      final category = await _categoryRepository.retrieveCategoryById(
+          quizCategoryDocRef: quizCategoryDocRef);
       return category;
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
@@ -66,9 +67,8 @@ class CategoryController extends StateNotifier<AsyncValue<List<Category>>> {
       categoryQuestionCount: 0,
       imagePath: "assets/images/category_images/category_image1.png",
     );
-    final categoryWithDocRef = await ref
-        .watch(categoryRepositoryProvider)
-        .addCategory(category: category);
+    final categoryWithDocRef =
+        await _categoryRepository.addCategory(category: category);
     state.whenData((categoryList) => state = AsyncValue.data(categoryList
       ..add(category.copyWith(id: categoryWithDocRef.categoryDocRef))));
     return categoryWithDocRef;
@@ -77,7 +77,7 @@ class CategoryController extends StateNotifier<AsyncValue<List<Category>>> {
   Future<void> editCategoryQuestionCount(
       {required int categoryQuestionCount,
       required String categoryDocRef}) async {
-    await ref.watch(categoryRepositoryProvider).editCategoryQuestionCount(
+    await _categoryRepository.editCategoryQuestionCount(
         categoryQuestionCount: categoryQuestionCount,
         categoryDocRef: categoryDocRef);
   }

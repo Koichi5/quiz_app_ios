@@ -12,10 +12,29 @@ class QuizHistoryCard extends HookConsumerWidget {
 
   final QuizHistory quizHistory;
 
+  Widget _buildCorrectRateIndicator(BuildContext context, double correctRate) {
+    final int correctRatePercent = (correctRate * 100).round();
+    return CircularPercentIndicator(
+      radius: 60.0,
+      lineWidth: 6.0,
+      percent: correctRate,
+      center: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text("正答率", style: TextStyle(fontSize: 10)),
+          Text("$correctRatePercent%", style: const TextStyle(fontSize: 20)),
+        ],
+      ),
+      progressColor: Theme.of(context).colorScheme.primary,
+      animation: true,
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final double correctRate = quizHistory.score / quizHistory.questionCount;
-    final int correctRatePercent = (correctRate * 100).round();
+
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.98,
       child: Card(
@@ -33,30 +52,9 @@ class QuizHistoryCard extends HookConsumerWidget {
         Row(
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 15.0),
-              child: CircularPercentIndicator(
-                radius: 60.0,
-                lineWidth: 6.0,
-                percent: correctRate,
-                center: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "正答率",
-                      style: TextStyle(fontSize: 10),
-                    ),
-                    Text(
-                      "$correctRatePercent%",
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-                progressColor: Theme.of(context).colorScheme.primary,
-                animation: true,
-              ),
-            ),
+                padding: const EdgeInsets.only(
+                    left: 15.0, right: 15.0, bottom: 15.0),
+                child: _buildCorrectRateIndicator(context, correctRate)),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Column(

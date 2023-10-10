@@ -25,16 +25,20 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final errorColor = Theme.of(context).colorScheme.error;
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.9,
-      // height: MediaQuery.of(context).size.height * 0.1,
+      width: screenWidth * 0.9,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(helperText ?? "", style: const TextStyle(fontSize: 13),),
-          ),
+          if (helperText != null && helperText != "" && helperText!.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(helperText!, style: const TextStyle(fontSize: 13)),
+            ),
           TextField(
             onChanged: onChanged,
             controller: controller,
@@ -47,17 +51,15 @@ class CustomTextField extends StatelessWidget {
               hintText: title,
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
-                  color: error != ""
-                      ? Theme.of(context).colorScheme.error
-                      : Theme.of(context).colorScheme.primary,
+                  color: error?.isNotEmpty ?? false ? errorColor : primaryColor,
                 ),
               ),
             ),
           ),
-          if(error != null)
+          if (error?.isNotEmpty ?? false)
             Text(
-              error ?? "",
-              style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.error),
+              error!,
+              style: TextStyle(fontSize: 12, color: errorColor),
             )
         ],
       ),

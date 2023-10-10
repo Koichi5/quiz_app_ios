@@ -9,14 +9,19 @@ final authControllerProvider = StateNotifierProvider<AuthController, User?>(
 
 class AuthController extends StateNotifier<User?> {
   final Ref ref;
+  late final AuthRepository _authRepository;
   StreamSubscription<User?>? _authStateChangesSubscription;
 
   AuthController(this.ref) : super(null) {
+    _authRepository = ref.watch(authRepositoryProvider);
+    _initializeAuthListener();
+  }
+
+  void _initializeAuthListener() {
     _authStateChangesSubscription?.cancel();
-    _authStateChangesSubscription = ref
-        .watch(authRepositoryProvider)
-        .authStateChanges
-        .listen((user) => state = user);
+    _authStateChangesSubscription = _authRepository.authStateChanges.listen(
+      (user) => state = user,
+    );
   }
 
   @override
@@ -26,43 +31,37 @@ class AuthController extends StateNotifier<User?> {
   }
 
   void appStarted() async {
-    final user = ref.watch(authRepositoryProvider).getCurrentUser();
-    if (user == null) {
-      // Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-    }
+    _authRepository.getCurrentUser();
   }
 
   Future<User?> signInAnnonymously() async {
-    User? user = await ref.watch(authRepositoryProvider).signInAnnonymously();
+    User? user = await _authRepository.signInAnnonymously();
     return user;
   }
 
   Future<void> createUserWithEmailAndPassword(
       String email, String password) async {
-    await ref
-        .watch(authRepositoryProvider)
-        .createUserWithEmailAndPassword(email, password);
+    await _authRepository.createUserWithEmailAndPassword(email, password);
   }
 
   Future<User?> signInWithEmailAndPassword(
       String email, String password) async {
-    User? user = await ref
-        .watch(authRepositoryProvider)
-        .signInWithEmailAndPassword(email, password);
+    User? user =
+        await _authRepository.signInWithEmailAndPassword(email, password);
     return user;
   }
 
   Future<User?> signInWithGoogle() async {
-    User? user = await ref.watch(authRepositoryProvider).signInWithGoogle();
+    User? user = await _authRepository.signInWithGoogle();
     return user;
   }
 
   Future<User?> signInWithApple() async {
-    User? user = await ref.watch(authRepositoryProvider).signInWithApple();
+    User? user = await _authRepository.signInWithApple();
     return user;
   }
 
   Future<void> signOut() async {
-    await ref.watch(authRepositoryProvider).signOut();
+    await _authRepository.signOut();
   }
 }

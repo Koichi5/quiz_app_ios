@@ -12,7 +12,7 @@ final originalQuestionExceptionProvider =
 
 final originalQuestionControllerProvider = StateNotifierProvider.autoDispose<
     OriginalQuestionController, AsyncValue<List<Question>>>((ref) {
-  final user = ref.read(authControllerProvider);
+  final user = ref.watch(authControllerProvider);
   return OriginalQuestionController(ref, user?.uid);
 });
 
@@ -31,7 +31,7 @@ class OriginalQuestionController
   Future<void> retrieveOriginalQuestionList() async {
     try {
       final originalQuestionList =
-          await ref.read(originalQuestionRepositoryProvider)
+          await ref.watch(originalQuestionRepositoryProvider)
               .retrieveOriginalQuestionList(userId: _userId!);
       if (mounted) {
         state = AsyncValue.data(originalQuestionList);
@@ -91,7 +91,7 @@ class OriginalQuestionController
   Future<void> deleteOriginalQuestion(
       {required String originalQuestionDocRef}) async {
     try {
-      await ref.read(originalQuestionRepositoryProvider).deleteOriginalQuestion(
+      await ref.watch(originalQuestionRepositoryProvider).deleteOriginalQuestion(
           userId: _userId!, originalQuestionDocRef: originalQuestionDocRef);
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);

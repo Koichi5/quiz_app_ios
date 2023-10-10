@@ -13,6 +13,7 @@ class LoginScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final screenSize = MediaQuery.of(context).size;
     final emailControllerProvider =
         ref.watch(loginEmailControllerStateProvider);
     final passwordControllerProvider =
@@ -22,6 +23,11 @@ class LoginScreen extends HookConsumerWidget {
         ref.watch(loginObscureTextStateProvider.notifier);
     final loginValidator = ref.watch(loginValidatorProvider);
     final loginValidatorNotifier = ref.watch(loginValidatorProvider.notifier);
+
+    void toggleObscureText() {
+      obscureTextControllerNotifier.state = !obscureText;
+    }
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -32,11 +38,9 @@ class LoginScreen extends HookConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            SizedBox(height: screenSize.height * 0.1),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.1,
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.9,
+              width: screenSize.width * 0.9,
               child: CustomTextField(
                 title: "メールアドレス",
                 controller: emailControllerProvider,
@@ -46,41 +50,32 @@ class LoginScreen extends HookConsumerWidget {
                 },
               ),
             ),
+            SizedBox(height: screenSize.height * 0.05),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.9,
+              width: screenSize.width * 0.9,
               child: CustomTextField(
-                  title: "パスワード",
-                  controller: passwordControllerProvider,
-                  obscureText: obscureText,
-                  error: loginValidator.form.password.errorMessage,
-                  onChanged: (password) {
-                    loginValidatorNotifier.setPassword(password);
-                  },
-                  suffixIcon: obscureText
-                      ? IconButton(
-                          onPressed: () {
-                            obscureTextControllerNotifier.state = false;
-                          },
-                          icon: const Icon(Icons.visibility_off))
-                      : IconButton(
-                          onPressed: () {
-                            obscureTextControllerNotifier.state = true;
-                          },
-                          icon: const Icon(Icons.visibility))),
+                title: "パスワード",
+                controller: passwordControllerProvider,
+                obscureText: obscureText,
+                error: loginValidator.form.password.errorMessage,
+                onChanged: (password) {
+                  loginValidatorNotifier.setPassword(password);
+                },
+                suffixIcon: IconButton(
+                  onPressed: toggleObscureText,
+                  icon: Icon(
+                      obscureText ? Icons.visibility_off : Icons.visibility),
+                ),
+              ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
+            SizedBox(height: screenSize.height * 0.04),
             LoginButton(
                 emailControllerProvider.text, passwordControllerProvider.text),
             Divider(
-              height: MediaQuery.of(context).size.height * 0.05,
+              height: screenSize.height * 0.05,
               thickness: 0.5,
-              indent: MediaQuery.of(context).size.width * 0.05,
-              endIndent: MediaQuery.of(context).size.width * 0.05,
+              indent: screenSize.width * 0.05,
+              endIndent: screenSize.width * 0.05,
               color: Theme.of(context).colorScheme.primary,
             ),
             const Padding(

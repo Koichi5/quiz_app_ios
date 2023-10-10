@@ -19,34 +19,30 @@ class QuizRepository implements BaseQuizRepository {
 
   QuizRepository(this.ref);
 
+  CollectionReference _quizCollection(String categoryDocRef) => ref
+      .watch(firebaseFirestoreProvider)
+      .collection("category")
+      .doc(categoryDocRef)
+      .collection("quiz");
+
   @override
   Future<Quiz> addQuiz({required Category category, required Quiz quiz}) async {
     try {
-      final quizRef = ref
-          .watch(firebaseFirestoreProvider)
-          .collection("category")
-          .doc(category.categoryDocRef)
-          .collection("quiz");
+      final quizRef = _quizCollection(category.categoryDocRef!);
+
       final emptyQuestion = await quizRef
           .doc(category.quizDocRef)
           .collection("questions")
           .add(Question.empty().toDocument());
 
-      final quizWithDocRef = Quiz(
-        id: quiz.id,
+      final quizWithDocRef = quiz.copyWith(
         categoryDocRef: category.categoryDocRef,
         quizDocRef: category.quizDocRef,
         questionDocRef: emptyQuestion.id,
-        title: quiz.title,
-        description: quiz.description,
-        questionsShuffled: quiz.questionsShuffled,
-        imagePath: quiz.imagePath,
         categoryId: category.categoryId,
       );
 
-      await quizRef
-          .doc(category.quizDocRef)
-          .update(quizWithDocRef.toDocument());
+      await quizRef.doc(category.quizDocRef).update(quizWithDocRef.toDocument());
       return quizWithDocRef;
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
@@ -56,12 +52,7 @@ class QuizRepository implements BaseQuizRepository {
   @override
   Future<List<Quiz>> retrieveQuiz({required Category category}) async {
     try {
-      final snap = await ref
-          .watch(firebaseFirestoreProvider)
-          .collection("category")
-          .doc(category.categoryDocRef)
-          .collection("quiz")
-          .get();
+      final snap = await _quizCollection(category.categoryDocRef!).get();
       return snap.docs.map((doc) => Quiz.fromDocument(doc)).toList();
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);

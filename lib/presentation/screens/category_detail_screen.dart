@@ -11,44 +11,29 @@ class CategoryDetailScreen extends HookConsumerWidget {
 
   final Category category;
 
+  String _calcProcessTime(int categoryCount) {
+    final processTime = categoryCount * 10;
+    if (categoryCount < 6) {
+      return "${processTime * 10} 秒";
+    } else {
+      final processTimeMin = (processTime / 60).floor();
+      final processTimeSec = processTime % 60;
+      return "$processTimeMin 分 $processTimeSec 秒";
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String calcProcessTime(int categoryCount) {
-      final processTime = categoryCount * 10;
-      var processTimeMin = 0;
-      var processTimeSec = 0;
-      if (categoryCount < 6) {
-        return "${processTime * 10} 秒";
-      } else {
-        processTimeMin = (processTime / 60).floor();
-        processTimeSec = processTime % 60;
-        return "$processTimeMin 分 $processTimeSec 秒";
-      }
-    }
-
-    final String categoryName = category.name;
-    final String categoryDescription = category.description;
-    final String categoryImagePath = category.imagePath;
-    final int categoryQuestionCount = category.categoryQuestionCount;
     final int weakQuestionInCategoryCount =
         ref.watch(weakQuestionInCategoryCountProvider);
     return Scaffold(
       body: Stack(
         children: [
           Image.asset(
-            categoryImagePath,
+            category.imagePath,
             fit: BoxFit.fitWidth,
           ),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 50.0),
-            child: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(Icons.arrow_back_ios),
-            ),
-          ),
+          _buildBackButton(context),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -73,120 +58,33 @@ class CategoryDetailScreen extends HookConsumerWidget {
                           padding: const EdgeInsets.only(
                               top: 40.0, right: 40.0, bottom: 20.0, left: 40.0),
                           child: Text(
-                            categoryName,
+                            category.name,
                             style: const TextStyle(fontSize: 20),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 15.0, horizontal: 40.0),
-                          child: Text(categoryDescription),
+                          child: Text(category.description),
                         ),
-                        Divider(
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                          thickness: 1.0,
-                          indent: 20.0,
-                          endIndent: 20.0,
+                        _buildCategoryInfoRow(
+                          context,
+                          icon: Icons.question_mark,
+                          label: "問題数",
+                          value: "${category.categoryQuestionCount} 問",
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 15.0,
-                                      right: 20.0,
-                                      bottom: 20.0,
-                                      left: 40),
-                                  child: Icon(
-                                    Icons.question_mark,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                ),
-                                const Text("問題数"),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 15.0, horizontal: 40.0),
-                              child: Text("$categoryQuestionCount 問"),
-                            ),
-                          ],
+                        _buildCategoryInfoRow(
+                          context,
+                          icon: Icons.timer,
+                          label: "所要時間",
+                          value:
+                              _calcProcessTime(category.categoryQuestionCount),
                         ),
-                        Divider(
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                          thickness: 1.0,
-                          indent: 20.0,
-                          endIndent: 20.0,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 15.0,
-                                      right: 20.0,
-                                      bottom: 20.0,
-                                      left: 40),
-                                  child: Icon(
-                                    Icons.timer,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                ),
-                                const Text("所要時間"),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 15.0, horizontal: 40.0),
-                              // child: Text("${categoryQuestionCount * 10} 秒"),
-                              child: Text(calcProcessTime(category.categoryQuestionCount)),
-                            ),
-                          ],
-                        ),
-                        Divider(
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                          thickness: 1.0,
-                          indent: 20.0,
-                          endIndent: 20.0,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 15.0,
-                                      right: 20.0,
-                                      bottom: 20.0,
-                                      left: 40),
-                                  child: Icon(
-                                    Icons.star,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                ),
-                                const Text("苦手問題"),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 15.0, horizontal: 40.0),
-                              child: Text("$weakQuestionInCategoryCount 問"),
-                            ),
-                          ],
-                        ),
-                        Divider(
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                          thickness: 1.0,
-                          indent: 20.0,
-                          endIndent: 20.0,
+                        _buildCategoryInfoRow(
+                          context,
+                          icon: Icons.star,
+                          label: "苦手問題",
+                          value: "$weakQuestionInCategoryCount 問",
                         ),
                       ],
                     ),
@@ -227,6 +125,55 @@ class CategoryDetailScreen extends HookConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildBackButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 50.0),
+      child: IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: const Icon(Icons.arrow_back_ios),
+      ),
+    );
+  }
+
+  Widget _buildCategoryInfoRow(BuildContext context,
+      {required IconData icon, required String label, required String value}) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: 15.0, right: 20.0, bottom: 20.0, left: 40),
+                  child: Icon(
+                    icon,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                Text(label),
+              ],
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 15.0, horizontal: 40.0),
+              child: Text(value),
+            ),
+          ],
+        ),
+        Divider(
+          color: Theme.of(context).colorScheme.inversePrimary,
+          thickness: 1.0,
+          indent: 20.0,
+          endIndent: 20.0,
+        ),
+      ],
     );
   }
 }

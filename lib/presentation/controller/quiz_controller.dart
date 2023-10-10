@@ -6,6 +6,8 @@ import 'package:quiz_app/domain/repository/quiz_repository.dart';
 import 'package:quiz_app/general/custom_exception.dart';
 import 'package:quiz_app/presentation/controller/auth_controller.dart';
 
+const defaultImagePath = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png";
+
 final quizExceptionProvider = StateProvider<CustomException?>((_) => null);
 
 final quizControllerProvider = StateNotifierProvider.family
@@ -23,18 +25,18 @@ class QuizController extends StateNotifier<AsyncValue<List<Quiz>>> {
   QuizController(this.ref, this._userId, this.category)
       : super(const AsyncValue.loading()) {
     if (_userId != null) {
-      retrieveQuiz(category: category);
+      retrieveQuiz();
     }
   }
 
-  Future<List<Quiz>> retrieveQuiz({required Category category}) async {
+  Future<List<Quiz>> retrieveQuiz() async {
     try {
-      final quiz = await ref.watch(quizRepositoryProvider)
+      final quizList = await ref.watch(quizRepositoryProvider)
           .retrieveQuiz(category: category);
       if (mounted) {
-        state = AsyncValue.data(quiz);
+        state = AsyncValue.data(quizList);
       }
-      return quiz;
+      return quizList;
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
     }
@@ -47,15 +49,13 @@ class QuizController extends StateNotifier<AsyncValue<List<Quiz>>> {
     required bool questionsShuffled,
     String? imagePath,
     required int categoryId,
-    required Category category,
   }) async {
     final quiz = Quiz(
         id: id,
         title: title,
         description: description,
         questionsShuffled: questionsShuffled,
-        imagePath:
-            "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png",
+        imagePath: imagePath ?? defaultImagePath,
         categoryId: categoryId,
         questions: []);
     final quizWithDocRef = await ref.watch(quizRepositoryProvider)

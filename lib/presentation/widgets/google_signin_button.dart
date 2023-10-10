@@ -11,9 +11,12 @@ class GoogleSignInButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authControllerProviderNotifier =
-    ref.watch(authControllerProvider.notifier);
-    final authRepositoryProviderNotifier = ref.watch(authRepositoryProvider);
+    final authController = ref.watch(authControllerProvider.notifier);
+    final authRepository = ref.watch(authRepositoryProvider);
+    final isDark = isDarkMode(context);
+    final textColor = isDark
+        ? Theme.of(context).colorScheme.secondary
+        : Theme.of(context).colorScheme.onBackground;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
@@ -21,15 +24,15 @@ class GoogleSignInButton extends HookConsumerWidget {
         width: MediaQuery.of(context).size.width * 0.9,
         child: OutlinedButton(
             style: OutlinedButton.styleFrom(
-                side: BorderSide(color: isDarkMode(context)
-                    ? Theme.of(context).colorScheme.secondary
-                    : Theme.of(context).colorScheme.onBackground,)),
+              side: BorderSide(
+                color: textColor,
+              ),
+            ),
             onPressed: ([bool mounted = true]) async {
-              await authControllerProviderNotifier.signInWithGoogle();
-              User? user =
-              authRepositoryProviderNotifier.getCurrentUser();
+              await authController.signInWithGoogle();
+              User? user = authRepository.getCurrentUser();
               if (user != null) {
-                if(!mounted) return;
+                if (!mounted) return;
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const HomeScreen()));
               }
@@ -46,9 +49,7 @@ class GoogleSignInButton extends HookConsumerWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     "Googleで続ける",
-                    style: TextStyle(color: isDarkMode(context)
-                        ? Theme.of(context).colorScheme.secondary
-                        : Theme.of(context).colorScheme.onBackground,),
+                    style: TextStyle(color: textColor),
                   ),
                 ),
               ],
