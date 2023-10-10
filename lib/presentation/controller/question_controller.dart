@@ -32,7 +32,7 @@ class QuestionController extends StateNotifier<AsyncValue<List<Question>>> {
 
   Future<void> retrieveQuestionList({required Quiz quiz}) async {
     try {
-      final questionList = await ref.read(questionRepositoryProvider)
+      final questionList = await ref.watch(questionRepositoryProvider)
           .retrieveQuestionList(quiz: quiz);
       if (mounted) {
         state = AsyncValue.data(questionList);
@@ -73,7 +73,7 @@ class QuestionController extends StateNotifier<AsyncValue<List<Question>>> {
             isSelected: false),
       ],
     );
-    final questionWithDocRef = await ref.read(questionRepositoryProvider)
+    final questionWithDocRef = await ref.watch(questionRepositoryProvider)
         .addQuestion(question: question, quiz: quiz);
     state.whenData((questionList) => state = AsyncValue.data(
         questionList..add(question.copyWith(id: questionWithDocRef.id))));
@@ -93,7 +93,6 @@ final weakQuestionControllerProvider = StateNotifierProvider.autoDispose<
 class WeakQuestionController extends StateNotifier<AsyncValue<List<Question>>> {
   final Ref ref;
   final String? _userId;
-  // final Quiz quiz;
 
   WeakQuestionController(this.ref, this._userId)
       : super(const AsyncValue.loading()) {
@@ -104,7 +103,7 @@ class WeakQuestionController extends StateNotifier<AsyncValue<List<Question>>> {
 
   Future<void> retrieveWeakQuestionList() async {
     try {
-      final weakQuestionList = await ref.read(weakQuestionRepositoryProvider)
+      final weakQuestionList = await ref.watch(weakQuestionRepositoryProvider)
           .retrieveWeakQuestionList();
       if (mounted) {
         state = AsyncValue.data(weakQuestionList);
@@ -115,7 +114,7 @@ class WeakQuestionController extends StateNotifier<AsyncValue<List<Question>>> {
   }
 
   Future<Question> addWeakQuestion({required Question question}) async {
-    final questionWithDocRef = await ref.read(weakQuestionRepositoryProvider)
+    final questionWithDocRef = await ref.watch(weakQuestionRepositoryProvider)
         .addWeakQuestion(question: question);
     state.whenData((questionList) => state = AsyncValue.data(
         questionList..add(question.copyWith(id: questionWithDocRef.id))));

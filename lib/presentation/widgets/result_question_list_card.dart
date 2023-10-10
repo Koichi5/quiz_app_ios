@@ -19,37 +19,7 @@ class ResultQuestionListCard extends HookConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(children: [
-            answerIsCorrect
-                ? Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Icon(
-                      Icons.circle_outlined,
-                      size: 20,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Icon(
-                      Icons.close,
-                      size: 20,
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-                  ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Text(
-                    question.options.elementAt(question.options.indexWhere((element) => element.isCorrect == true)).text,
-                  ),
-                ),
-              ],
-            ),
-          ]
-              ),
+          _buildQuestionOutcome(context),
           weakQuestionsState.when(
               data: (weakQuestionList) {
                 return weakQuestionList.any((element) =>
@@ -120,24 +90,24 @@ class ResultQuestionListCard extends HookConsumerWidget {
                       );
               },
               error: (error, _) => Center(
-                child: Container(
-                  color: Colors.white,
-                  width: double.infinity,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "エラーが発生しています",
-                        textAlign: TextAlign.center,
+                    child: Container(
+                      color: Colors.white,
+                      width: double.infinity,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "エラーが発生しています",
+                            textAlign: TextAlign.center,
+                          ),
+                          Lottie.asset("assets/json_files/error.json",
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              fit: BoxFit.fitWidth),
+                        ],
                       ),
-                      Lottie.asset("assets/json_files/error.json",
-                          width: MediaQuery.of(context).size.width * 0.7,
-                          fit: BoxFit.fitWidth),
-                    ],
+                    ),
                   ),
-                ),
-              ),
               loading: () {
                 return const Center(
                   child: CircularProgressIndicator(),
@@ -145,6 +115,36 @@ class ResultQuestionListCard extends HookConsumerWidget {
               }),
         ],
       ),
+    );
+  }
+
+  Row _buildQuestionOutcome(BuildContext context) {
+    return Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Icon(
+            answerIsCorrect ? Icons.circle_outlined : Icons.close,
+            size: 20,
+            color: answerIsCorrect
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.error,
+          ),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: Text(
+                question.options
+                    .firstWhere((option) => option.isCorrect == true)
+                    .text,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

@@ -8,8 +8,7 @@ import 'package:quiz_app/general/general_provider.dart';
 abstract class BaseCategoryRepository {
   Future<Category> addCategory({required Category category});
   Future<List<Category>> retrieveCategoryList();
-  Future<Category> retrieveCategoryById(
-      {required String quizCategoryDocRef});
+  Future<Category> retrieveCategoryById({required String quizCategoryDocRef});
   Future<void> editCategoryQuestionCount(
       {required int categoryQuestionCount, required String categoryDocRef});
 }
@@ -22,15 +21,15 @@ class CategoryRepository implements BaseCategoryRepository {
 
   CategoryRepository(this.ref);
 
+  CollectionReference get _categoryCollection =>
+      ref.watch(firebaseFirestoreProvider).collection("category");
+
   @override
   Future<Category> addCategory({required Category category}) async {
     try {
-      final categoryRef =
-          ref.watch(firebaseFirestoreProvider).collection("category");
+      final categoryDocRef = _categoryCollection.doc().id;
 
-      final categoryDocRef = categoryRef.doc().id;
-
-      final emptyQuiz = await categoryRef
+      final emptyQuiz = await _categoryCollection
           .doc(categoryDocRef)
           .collection("quiz")
           .add(Quiz.empty().toDocument());
@@ -45,7 +44,7 @@ class CategoryRepository implements BaseCategoryRepository {
         imagePath: category.imagePath,
       );
 
-      await categoryRef
+      await _categoryCollection
           .doc(categoryDocRef)
           .set(categoryWithDocRef.toDocument());
 
@@ -58,10 +57,7 @@ class CategoryRepository implements BaseCategoryRepository {
   @override
   Future<List<Category>> retrieveCategoryList() async {
     try {
-      final snap = await ref.watch(firebaseFirestoreProvider)
-          .collection("category")
-          .orderBy("categoryId")
-          .get();
+      final snap = await _categoryCollection.orderBy("categoryId").get();
       return snap.docs.map((doc) => Category.fromDocument(doc)).toList();
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
@@ -72,11 +68,7 @@ class CategoryRepository implements BaseCategoryRepository {
   Future<Category> retrieveCategoryById(
       {required String quizCategoryDocRef}) async {
     try {
-      final snap = await ref.watch(firebaseFirestoreProvider)
-          .collection("category")
-          .doc(quizCategoryDocRef)
-          .get();
-      // return snap.docs.map((doc) => Category.fromDocument(doc)).toList();
+      final snap = await _categoryCollection.doc(quizCategoryDocRef).get();
       return Category.fromDocument(snap);
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
@@ -88,10 +80,7 @@ class CategoryRepository implements BaseCategoryRepository {
       {required int categoryQuestionCount,
       required String categoryDocRef}) async {
     try {
-      final categoryRef =
-          ref.watch(firebaseFirestoreProvider).collection("category");
-
-      await categoryRef
+      await _categoryCollection
           .doc(categoryDocRef)
           .update({"categoryQuestionCount": categoryQuestionCount});
     } on FirebaseException catch (e) {

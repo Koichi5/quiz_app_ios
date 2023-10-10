@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/quiz_history/quiz_history.dart';
@@ -21,35 +22,26 @@ class QuizHistoryRepository implements BaseQuizHistoryRepository {
 
   QuizHistoryRepository(this.ref);
 
+  CollectionReference _userQuizHistoryCollection(String userId) => ref
+      .watch(firebaseFirestoreProvider)
+      .collection("user")
+      .doc(userId)
+      .collection("quizHistory");
+
   @override
   Future<String> addQuizHistory(
       {required User user, required QuizHistory quizHistory}) async {
     try {
-      final quizHistoryRef = ref.watch(firebaseFirestoreProvider)
-          .collection("user")
-          .doc(user.uid)
-          .collection("quizHistory");
+      final quizHistoryRef = _userQuizHistoryCollection(user.uid);
       final quizHistoryDocRef = quizHistoryRef.doc().id;
-      await quizHistoryRef.doc(quizHistoryDocRef).set(QuizHistory(
-            id: quizHistory.id,
-            quizDocRef: quizHistory.quizDocRef,
-            categoryDocRef: quizHistory.categoryDocRef,
-            quizTitle: quizHistory.quizTitle,
-            score: quizHistory.score,
-            questionCount: quizHistory.questionCount,
-            timeTakenMinutes: quizHistory.timeTakenMinutes,
-            timeTakenSeconds: quizHistory.timeTakenSeconds,
-            quizDate: quizHistory.quizDate,
-            status: quizHistory.status,
-            takenQuestions: quizHistory.takenQuestions,
-            answerIsCorrectList: quizHistory.answerIsCorrectList,
-            questionList: [],
-          ).toDocument());
 
-      await quizHistoryRef.doc(quizHistoryDocRef).update({
-        "questionList": quizHistory.questionList
-            .map((question) => question.copyWith(options: []).toDocument())
-            .toList()
+      final questionList = quizHistory.questionList
+          .map((question) => question.copyWith(options: []).toDocument())
+          .toList();
+
+      await quizHistoryRef.doc(quizHistoryDocRef).set({
+        ...quizHistory.copyWith(id: quizHistoryDocRef).toDocument(),
+        "questionList": questionList,
       });
 
       return quizHistoryDocRef;
@@ -61,7 +53,8 @@ class QuizHistoryRepository implements BaseQuizHistoryRepository {
   Future<List<String?>> retrieveUserCompletedCategoryList() async {
     final User? currentUser = ref.watch(firebaseAuthProvider).currentUser;
     try {
-      final snap = ref.watch(firebaseFirestoreProvider)
+      final snap = ref
+          .watch(firebaseFirestoreProvider)
           .collection("user")
           .doc(currentUser!.uid)
           .get();
@@ -77,10 +70,7 @@ class QuizHistoryRepository implements BaseQuizHistoryRepository {
     final User? currentUser = ref.watch(firebaseAuthProvider).currentUser;
     const int quizHistoryLimitCount = 10;
     try {
-      final snap = await ref.watch(firebaseFirestoreProvider)
-          .collection("user")
-          .doc(currentUser!.uid)
-          .collection("quizHistory")
+      final snap = await _userQuizHistoryCollection(currentUser!.uid)
           .orderBy("quizDate", descending: true)
           .limit(quizHistoryLimitCount)
           .get();
@@ -94,7 +84,8 @@ class QuizHistoryRepository implements BaseQuizHistoryRepository {
   Future<List<String>> retrieveUserCompletedCategoryNameList() async {
     final User? currentUser = ref.watch(firebaseAuthProvider).currentUser;
     try {
-      final snap = await ref.watch(firebaseFirestoreProvider)
+      final snap = await ref
+          .watch(firebaseFirestoreProvider)
           .collection("user")
           .doc(currentUser!.uid)
           .get();

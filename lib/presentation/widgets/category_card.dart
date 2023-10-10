@@ -12,29 +12,9 @@ class CategoryCard extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final screenHeight = MediaQuery.of(context).size.height;
     return GestureDetector(
-      onTap: ([bool mounted = true]) async {
-        ref.watch(weakQuestionInCategoryCountProvider.notifier).state = 0;
-        await ref
-            .watch(weakQuestionRepositoryProvider)
-            .retrieveWeakQuestionList()
-            .then((weakQuestionList) {
-          for (var weakQuestion in weakQuestionList) {
-            if (weakQuestion.categoryDocRef == category.categoryDocRef) {
-              ref.watch(weakQuestionInCategoryCountProvider.notifier).state++;
-            }
-          }
-        });
-        if (!mounted) return;
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => CategoryDetailScreen(
-              category: category,
-            ),
-          ),
-        );
-      },
+      onTap: () => _handleTap(context, ref),
       child: Card(
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
@@ -44,7 +24,7 @@ class CategoryCard extends HookConsumerWidget {
           alignment: Alignment.center,
           children: [
             Container(
-              height: MediaQuery.of(context).size.height * 0.27,
+              height: screenHeight * 0.27,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(category.imagePath),
@@ -69,6 +49,30 @@ class CategoryCard extends HookConsumerWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _handleTap(BuildContext context, WidgetRef ref,
+      [bool mounted = true]) async {
+    ref.watch(weakQuestionInCategoryCountProvider.notifier).state = 0;
+    await ref
+        .watch(weakQuestionRepositoryProvider)
+        .retrieveWeakQuestionList()
+        .then((weakQuestionList) {
+      for (var weakQuestion in weakQuestionList) {
+        if (weakQuestion.categoryDocRef == category.categoryDocRef) {
+          ref.watch(weakQuestionInCategoryCountProvider.notifier).state++;
+        }
+      }
+    });
+    if (!mounted) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CategoryDetailScreen(
+          category: category,
         ),
       ),
     );

@@ -13,6 +13,7 @@ class QuizResultScreen extends HookConsumerWidget {
   final List<int> takenQuestions;
   final List<bool> answerIsCorrectList;
   final List<Question> questionList;
+
   const QuizResultScreen(
       {required this.result,
       required this.takenQuestions,
@@ -21,50 +22,59 @@ class QuizResultScreen extends HookConsumerWidget {
       Key? key})
       : super(key: key);
 
+  bool get hasError => questionList.length != answerIsCorrectList.length;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        automaticallyImplyLeading:
-            questionList.length != answerIsCorrectList.length ? true : false,
+        automaticallyImplyLeading: !hasError,
       ),
-      body: questionList.length != answerIsCorrectList.length
-          ? Container(
-              color: Colors.white,
-              width: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text(
-                    "エラーが発生しています\n テスト結果を正確に取得できませんでした",
-                    textAlign: TextAlign.center,
-                  ),
-                  Lottie.asset("assets/json_files/error.json",
-                      width: MediaQuery.of(context).size.width * 0.7,
-                      fit: BoxFit.fitWidth),
-                ],
-              ),
-            )
-          : SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  quizResultInfo(context, result),
-                  resultQuestionList(context, result.questionList,
-                      takenQuestions, answerIsCorrectList),
-                  bottomButtons(context, ref),
-                ],
-              ),
-            ),
+      body: hasError
+          ? _buildErrorScreen(context)
+          : _buildResultScreen(context, ref),
     );
   }
 
-  Widget quizResultInfo(BuildContext context, QuizResult result) {
-    final double totalCorrect = result.totalCorrect;
-    final int totalQuestions = result.questionList.length;
-    final int correctAnswerRate = (totalCorrect / totalQuestions * 100).round();
+  Widget _buildErrorScreen(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      width: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text(
+            "エラーが発生しています\n テスト結果を正確に取得できませんでした",
+            textAlign: TextAlign.center,
+          ),
+          Lottie.asset(
+            "assets/json_files/error.json",
+            width: MediaQuery.of(context).size.width * 0.7,
+            fit: BoxFit.fitWidth,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildResultScreen(BuildContext context, WidgetRef ref) {
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _quizResultInfo(context),
+          _resultQuestionList(context),
+          _bottomButtons(context, ref),
+        ],
+      ),
+    );
+  }
+
+  Widget _quizResultInfo(BuildContext context) {
+    final int correctAnswerRate =
+        (result.totalCorrect / result.questionList.length * 100).round();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -82,12 +92,11 @@ class QuizResultScreen extends HookConsumerWidget {
     );
   }
 
-  Widget resultQuestionList(BuildContext context, List<Question> questionList,
-      List<int> takenQuestions, List<bool> answerIsCorrectList) {
+  Widget _resultQuestionList(BuildContext context) {
     return ListView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: questionList.length,
+        itemCount: result.questionList.length,
         itemBuilder: (BuildContext context, int index) {
           final question = questionList[takenQuestions[index]];
           final answerIsCorrect = answerIsCorrectList[index];
@@ -96,71 +105,73 @@ class QuizResultScreen extends HookConsumerWidget {
         });
   }
 
-  Widget bottomButtons(BuildContext context, WidgetRef ref) {
+  Widget _bottomButtons(BuildContext context, WidgetRef ref) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: TextButton(
-              onPressed: () {
-                ref.watch(currentQuestionIndexProvider.notifier).state = 1;
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Scaffold(
-                      appBar: AppBar(
-                        leading: IconButton(
-                          icon: const Icon(Icons.arrow_back_ios),
-                          onPressed: (){
-                            Navigator.pop(context);
-                            ref.watch(currentQuestionIndexProvider.notifier).state = 1;
-                          },
-                        ),
-                        centerTitle: true,
-                        title: const Text("再挑戦"),
-                      ),
-                      body: QuizScreen(
-                        questionList: result.questionList,
-                        ref: ref,
-                      ),
-                    ),
+          _retryButton(context, ref),
+          _exitButton(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _retryButton(BuildContext context, WidgetRef ref) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: TextButton(
+        onPressed: () {
+          ref.watch(currentQuestionIndexProvider.notifier).state = 1;
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Scaffold(
+                appBar: AppBar(
+                  leading: IconButton(
+                    icon: const Icon(Icons.arrow_back_ios),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      ref.watch(currentQuestionIndexProvider.notifier).state =
+                          1;
+                    },
                   ),
-                );
-              },
-              child: Text(
-                "再挑戦",
-                style: TextStyle(color: Theme.of(context).colorScheme.primary),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const HomeScreen()));
-                // Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text(
-                  "終 了",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
+                  centerTitle: true,
+                  title: const Text("再挑戦"),
+                ),
+                body: QuizScreen(
+                  questionList: result.questionList,
+                  ref: ref,
                 ),
               ),
             ),
+          );
+        },
+        child: Text(
+          "再挑戦",
+          style: TextStyle(color: Theme.of(context).colorScheme.primary),
+        ),
+      ),
+    );
+  }
+
+  Widget _exitButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: ElevatedButton(
+        onPressed: () => Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const HomeScreen())),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Theme.of(context).colorScheme.primary,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Text(
+            "終 了",
+            style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
           ),
-        ],
+        ),
       ),
     );
   }

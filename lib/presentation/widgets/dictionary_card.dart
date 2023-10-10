@@ -12,6 +12,7 @@ class DictionaryCard extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final linkButton = LinkButton();
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -45,7 +46,7 @@ class DictionaryCard extends HookConsumerWidget {
               ),
               TextButton(
                 onPressed: () async {
-                  LinkButton().launchUriWithString(
+                  linkButton.launchUriWithString(
                       context, dictionaryItem.dictionaryUrl);
                 },
                 child: const Text(

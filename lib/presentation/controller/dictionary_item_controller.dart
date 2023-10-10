@@ -5,18 +5,21 @@ import 'package:quiz_app/domain/repository/dictionary_item_repository.dart';
 import 'package:quiz_app/general/custom_exception.dart';
 import 'auth_controller.dart';
 
-final dictionaryItemExceptionProvider = StateProvider<CustomException?>((_) => null);
+final dictionaryItemExceptionProvider =
+    StateProvider<CustomException?>((_) => null);
 
-final dictionaryItemControllerProvider = StateNotifierProvider
-    .autoDispose<DictionaryItemController, AsyncValue<List<DictionaryItem>>>(
-        (ref) {
-      final user = ref.watch(authControllerProvider);
-      return DictionaryItemController(ref, user?.uid);
-    });
+final dictionaryItemControllerProvider = StateNotifierProvider.autoDispose<
+    DictionaryItemController, AsyncValue<List<DictionaryItem>>>((ref) {
+  final user = ref.watch(authControllerProvider);
+  return DictionaryItemController(ref, user?.uid);
+});
 
-class DictionaryItemController extends StateNotifier<AsyncValue<List<DictionaryItem>>> {
+class DictionaryItemController
+    extends StateNotifier<AsyncValue<List<DictionaryItem>>> {
   final Ref ref;
   final String? _userId;
+  late final _dictionaryItemRepository =
+      ref.watch(dictionaryItemRepositoryProvider);
 
   DictionaryItemController(this.ref, this._userId)
       : super(const AsyncValue.loading()) {
@@ -27,8 +30,8 @@ class DictionaryItemController extends StateNotifier<AsyncValue<List<DictionaryI
 
   Future<void> retrieveDictionaryItemList() async {
     try {
-      final dictionaryItemList = await ref.watch(dictionaryItemRepositoryProvider)
-          .retrieveDictionaryItem();
+      final dictionaryItemList =
+          await _dictionaryItemRepository.retrieveDictionaryItem();
       if (mounted) {
         state = AsyncValue.data(dictionaryItemList);
       }

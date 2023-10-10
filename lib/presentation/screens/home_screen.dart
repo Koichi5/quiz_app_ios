@@ -24,85 +24,92 @@ class HomeScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final bottomNavBarSelectedIndex =
         ref.watch(bottomNavBarSelectedIndexProvider);
+
     return Scaffold(
-      appBar: bottomNavBarSelectedIndex == 2
-          ? null
-          : AppBar(
-              centerTitle: true,
-              automaticallyImplyLeading: false,
-              title: bottomNavBarSelectedIndex == 0
-                  ? const Text("ホーム")
-                  : bottomNavBarSelectedIndex == 1
-                      ? const Text("復習")
-                      : const Text("設定")),
-      bottomNavigationBar: BottomNavBar(),
-      body: pageController(bottomNavBarSelectedIndex),
-      floatingActionButton: bottomNavBarSelectedIndex == 1
-          ? ref.watch(currentSelectedIndexProvider) == 0
-              ? ref.watch(weakQuestionControllerProvider).when(
-                  data: (weakQuestionList) {
-                    if (weakQuestionList.isNotEmpty) {
-                      return FloatingActionButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Scaffold(
-                                appBar: AppBar(
-                                  leading: IconButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      ref
-                                          .watch(currentQuestionIndexProvider
-                                              .notifier)
-                                          .state = 1;
-                                    },
-                                    icon: const Icon(Icons.arrow_back_ios),
-                                  ),
-                                  centerTitle: true,
-                                  title: const Text("苦手問題"),
-                                ),
-                                body: QuizScreen(
-                                  ref: ref,
-                                  questionList: weakQuestionList,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                        child: const Icon(Icons.play_arrow),
-                      );
-                    } else {
-                      return null;
-                    }
-                  },
-                  error: (error, _) => Center(
-                        child: Container(
-                          color: Colors.white,
-                          width: double.infinity,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Text(
-                                "エラーが発生しています",
-                                textAlign: TextAlign.center,
-                              ),
-                              Lottie.asset("assets/json_files/error.json",
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.7,
-                                  fit: BoxFit.fitWidth),
-                            ],
-                          ),
-                        ),
-                      ),
-                  loading: () => const SizedBox())
-              : null
-          : null,
+        appBar: _buildAppBar(bottomNavBarSelectedIndex),
+        bottomNavigationBar: BottomNavBar(),
+        body: homePageList[bottomNavBarSelectedIndex],
+        floatingActionButton: _buildFloatingActionButton(
+            context, ref, bottomNavBarSelectedIndex));
+  }
+
+  AppBar? _buildAppBar(int index) {
+    if (index == 2) return null;
+
+    Map<int, String> titles = {
+      0: "ホーム",
+      1: "復習",
+      3: "設定",
+    };
+    return AppBar(
+      centerTitle: true,
+      automaticallyImplyLeading: false,
+      title: Text(titles[index] ?? ""),
     );
   }
 
-  pageController(i) {
-    return homePageList[i];
+  Widget? _buildFloatingActionButton(
+      BuildContext context, WidgetRef ref, int index) {
+    if (index != 1) return null;
+    if (ref.watch(currentSelectedIndexProvider) != 0) return null;
+
+    return ref.watch(weakQuestionControllerProvider).when(
+          data: (weakQuestionList) {
+            if (weakQuestionList.isNotEmpty) {
+              return FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Scaffold(
+                        appBar: AppBar(
+                          leading: IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              ref
+                                  .watch(currentQuestionIndexProvider.notifier)
+                                  .state = 1;
+                            },
+                            icon: const Icon(Icons.arrow_back_ios),
+                          ),
+                          centerTitle: true,
+                          title: const Text("苦手問題"),
+                        ),
+                        body: QuizScreen(
+                          ref: ref,
+                          questionList: weakQuestionList,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                child: const Icon(Icons.play_arrow),
+              );
+            }
+            return null;
+          },
+          error: (error, _) => Center(
+            child: Container(
+              color: Colors.white,
+              width: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text(
+                    "エラーが発生しています",
+                    textAlign: TextAlign.center,
+                  ),
+                  Lottie.asset(
+                    "assets/json_files/error.json",
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    fit: BoxFit.fitWidth,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          loading: () => const SizedBox(),
+        );
   }
 }

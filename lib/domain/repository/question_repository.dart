@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/question/question.dart';
@@ -16,37 +17,31 @@ final questionRepositoryProvider =
 
 class QuestionRepository implements BaseQuestionRepository {
   final Ref ref;
+
   QuestionRepository(this.ref);
+
+  CollectionReference _questionsCollection(Quiz quiz) => ref
+      .watch(firebaseFirestoreProvider)
+      .collection("category")
+      .doc(quiz.categoryDocRef)
+      .collection("quiz")
+      .doc(quiz.quizDocRef)
+      .collection("questions");
 
   @override
   Future<Question> addQuestion(
       {required Quiz quiz, required Question question}) async {
     try {
-      final questionRef = ref.watch(firebaseFirestoreProvider)
-          .collection("category")
-          .doc(quiz.categoryDocRef)
-          .collection("quiz")
-          .doc(quiz.quizDocRef)
-          .collection("questions");
-      final questionWithDocRef = Question(
-        id: question.id,
-        categoryDocRef: quiz.categoryDocRef,
-        quizDocRef: quiz.quizDocRef,
-        questionDocRef: quiz.questionDocRef,
-        text: question.text,
-        duration: question.duration,
-        optionsShuffled: question.optionsShuffled,
-        options: [],
-      );
-      // changed update to set
-      await questionRef
-          .doc(quiz.questionDocRef)
-          .set(questionWithDocRef.toDocument());
+      final questionRef = _questionsCollection(quiz).doc(quiz.questionDocRef);
+      final questionWithDocRef =
+          question.copyWith(questionDocRef: quiz.questionDocRef);
 
-      await questionRef.doc(quiz.questionDocRef).update({
+      await questionRef.set({
+        ...questionWithDocRef.toDocument(),
         "options":
             question.options.map((option) => option.toDocument()).toList(),
       });
+
       return questionWithDocRef;
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
@@ -56,20 +51,13 @@ class QuestionRepository implements BaseQuestionRepository {
   @override
   Future<List<Question>> retrieveQuestionList({required Quiz quiz}) async {
     try {
-      final snap = await ref.watch(firebaseFirestoreProvider)
-          .collection("category")
-          .doc(quiz.categoryDocRef)
-          .collection("quiz")
-          .doc(quiz.quizDocRef)
-          .collection("questions")
-          .get();
+      final snap = await _questionsCollection(quiz).get();
       return snap.docs.map((doc) => Question.fromDocument(doc)).toList();
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
     }
   }
 }
-
 
 abstract class BaseWeakQuestionRepository {
   Future<Question> addWeakQuestion({required Question question});
@@ -78,42 +66,33 @@ abstract class BaseWeakQuestionRepository {
 }
 
 final weakQuestionRepositoryProvider =
-Provider<WeakQuestionRepository>((ref) => WeakQuestionRepository(ref));
+    Provider<WeakQuestionRepository>((ref) => WeakQuestionRepository(ref));
 
 class WeakQuestionRepository implements BaseWeakQuestionRepository {
   final Ref ref;
+
   WeakQuestionRepository(this.ref);
+
+  CollectionReference _weakQuestionsCollection(String userId) => ref
+      .watch(firebaseFirestoreProvider)
+      .collection("user")
+      .doc(userId)
+      .collection("weakQuestion");
 
   @override
   Future<Question> addWeakQuestion({required Question question}) async {
-    final User? currentUser = ref.watch(firebaseAuthProvider).currentUser;
     try {
-      print(question);
-      final questionRef = ref.watch(firebaseFirestoreProvider)
-          .collection("user")
-          .doc(currentUser!.uid)
-          .collection("weakQuestion");
-      final questionWithDocRef = Question(
-        id: question.id,
-        categoryDocRef: question.categoryDocRef,
-        quizDocRef: question.quizDocRef,
-        questionDocRef: question.questionDocRef,
-        text: question.text,
-        duration: question.duration,
-        optionsShuffled: question.optionsShuffled,
-        options: [],
-      );
-      await questionRef
-          .doc(question.questionDocRef)
-          .set(questionWithDocRef.toDocument());
-      await questionRef
-          .doc(question.questionDocRef)
-          .update(questionWithDocRef.toDocument());
-      await questionRef.doc(question.questionDocRef).update({
+      final currentUser = ref.watch(firebaseAuthProvider).currentUser!;
+      final questionRef = _weakQuestionsCollection(currentUser.uid)
+          .doc(question.questionDocRef);
+
+      await questionRef.set({
+        ...question.toDocument(),
         "options":
-        question.options.map((option) => option.toDocument()).toList(),
+            question.options.map((option) => option.toDocument()).toList(),
       });
-      return questionWithDocRef;
+
+      return question;
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
     }
@@ -122,12 +101,8 @@ class WeakQuestionRepository implements BaseWeakQuestionRepository {
   @override
   Future<List<Question>> retrieveWeakQuestionList() async {
     try {
-      final User? currentUser = ref.watch(firebaseAuthProvider).currentUser;
-      final snap = await ref.watch(firebaseFirestoreProvider)
-          .collection("user")
-          .doc(currentUser!.uid)
-          .collection("weakQuestion")
-          .get();
+      final currentUser = ref.watch(firebaseAuthProvider).currentUser!;
+      final snap = await _weakQuestionsCollection(currentUser.uid).get();
       return snap.docs.map((doc) => Question.fromDocument(doc)).toList();
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
@@ -136,12 +111,9 @@ class WeakQuestionRepository implements BaseWeakQuestionRepository {
 
   @override
   Future<void> deleteWeakQuestion({required String weakQuestionDocRef}) async {
-    final User? currentUser = ref.watch(firebaseAuthProvider).currentUser;
     try {
-      await ref.watch(firebaseFirestoreProvider)
-          .collection('user')
-          .doc(currentUser!.uid)
-          .collection("weakQuestion")
+      final currentUser = ref.watch(firebaseAuthProvider).currentUser!;
+      await _weakQuestionsCollection(currentUser.uid)
           .doc(weakQuestionDocRef)
           .delete();
     } on FirebaseException catch (e) {

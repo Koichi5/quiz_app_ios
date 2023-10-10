@@ -21,6 +21,7 @@ class QuizHistoryController
     extends StateNotifier<AsyncValue<List<QuizHistory>>> {
   final Ref ref;
   final String? _userId;
+
   QuizHistoryController(this.ref, this._userId)
       : super(const AsyncValue.loading()) {
     if (_userId != null) {
@@ -46,10 +47,11 @@ class QuizHistoryController
     required String quizDocRef,
     required String categoryDocRef,
     required String quizTitle,
-    required int score,
-    required int questionCount,
-    required int timeTakenMinutes,
-    required int timeTakenSeconds,
+    // required int score,
+    // required int questionCount,
+    // required int timeTakenMinutes,
+    // required int timeTakenSeconds,
+    required QuizPerformance performance,
     required DateTime quizDate,
     required String status,
     required List<int> takenQuestions,
@@ -60,10 +62,10 @@ class QuizHistoryController
       quizDocRef: quizDocRef,
       categoryDocRef: categoryDocRef,
       quizTitle: quizTitle,
-      score: score,
-      questionCount: questionCount,
-      timeTakenMinutes: timeTakenMinutes,
-      timeTakenSeconds: timeTakenSeconds,
+      score: performance.score,
+      questionCount: performance.questionCount,
+      timeTakenMinutes: performance.timeTakenMinutes,
+      timeTakenSeconds: performance.timeTakenSeconds,
       quizDate: quizDate,
       status: status,
       takenQuestions: takenQuestions,
@@ -76,4 +78,18 @@ class QuizHistoryController
         categoryList..add(quizHistory.copyWith(id: quizHistoryDocRef))));
     return quizHistoryDocRef;
   }
+}
+
+class QuizPerformance {
+  final int score;
+  final int questionCount;
+  final int timeTakenMinutes;
+  final int timeTakenSeconds;
+
+  QuizPerformance({
+    required this.score,
+    required this.questionCount,
+    required this.timeTakenMinutes,
+    required this.timeTakenSeconds,
+  });
 }

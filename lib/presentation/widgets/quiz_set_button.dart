@@ -33,7 +33,6 @@ class QuizSetButton extends HookConsumerWidget {
               final quiz = await ref
                   .watch(quizControllerProvider(category).notifier)
                   .addQuiz(
-                      category: category,
                       title: title,
                       description: description,
                       questionsShuffled: false,

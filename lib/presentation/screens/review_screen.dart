@@ -4,7 +4,7 @@ import 'package:quiz_app/presentation/screens/quiz_history_screen.dart';
 import 'package:quiz_app/presentation/screens/weak_question_screen.dart';
 import 'package:quiz_app/presentation/widgets/segmented_button.dart';
 
-final List<Widget> reviewScreenList = [
+final List<Widget> _reviewScreens = [
   const WeakQuestionScreen(),
   const QuizHistoryScreen(),
 ];
@@ -14,17 +14,18 @@ class ReviewScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currentPageIndex = ref.watch(currentSelectedIndexProvider);
     return SingleChildScrollView(
       child: Column(
         children: [
           const OriginalSegmentedButton(),
-          reviewScreenPageController(ref.watch(currentSelectedIndexProvider)),
+          _getCurrentReviewScreen(currentPageIndex),
         ],
       ),
     );
   }
 
-  reviewScreenPageController(int currentPageIndex) {
-    return reviewScreenList[currentPageIndex];
+  Widget _getCurrentReviewScreen(int pageIndex) {
+    return _reviewScreens[pageIndex];
   }
 }
