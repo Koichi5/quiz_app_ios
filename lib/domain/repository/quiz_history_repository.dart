@@ -11,6 +11,8 @@ abstract class BaseQuizHistoryRepository {
   Future<String> addQuizHistory(
       {required User user, required QuizHistory quizHistory});
   Future<List<QuizHistory>> retrieveQuizHistoryList();
+  Future<List<QuizHistory>> retrieveLocatQuizHistoryList(
+      {required String uid, required int quizHistoryLimitCount});
   Future<List<String>> retrieveUserCompletedCategoryNameList();
 }
 
@@ -70,14 +72,54 @@ class QuizHistoryRepository implements BaseQuizHistoryRepository {
     final User? currentUser = ref.watch(firebaseAuthProvider).currentUser;
     const int quizHistoryLimitCount = 10;
     try {
-      final snap = await _userQuizHistoryCollection(currentUser!.uid)
-          .orderBy("quizDate", descending: true)
-          .limit(quizHistoryLimitCount)
-          .get();
-      return snap.docs.map((doc) => QuizHistory.fromDocument(doc)).toList();
+      return await retrieveQuery(
+        uid: currentUser!.uid,
+        quizHistoryLimitCount: quizHistoryLimitCount,
+      ).then(
+        (ref) async => await ref
+            .get()
+            .then((value) async => await retrieveLocatQuizHistoryList(
+                  uid: currentUser.uid,
+                  quizHistoryLimitCount: quizHistoryLimitCount,
+                )),
+      );
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
     }
+  }
+
+  @override
+  Future<List<QuizHistory>> retrieveLocatQuizHistoryList(
+      {required String uid, required int quizHistoryLimitCount}) async {
+    final snap = await _userQuizHistoryCollection(uid)
+        .orderBy("quizDate", descending: true)
+        .limit(quizHistoryLimitCount)
+        .get(const GetOptions(source: Source.cache));
+    return snap.docs.map((doc) => QuizHistory.fromDocument(doc)).toList();
+  }
+
+  Future<Query<QuizHistory>> retrieveQuery(
+      {required String uid, required int quizHistoryLimitCount}) async {
+    DocumentSnapshot? lastDocRef;
+    await _userQuizHistoryCollection(uid)
+        .orderBy("quizDate", descending: true)
+        .limit(quizHistoryLimitCount)
+        .get(const GetOptions(source: Source.cache))
+        .then((value) {
+      if (value.docs.isNotEmpty) lastDocRef = value.docs.last;
+    });
+
+    Query<QuizHistory> ref = _userQuizHistoryCollection(uid)
+        .limit(quizHistoryLimitCount)
+        .withConverter(
+          fromFirestore: (snapshot, _) =>
+              QuizHistory.fromJson(snapshot.data()!),
+          toFirestore: (data, _) => data.toJson(),
+        );
+    if (lastDocRef != null) {
+      ref = ref.startAtDocument(lastDocRef!);
+    }
+    return ref;
   }
 
   @override

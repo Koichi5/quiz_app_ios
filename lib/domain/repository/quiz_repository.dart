@@ -8,7 +8,8 @@ import 'package:quiz_app/general/general_provider.dart';
 
 abstract class BaseQuizRepository {
   Future<Quiz> addQuiz({required Category category, required Quiz quiz});
-  Future<List<Quiz>> retrieveQuiz({required Category category});
+  Future<List<Quiz>> retrieveQuizList({required Category category});
+  Future<List<Quiz>> retrieveLocalQuizList({required Category category});
 }
 
 final quizRepositoryProvider =
@@ -42,7 +43,9 @@ class QuizRepository implements BaseQuizRepository {
         categoryId: category.categoryId,
       );
 
-      await quizRef.doc(category.quizDocRef).update(quizWithDocRef.toDocument());
+      await quizRef
+          .doc(category.quizDocRef)
+          .update(quizWithDocRef.toDocument());
       return quizWithDocRef;
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
@@ -50,12 +53,37 @@ class QuizRepository implements BaseQuizRepository {
   }
 
   @override
-  Future<List<Quiz>> retrieveQuiz({required Category category}) async {
+  Future<List<Quiz>> retrieveQuizList({required Category category}) async {
     try {
-      final snap = await _quizCollection(category.categoryDocRef!).get();
-      return snap.docs.map((doc) => Quiz.fromDocument(doc)).toList();
+      return await retrieveQuery(category: category).then((ref) async =>
+          await ref.get().then((value) async =>
+              await retrieveLocalQuizList(category: category)));
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
     }
+  }
+
+  @override
+  Future<List<Quiz>> retrieveLocalQuizList({required Category category}) async {
+    final snap = await _quizCollection(category.categoryDocRef!)
+        .get(const GetOptions(source: Source.cache));
+    return snap.docs.map((doc) => Quiz.fromDocument(doc)).toList();
+  }
+
+  Future<Query<Quiz>> retrieveQuery({required Category category}) async {
+    DocumentSnapshot? lastDocRef;
+    await _quizCollection(category.categoryDocRef!)
+        .get(const GetOptions(source: Source.cache))
+        .then((value) {
+      if (value.docs.isNotEmpty) lastDocRef = value.docs.last;
+    });
+
+    Query<Quiz> ref = _quizCollection(category.categoryDocRef!).withConverter(
+        fromFirestore: (snapshot, _) => Quiz.fromJson(snapshot.data()!),
+        toFirestore: (data, _) => data.toJson());
+    if (lastDocRef != null) {
+      ref = ref.startAtDocument(lastDocRef!);
+    }
+    return ref;
   }
 }

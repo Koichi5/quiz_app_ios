@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/question/question.dart';
 import 'package:quiz_app/domain/quiz/quiz.dart';
@@ -10,6 +9,7 @@ abstract class BaseQuestionRepository {
   Future<Question> addQuestion(
       {required Quiz quiz, required Question question});
   Future<List<Question>> retrieveQuestionList({required Quiz quiz});
+  Future<List<Question>> retrieveLocalQuestionList({required Quiz quiz});
 }
 
 final questionRepositoryProvider =
@@ -48,20 +48,56 @@ class QuestionRepository implements BaseQuestionRepository {
     }
   }
 
+  // @override
+  // Future<List<Question>> retrieveQuestionList({required Quiz quiz}) async {
+  //   try {
+  //     final snap = await _questionsCollection(quiz).get();
+  //     return snap.docs.map((doc) => Question.fromDocument(doc)).toList();
+  //   } on FirebaseException catch (e) {
+  //     throw CustomException(message: e.message);
+  //   }
+  // }
+
   @override
   Future<List<Question>> retrieveQuestionList({required Quiz quiz}) async {
     try {
-      final snap = await _questionsCollection(quiz).get();
-      return snap.docs.map((doc) => Question.fromDocument(doc)).toList();
+      return await retrieveQuery(quiz: quiz).then((ref) async => await ref
+          .get()
+          .then((value) async => await retrieveLocalQuestionList(quiz: quiz)));
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
     }
+  }
+
+  @override
+  Future<List<Question>> retrieveLocalQuestionList({required Quiz quiz}) async {
+    final snap = await _questionsCollection(quiz)
+        .get(const GetOptions(source: Source.cache));
+    return snap.docs.map((doc) => Question.fromDocument(doc)).toList();
+  }
+
+  Future<Query<Question>> retrieveQuery({required Quiz quiz}) async {
+    DocumentSnapshot? lastDocRef;
+    await _questionsCollection(quiz)
+        .get(const GetOptions(source: Source.cache))
+        .then((value) {
+      if (value.docs.isNotEmpty) lastDocRef = value.docs.last;
+    });
+
+    Query<Question> ref = _questionsCollection(quiz).withConverter(
+        fromFirestore: (snapshot, _) => Question.fromJson(snapshot.data()!),
+        toFirestore: (data, _) => data.toJson());
+    if (lastDocRef != null) {
+      ref = ref.startAtDocument(lastDocRef!);
+    }
+    return ref;
   }
 }
 
 abstract class BaseWeakQuestionRepository {
   Future<Question> addWeakQuestion({required Question question});
   Future<List<Question>> retrieveWeakQuestionList();
+  Future<List<Question>> retrieveLocalWeakQuestionList({required String uid});
   Future<void> deleteWeakQuestion({required String weakQuestionDocRef});
 }
 
@@ -102,11 +138,37 @@ class WeakQuestionRepository implements BaseWeakQuestionRepository {
   Future<List<Question>> retrieveWeakQuestionList() async {
     try {
       final currentUser = ref.watch(firebaseAuthProvider).currentUser!;
-      final snap = await _weakQuestionsCollection(currentUser.uid).get();
-      return snap.docs.map((doc) => Question.fromDocument(doc)).toList();
+      return await retrieveQuery(uid: currentUser.uid).then((ref) async =>
+          await ref.get().then((value) async =>
+              await retrieveLocalWeakQuestionList(uid: currentUser.uid)));
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
     }
+  }
+
+  @override
+  Future<List<Question>> retrieveLocalWeakQuestionList(
+      {required String uid}) async {
+    final snap = await _weakQuestionsCollection(uid)
+        .get(const GetOptions(source: Source.cache));
+    return snap.docs.map((doc) => Question.fromDocument(doc)).toList();
+  }
+
+  Future<Query<Question>> retrieveQuery({required String uid}) async {
+    DocumentSnapshot? lastDocRef;
+    await _weakQuestionsCollection(uid)
+        .get(const GetOptions(source: Source.cache))
+        .then((value) {
+      if (value.docs.isNotEmpty) lastDocRef = value.docs.last;
+    });
+
+    Query<Question> ref = _weakQuestionsCollection(uid).withConverter(
+        fromFirestore: (snapshot, _) => Question.fromJson(snapshot.data()!),
+        toFirestore: (data, _) => data.toJson());
+    if (lastDocRef != null) {
+      ref = ref.startAtDocument(lastDocRef!);
+    }
+    return ref;
   }
 
   @override
