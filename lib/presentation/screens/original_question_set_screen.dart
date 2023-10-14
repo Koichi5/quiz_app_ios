@@ -100,6 +100,7 @@ class OriginalQuestionSetScreen extends HookConsumerWidget {
   Widget _buildOptionHeader(Size screenSize) {
     return SizedBox(
       width: screenSize.width * 0.9,
+      height: screenSize.height * 0.05,
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
