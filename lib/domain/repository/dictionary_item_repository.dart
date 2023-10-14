@@ -10,6 +10,7 @@ abstract class BaseDictionaryItemRepository {
       required List<String> dictionaryDescriptionList,
       required List<String> dictionaryWordUrlList});
   Future<List<DictionaryItem>> retrieveDictionaryItem();
+  Future<List<DictionaryItem>> retrieveLocalDictionaryItem();
 }
 
 final dictionaryItemRepositoryProvider =
@@ -48,10 +49,38 @@ class DictionaryItemRepository implements BaseDictionaryItemRepository {
   @override
   Future<List<DictionaryItem>> retrieveDictionaryItem() async {
     try {
-      final snap = await _dictionaryCollection.orderBy("dictionaryWord").get();
-      return snap.docs.map((doc) => DictionaryItem.fromDocument(doc)).toList();
+      return await retrieveQuery().then((ref) async => await ref
+          .get()
+          .then((value) async => await retrieveLocalDictionaryItem()));
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
     }
+  }
+
+  @override
+  Future<List<DictionaryItem>> retrieveLocalDictionaryItem() async {
+    final snap = await _dictionaryCollection
+        .orderBy("dictionaryWord")
+        .get(const GetOptions(source: Source.cache));
+    return snap.docs.map((doc) => DictionaryItem.fromDocument(doc)).toList();
+  }
+
+  Future<Query<DictionaryItem>> retrieveQuery() async {
+    DocumentSnapshot? lastDocRef;
+    await _dictionaryCollection
+        .orderBy("dictionaryWord")
+        .get(const GetOptions(source: Source.cache))
+        .then((value) {
+      if (value.docs.isNotEmpty) lastDocRef = value.docs.last;
+    });
+
+    Query<DictionaryItem> ref = _dictionaryCollection.withConverter(
+      fromFirestore: (snapshot, _) => DictionaryItem.fromJson(snapshot.data()!),
+      toFirestore: (data, _) => data.toJson(),
+    );
+    if (lastDocRef != null) {
+      ref = ref.startAtDocument(lastDocRef!);
+    }
+    return ref;
   }
 }

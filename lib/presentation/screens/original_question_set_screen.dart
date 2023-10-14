@@ -67,7 +67,7 @@ class OriginalQuestionSetScreen extends HookConsumerWidget {
           controller: textControllerProvider,
           error: questionValidator.form.text.errorMessage,
           onChanged: (text) => questionValidatorNotifier.setQuestionText(text)),
-      const SizedBox(height: 10),
+      SizedBox(height: screenSize.height * 0.05),
       _buildOptionHeader(screenSize),
       ..._buildOptions(
           context, ref, screenSize, optionValidator, optionValidatorNotifier),
@@ -100,6 +100,7 @@ class OriginalQuestionSetScreen extends HookConsumerWidget {
   Widget _buildOptionHeader(Size screenSize) {
     return SizedBox(
       width: screenSize.width * 0.9,
+      height: screenSize.height * 0.05,
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -165,7 +166,7 @@ class OriginalQuestionSetScreen extends HookConsumerWidget {
               ],
             ),
           ),
-          const SizedBox(height: 10),
+      SizedBox(height: screenSize.height * 0.05),
         ],
       );
     });

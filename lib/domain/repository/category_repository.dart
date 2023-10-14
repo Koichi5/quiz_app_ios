@@ -8,6 +8,7 @@ import 'package:quiz_app/general/general_provider.dart';
 abstract class BaseCategoryRepository {
   Future<Category> addCategory({required Category category});
   Future<List<Category>> retrieveCategoryList();
+  Future<List<Category>> retrieveLocalCategoryList();
   Future<Category> retrieveCategoryById({required String quizCategoryDocRef});
   Future<void> editCategoryQuestionCount(
       {required int categoryQuestionCount, required String categoryDocRef});
@@ -57,11 +58,39 @@ class CategoryRepository implements BaseCategoryRepository {
   @override
   Future<List<Category>> retrieveCategoryList() async {
     try {
-      final snap = await _categoryCollection.orderBy("categoryId").get();
-      return snap.docs.map((doc) => Category.fromDocument(doc)).toList();
+      return await retrieveQuery().then((ref) async => await ref
+          .get()
+          .then((value) async => await retrieveLocalCategoryList()));
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
     }
+  }
+
+  @override
+  Future<List<Category>> retrieveLocalCategoryList() async {
+    final snap = await _categoryCollection
+        .orderBy("categoryId")
+        .get(const GetOptions(source: Source.cache));
+    return snap.docs.map((doc) => Category.fromDocument(doc)).toList();
+  }
+
+  Future<Query<Category>> retrieveQuery() async {
+    DocumentSnapshot? lastDocRef;
+    await _categoryCollection
+        .orderBy("categoryId")
+        .get(const GetOptions(source: Source.cache))
+        .then((value) {
+      if (value.docs.isNotEmpty) lastDocRef = value.docs.last;
+    });
+
+    Query<Category> ref = _categoryCollection.withConverter(
+      fromFirestore: (snapshot, _) => Category.fromJson(snapshot.data()!),
+      toFirestore: (data, _) => data.toJson(),
+    );
+    if (lastDocRef != null) {
+      ref = ref.startAtDocument(lastDocRef!);
+    }
+    return ref;
   }
 
   @override

@@ -32,7 +32,7 @@ class QuizController extends StateNotifier<AsyncValue<List<Quiz>>> {
   Future<List<Quiz>> retrieveQuiz() async {
     try {
       final quizList = await ref.watch(quizRepositoryProvider)
-          .retrieveQuiz(category: category);
+          .retrieveQuizList(category: category);
       if (mounted) {
         state = AsyncValue.data(quizList);
       }

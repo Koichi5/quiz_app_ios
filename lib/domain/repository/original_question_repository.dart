@@ -8,6 +8,8 @@ abstract class BaseOriginalQuestionRepository {
   Future<Question> addOriginalQuestion(
       {required String userId, required Question question});
   Future<List<Question>> retrieveOriginalQuestionList({required String userId});
+  Future<List<Question>> retrieveLocalOriginalQuestionList(
+      {required String userId});
   Future<void> deleteOriginalQuestion(
       {required String userId, required String originalQuestionDocRef});
 }
@@ -65,11 +67,38 @@ class OriginalQuestionRepository implements BaseOriginalQuestionRepository {
   Future<List<Question>> retrieveOriginalQuestionList(
       {required String userId}) async {
     try {
-      final snap = await _userCollection(userId).get();
-      return snap.docs.map((doc) => Question.fromDocument(doc)).toList();
+      return await retrieveQuery(userId: userId).then((ref) async => await ref
+          .get()
+          .then((value) async =>
+              await retrieveLocalOriginalQuestionList(userId: userId)));
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
     }
+  }
+
+  @override
+  Future<List<Question>> retrieveLocalOriginalQuestionList(
+      {required String userId}) async {
+    final snap = await _userCollection(userId)
+        .get(const GetOptions(source: Source.cache));
+    return snap.docs.map((doc) => Question.fromDocument(doc)).toList();
+  }
+
+  Future<Query<Question>> retrieveQuery({required String userId}) async {
+    DocumentSnapshot? lastDocRef;
+    await _userCollection(userId)
+        .get(const GetOptions(source: Source.cache))
+        .then((value) {
+      if (value.docs.isNotEmpty) lastDocRef = value.docs.last;
+    });
+
+    Query<Question> ref = _userCollection(userId).withConverter(
+        fromFirestore: (snapshot, _) => Question.fromJson(snapshot.data()!),
+        toFirestore: (data, _) => data.toJson());
+    if (lastDocRef != null) {
+      ref = ref.startAtDocument(lastDocRef!);
+    }
+    return ref;
   }
 
   @override
