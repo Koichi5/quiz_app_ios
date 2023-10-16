@@ -144,16 +144,13 @@ class AuthRepository implements BaseAuthRepository {
           AppleIDAuthorizationScopes.fullName,
         ],
       );
-      print("apple credential: $appleCredential");
       final oauthCredential = OAuthProvider("apple.com").credential(
         idToken: appleCredential.identityToken,
         rawNonce: rawNonce,
       );
-      print("oauthCredential: $oauthCredential");
       final userCredential =
           await FirebaseAuth.instance.signInWithCredential(oauthCredential);
       user = userCredential.user;
-      print("user in apple sign in func: $user");
       return user;
     } on FirebaseAuthException catch (e) {
       _handleAuthErrors(e);

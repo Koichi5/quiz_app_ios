@@ -9,7 +9,7 @@ final userCompletedCategoryListProvider = StateProvider((ref) => []);
 
 abstract class BaseQuizHistoryRepository {
   Future<String> addQuizHistory(
-      {required User user, required QuizHistory quizHistory});
+      {required String userId, required QuizHistory quizHistory});
   Future<List<QuizHistory>> retrieveQuizHistoryList();
   Future<List<QuizHistory>> retrieveLocatQuizHistoryList(
       {required String uid, required int quizHistoryLimitCount});
@@ -32,9 +32,9 @@ class QuizHistoryRepository implements BaseQuizHistoryRepository {
 
   @override
   Future<String> addQuizHistory(
-      {required User user, required QuizHistory quizHistory}) async {
+      {required String userId, required QuizHistory quizHistory}) async {
     try {
-      final quizHistoryRef = _userQuizHistoryCollection(user.uid);
+      final quizHistoryRef = _userQuizHistoryCollection(userId);
       final quizHistoryDocRef = quizHistoryRef.doc().id;
 
       final questionList = quizHistory.questionList
