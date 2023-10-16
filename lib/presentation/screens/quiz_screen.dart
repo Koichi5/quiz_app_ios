@@ -317,8 +317,9 @@ class _QuizScreenState extends ConsumerState<QuizScreen>
       timeTakenSeconds = -takenTime.inSeconds % 60;
     }
     if (category != null) {
+      final currentUser = ref.watch(firebaseAuthProvider).currentUser!;
       ref.watch(quizHistoryControllerProvider.notifier).addQuizHistory(
-            user: ref.watch(firebaseAuthProvider).currentUser!,
+            userId: currentUser.uid,
             quizDocRef: category.quizDocRef!,
             categoryDocRef: category.categoryDocRef!,
             quizTitle: category.name,

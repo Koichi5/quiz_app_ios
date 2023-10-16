@@ -43,7 +43,7 @@ class QuizHistoryController
   }
 
   Future<String> addQuizHistory({
-    required User user,
+    required String userId,
     required String quizDocRef,
     required String categoryDocRef,
     required String quizTitle,
@@ -73,7 +73,7 @@ class QuizHistoryController
       questionList: questionList,
     );
     final quizHistoryDocRef = await ref.watch(quizHistoryRepositoryProvider)
-        .addQuizHistory(quizHistory: quizHistory, user: user);
+        .addQuizHistory(quizHistory: quizHistory, userId: userId);
     state.whenData((categoryList) => state = AsyncValue.data(
         categoryList..add(quizHistory.copyWith(id: quizHistoryDocRef))));
     return quizHistoryDocRef;
