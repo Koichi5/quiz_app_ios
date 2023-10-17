@@ -22,7 +22,7 @@ class IntroSliderScreen extends StatelessWidget {
           title: "高校情報レベルの単語を出題",
           centerWidget: _buildLottieAsset("intro_slider1.json"),
           styleTitle: _titleStyle,
-          description: "IQ でこれからの時代の\n常識を身につけよう！",
+          description: "Tech Journey でこれからの時代の\n常識を身につけよう！",
           styleDescription: _descriptionStyle,
           backgroundColor: _bgColor,
         ),
