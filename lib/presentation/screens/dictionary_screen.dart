@@ -8,6 +8,9 @@ import 'package:quiz_app/presentation/widgets/dictionary_card.dart';
 class DictionaryScreen extends HookConsumerWidget {
   const DictionaryScreen({Key? key}) : super(key: key);
 
+  static String get routeName => 'dictionary';
+  static String get routeLocation => '/$routeName';
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dictionaryItemState = ref.watch(dictionaryItemControllerProvider);

@@ -11,6 +11,8 @@ import 'package:quiz_app/presentation/widgets/question_set_button.dart';
 class QuestionSetScreen extends HookConsumerWidget {
   const QuestionSetScreen({required this.quiz, Key? key}) : super(key: key);
 
+  static String get routeName => 'question-set';
+  static String get routeLocation => '/$routeName';
   final Quiz quiz;
 
   @override

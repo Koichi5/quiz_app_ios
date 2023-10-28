@@ -3,14 +3,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quiz_app/domain/question/question.dart';
 import 'package:quiz_app/presentation/controller/original_question_controller.dart';
+import 'package:quiz_app/presentation/routers.dart';
 import 'package:quiz_app/presentation/screens/quiz_screen.dart';
 import 'package:quiz_app/presentation/widgets/original_question_list_card.dart';
-
-import 'original_question_set_screen.dart';
 
 class OriginalQuestionListScreen extends HookConsumerWidget {
   OriginalQuestionListScreen({Key? key}) : super(key: key);
 
+  static String get routeName => 'original-question-list';
+  static String get routeLocation => '/$routeName';
   final List<String> dictionaryWordList = [];
   final List<String> dictionaryDescriptionList = [];
   final List<String> dictionaryUrlList = [];
@@ -35,10 +36,13 @@ class OriginalQuestionListScreen extends HookConsumerWidget {
       title: const Text("オリジナル問題"),
       actions: [
         IconButton(
-          onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const OriginalQuestionSetScreen())),
+          // onPressed: () => Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //         builder: (context) => const OriginalQuestionSetScreen())),
+          onPressed: () {
+            const OriginalQuestionSetRoute().go(context);
+          },
           icon: Icon(Icons.add, color: Theme.of(context).colorScheme.primary),
         ),
       ],

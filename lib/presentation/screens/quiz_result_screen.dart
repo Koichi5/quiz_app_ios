@@ -3,12 +3,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quiz_app/domain/dto/quiz_result.dart';
 import 'package:quiz_app/domain/question/question.dart';
+import 'package:quiz_app/presentation/routers.dart';
 import 'package:quiz_app/presentation/screens/quiz_screen.dart';
 import 'package:quiz_app/presentation/widgets/result_question_list_card.dart';
-import 'home_screen.dart';
 
 class QuizResultScreen extends HookConsumerWidget {
-  static const routeName = '/quizResult';
+  static String get routeName => 'quiz-result';
+  static String get routeLocation => '/$routeName';
   final QuizResult result;
   final List<int> takenQuestions;
   final List<bool> answerIsCorrectList;
@@ -160,8 +161,11 @@ class QuizResultScreen extends HookConsumerWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: ElevatedButton(
-        onPressed: () => Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const HomeScreen())),
+        // onPressed: () => Navigator.pushReplacement(context,
+        //     MaterialPageRoute(builder: (context) => const HomeScreen())),
+        onPressed: () {
+          const HomeRoute().pushReplacement(context);
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: Theme.of(context).colorScheme.primary,
         ),

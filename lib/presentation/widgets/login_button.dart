@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/presentation/controller/auth_controller.dart';
 import 'package:quiz_app/presentation/controller/validator/login_validator_provider.dart';
-import 'package:quiz_app/presentation/screens/home_screen.dart';
+import 'package:quiz_app/presentation/routers.dart';
 
 class LoginButton extends HookConsumerWidget {
   const LoginButton(this.email, this.password, {super.key});
@@ -58,8 +58,9 @@ class LoginButton extends HookConsumerWidget {
                     .signInWithEmailAndPassword(email, password);
                 if (user != null) {
                   if (!mounted) return;
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => const HomeScreen()));
+                  // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  //     builder: (context) => const HomeScreen()));
+                  const HomeRoute().pushReplacement(context);
                 } else {
                   showErrorDialog();
                 }

@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:intro_slider/intro_slider.dart';
 import 'package:lottie/lottie.dart';
+// import 'package:quiz_app/presentation/auth_routes.dart';
+import 'package:quiz_app/presentation/routers.dart';
+// import 'package:quiz_app/presentation/auth_routes.dart';
+// import 'package:quiz_app/presentation/screens/signup_screen.dart';
 
 class IntroSliderScreen extends StatelessWidget {
   const IntroSliderScreen({Key? key}) : super(key: key);
 
-  final TextStyle _titleStyle = const TextStyle(color: Colors.cyan, fontSize: 20);
-  final TextStyle _descriptionStyle = const TextStyle(color: Colors.cyan, fontSize: 18);
+  static String get routeName => 'intro-slider';
+  static String get routeLocation => '/$routeName';
+
+  final TextStyle _titleStyle =
+      const TextStyle(color: Colors.cyan, fontSize: 20);
+  final TextStyle _descriptionStyle =
+      const TextStyle(color: Colors.cyan, fontSize: 18);
   final Color _bgColor = Colors.white;
 
   List<ContentConfig> get slides => [
@@ -57,7 +66,13 @@ class IntroSliderScreen extends StatelessWidget {
   Widget _renderDoneBtn(BuildContext context) {
     return TextButton(
       onPressed: () {
-        Navigator.pushNamed(context, "/signup");
+        const SignupRoute().go(context);
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => const SignupScreen(),
+        //   ),
+        // );
       },
       child: const Text("終了"),
     );

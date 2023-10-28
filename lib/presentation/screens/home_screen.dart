@@ -14,11 +14,14 @@ final List homePageList = [
   const CategoryListScreen(),
   const ReviewScreen(),
   OriginalQuestionListScreen(),
-  SettingScreen(),
+  const SettingScreen(),
 ];
 
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  static String get routeName => 'home';
+  static String get routeLocation => '/';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

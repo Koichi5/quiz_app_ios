@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/repository/auth_repository.dart';
 import 'package:quiz_app/presentation/controller/auth_controller.dart';
 import 'package:quiz_app/presentation/controller/validator/signup_validator_provider.dart';
-import 'package:quiz_app/presentation/screens/home_screen.dart';
+import 'package:quiz_app/presentation/routers.dart';
 
 class SignUpButton extends HookConsumerWidget {
   const SignUpButton(this.email, this.password, {super.key});
@@ -13,7 +13,7 @@ class SignUpButton extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authControllerProviderNotifier =
-    ref.watch(authControllerProvider.notifier);
+        ref.watch(authControllerProvider.notifier);
     final authRepositoryProviderNotifier = ref.watch(authRepositoryProvider);
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -27,13 +27,14 @@ class SignUpButton extends HookConsumerWidget {
                     : Theme.of(context).colorScheme.secondary),
             onPressed: ([bool mounted = true]) async {
               if (ref.watch(signupValidatorProvider).form.isValid) {
-                await authControllerProviderNotifier.createUserWithEmailAndPassword(
-                    email, password);
+                await authControllerProviderNotifier
+                    .createUserWithEmailAndPassword(email, password);
                 User? user = authRepositoryProviderNotifier.getCurrentUser();
                 if (user != null) {
-                  if(!mounted) return;
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => const HomeScreen()));
+                  if (!mounted) return;
+                  // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  //     builder: (context) => const HomeScreen()));
+                  const HomeRoute().pushReplacement(context);
                 }
               } else {
                 null;

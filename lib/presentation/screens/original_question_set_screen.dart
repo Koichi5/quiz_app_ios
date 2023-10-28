@@ -12,6 +12,9 @@ import 'package:quiz_app/presentation/widgets/original_question_set_button.dart'
 class OriginalQuestionSetScreen extends HookConsumerWidget {
   const OriginalQuestionSetScreen({Key? key}) : super(key: key);
 
+    static String get routeName => 'original-question-set';
+  static String get routeLocation => '/$routeName';
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final screenSize = MediaQuery.of(context).size;

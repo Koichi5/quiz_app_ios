@@ -1,13 +1,17 @@
+import 'dart:developer';
+
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quiz_app/domain/repository/auth_repository.dart';
 import 'package:quiz_app/firebase_options.dart';
+import 'package:quiz_app/presentation/routers.dart';
 import 'package:quiz_app/presentation/screens/home_screen.dart';
-import 'package:quiz_app/presentation/screens/login_screen.dart';
-import 'package:quiz_app/presentation/screens/signup_screen.dart';
 
 import 'color_schemes.g.dart';
 import 'presentation/screens/intro_slider_screen.dart';
@@ -21,50 +25,81 @@ void main() async {
   try {
     if (await AppTrackingTransparency.trackingAuthorizationStatus ==
         TrackingStatus.notDetermined) {
-      await Future.delayed(
-        const Duration(
-          milliseconds: 200,
-        ),
-      );
+      await Future.delayed(const Duration(milliseconds: 1000));
       await AppTrackingTransparency.requestTrackingAuthorization();
     }
-  } on PlatformException {}
+  } on PlatformException catch (e) {
+    if (kDebugMode) {
+      print(e);
+    }
+  }
   runApp(
-    const ProviderScope(
+    ProviderScope(
       child: MyApp(),
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends ConsumerWidget {
+  MyApp({Key? key}) : super(key: key);
+
+  final routerProvider = Provider<GoRouter>(
+    (ref) {
+      final authStateStream =
+          ref.watch(authRepositoryProvider).authStateChanges;
+      User? authState;
+
+      authStateStream.listen((User? user) {
+        authState = user;
+      });
+
+      return GoRouter(
+        debugLogDiagnostics: true,
+        routes: $appRoutes,
+        redirect: (context, state) {
+          final isSplash = state.uri.toString() == HomeScreen.routeLocation;
+          log('[GoRouter] current route is ${state.uri.toString()}');
+          if (isSplash) {
+            log('authState: $authState');
+            return authState == null
+                ? IntroSliderScreen.routeLocation
+                : HomeScreen.routeLocation;
+          }
+          return null;
+        },
+      );
+    },
+  );
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
+    // return MaterialApp(
+    //   title: 'Quiz-app',
+    //   debugShowCheckedModeBanner: false,
+    //   theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+    //   darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+    //   home: StreamBuilder<User?>(
+    //     stream: FirebaseAuth.instance.authStateChanges(),
+    //     builder: (context, snapshot) {
+    //       if (snapshot.connectionState == ConnectionState.waiting) {
+    //         return const SizedBox();
+    //       }
+    //       if (snapshot.hasData) {
+    //         // User が null でなない、つまりサインイン済みのホーム画面へ
+    //         return const HomeScreen();
+    //       }
+    //       // User が null である、つまり未サインインのサインイン画面へ
+    //       return const IntroSliderScreen();
+    //     },
+    //   ),
+    // );
+    return MaterialApp.router(
       title: 'Quiz-app',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
       darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-      routes: {
-        '/home': (BuildContext context) => const HomeScreen(),
-        '/signup': (BuildContext context) => const SignupScreen(),
-        '/login': (BuildContext context) => const LoginScreen(),
-      },
-      home: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const SizedBox();
-          }
-          if (snapshot.hasData) {
-            // User が null でなない、つまりサインイン済みのホーム画面へ
-            return const HomeScreen();
-          }
-          // User が null である、つまり未サインインのサインイン画面へ
-          return IntroSliderScreen();
-        },
-      ),
+      routerConfig: router,
     );
   }
 }

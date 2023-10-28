@@ -10,6 +10,8 @@ class CategoryDetailScreen extends HookConsumerWidget {
       : super(key: key);
 
   final Category category;
+  static String get routeName => 'category-detail';
+  static String get routeLocation => '/$routeName';
 
   String _calcProcessTime(int categoryCount) {
     final processTime = categoryCount * 10;

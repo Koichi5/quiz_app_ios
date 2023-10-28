@@ -9,6 +9,8 @@ import 'package:quiz_app/presentation/controller/quiz_controller.dart';
 import 'package:quiz_app/presentation/screens/quiz_screen.dart';
 
 class QuizListScreen extends HookConsumerWidget {
+  static String get routeName => 'quiz-list';
+  static String get routeLocation => '/$routeName';
   final Category? category;
   final List<Question>? questionList;
   final List<Quiz>? quizList;

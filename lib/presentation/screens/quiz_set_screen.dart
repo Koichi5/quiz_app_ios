@@ -8,7 +8,8 @@ import 'package:quiz_app/presentation/widgets/quiz_set_button.dart';
 
 class QuizSetScreen extends HookConsumerWidget {
   const QuizSetScreen({required this.category, Key? key}) : super(key: key);
-
+  static String get routeName => 'quiz-set';
+  static String get routeLocation => '/$routeName';
   final Category category;
 
   @override

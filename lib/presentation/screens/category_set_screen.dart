@@ -8,6 +8,9 @@ import 'package:quiz_app/presentation/widgets/custom_text_field.dart';
 class CategorySetScreen extends HookConsumerWidget {
   const CategorySetScreen({Key? key}) : super(key: key);
 
+  static String get routeName => 'category-set';
+  static String get routeLocation => '/$routeName';
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final idControllerProvider = ref.watch(categoryIdControllerProvider);

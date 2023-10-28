@@ -24,7 +24,8 @@ final currentQuestionTextProvider = StateProvider<String?>((ref) => "");
 
 // ignore: must_be_immutable
 class QuizScreen extends StatefulHookConsumerWidget {
-  static const routeName = '/quiz';
+  static String get routeName => 'quiz';
+  static String get routeLocation => '/$routeName';
   Category? category;
   Quiz? quiz;
   final List<Question> questionList;
