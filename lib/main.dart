@@ -23,7 +23,7 @@ void main() async {
         TrackingStatus.notDetermined) {
       await Future.delayed(
         const Duration(
-          milliseconds: 200,
+          milliseconds: 1000,
         ),
       );
       await AppTrackingTransparency.requestTrackingAuthorization();
@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
             return const HomeScreen();
           }
           // User が null である、つまり未サインインのサインイン画面へ
-          return IntroSliderScreen();
+          return const IntroSliderScreen();
         },
       ),
     );
