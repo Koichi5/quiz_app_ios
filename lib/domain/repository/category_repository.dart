@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/category/category.dart';
 import 'package:quiz_app/domain/quiz/quiz.dart';
 import 'package:quiz_app/general/custom_exception.dart';
 import 'package:quiz_app/general/general_provider.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'category_repository.g.dart';
 
 abstract class BaseCategoryRepository {
   Future<Category> addCategory({required Category category});
@@ -14,18 +16,17 @@ abstract class BaseCategoryRepository {
       {required int categoryQuestionCount, required String categoryDocRef});
 }
 
-final categoryRepositoryProvider =
-    Provider<CategoryRepository>((ref) => CategoryRepository(ref));
+// final categoryRepositoryProvider =
+//     Provider<CategoryRepository>((ref) => CategoryRepository(ref));
 
-class CategoryRepository implements BaseCategoryRepository {
-  final Ref ref;
-
-  CategoryRepository(this.ref);
+@Riverpod(keepAlive: true, dependencies: [firebaseFirestore])
+class CategoryRepository extends _$CategoryRepository {
+  @override
+  CategoryRepository build() => CategoryRepository();
 
   CollectionReference get _categoryCollection =>
       ref.watch(firebaseFirestoreProvider).collection("category");
 
-  @override
   Future<Category> addCategory({required Category category}) async {
     try {
       final categoryDocRef = _categoryCollection.doc().id;
@@ -55,7 +56,6 @@ class CategoryRepository implements BaseCategoryRepository {
     }
   }
 
-  @override
   Future<List<Category>> retrieveCategoryList() async {
     try {
       return await retrieveQuery().then((ref) async => await ref
@@ -66,7 +66,6 @@ class CategoryRepository implements BaseCategoryRepository {
     }
   }
 
-  @override
   Future<List<Category>> retrieveLocalCategoryList() async {
     final snap = await _categoryCollection
         .orderBy("categoryId")
@@ -93,7 +92,6 @@ class CategoryRepository implements BaseCategoryRepository {
     return ref;
   }
 
-  @override
   Future<Category> retrieveCategoryById(
       {required String quizCategoryDocRef}) async {
     try {
@@ -104,7 +102,6 @@ class CategoryRepository implements BaseCategoryRepository {
     }
   }
 
-  @override
   Future<void> editCategoryQuestionCount(
       {required int categoryQuestionCount,
       required String categoryDocRef}) async {

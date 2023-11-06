@@ -1,40 +1,43 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/quiz_history/quiz_history.dart';
+import 'package:quiz_app/domain/repository/auth_repository.dart';
 import 'package:quiz_app/general/custom_exception.dart';
 import 'package:quiz_app/general/general_provider.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final userCompletedCategoryListProvider = StateProvider((ref) => []);
+part 'quiz_history_repository.g.dart';
 
-abstract class BaseQuizHistoryRepository {
-  Future<String> addQuizHistory(
-      {required String userId, required QuizHistory quizHistory});
-  Future<List<QuizHistory>> retrieveQuizHistoryList();
-  Future<List<QuizHistory>> retrieveLocatQuizHistoryList(
-      {required String uid, required int quizHistoryLimitCount});
-  Future<List<String>> retrieveUserCompletedCategoryNameList();
-}
+// abstract class BaseQuizHistoryRepository {
+//   Future<String> addQuizHistory(
+//       {required String userId, required QuizHistory quizHistory});
+//   Future<List<QuizHistory>> retrieveQuizHistoryList();
+//   Future<List<QuizHistory>> retrieveLocatQuizHistoryList(
+//       {required String uid, required int quizHistoryLimitCount});
+//   Future<List<String>> retrieveUserCompletedCategoryNameList();
+// }
 
-final quizHistoryRepositoryProvider =
-    Provider<QuizHistoryRepository>((ref) => QuizHistoryRepository(ref));
+// final quizHistoryRepositoryProvider =
+//     Provider<QuizHistoryRepository>((ref) => QuizHistoryRepository(ref));
 
-class QuizHistoryRepository implements BaseQuizHistoryRepository {
-  final Ref ref;
-
-  QuizHistoryRepository(this.ref);
-
-  CollectionReference _userQuizHistoryCollection(String userId) => ref
-      .watch(firebaseFirestoreProvider)
-      .collection("user")
-      .doc(userId)
-      .collection("quizHistory");
-
+@Riverpod(keepAlive: true, dependencies: [firebaseFirestore, firebaseAuth, AuthRepository])
+class QuizHistoryRepository extends _$QuizHistoryRepository {
+  late final CollectionReference _userQuizHistoryCollection;
   @override
+  QuizHistoryRepository build() {
+    final userId = ref.watch(authRepositoryProvider).getCurrentUser()!.uid;
+    _userQuizHistoryCollection = ref
+        .watch(firebaseFirestoreProvider)
+        .collection("user")
+        .doc(userId)
+        .collection("quizHistory");
+    return QuizHistoryRepository();
+  }
+
   Future<String> addQuizHistory(
       {required String userId, required QuizHistory quizHistory}) async {
     try {
-      final quizHistoryRef = _userQuizHistoryCollection(userId);
+      final quizHistoryRef = _userQuizHistoryCollection;
       final quizHistoryDocRef = quizHistoryRef.doc().id;
 
       final questionList = quizHistory.questionList
@@ -67,7 +70,6 @@ class QuizHistoryRepository implements BaseQuizHistoryRepository {
     }
   }
 
-  @override
   Future<List<QuizHistory>> retrieveQuizHistoryList() async {
     final User? currentUser = ref.watch(firebaseAuthProvider).currentUser;
     const int quizHistoryLimitCount = 10;
@@ -88,10 +90,9 @@ class QuizHistoryRepository implements BaseQuizHistoryRepository {
     }
   }
 
-  @override
   Future<List<QuizHistory>> retrieveLocatQuizHistoryList(
       {required String uid, required int quizHistoryLimitCount}) async {
-    final snap = await _userQuizHistoryCollection(uid)
+    final snap = await _userQuizHistoryCollection
         .orderBy("quizDate", descending: true)
         .limit(quizHistoryLimitCount)
         .get(const GetOptions(source: Source.cache));
@@ -101,7 +102,7 @@ class QuizHistoryRepository implements BaseQuizHistoryRepository {
   Future<Query<QuizHistory>> retrieveQuery(
       {required String uid, required int quizHistoryLimitCount}) async {
     DocumentSnapshot? lastDocRef;
-    await _userQuizHistoryCollection(uid)
+    await _userQuizHistoryCollection
         .orderBy("quizDate", descending: true)
         .limit(quizHistoryLimitCount)
         .get(const GetOptions(source: Source.cache))
@@ -109,7 +110,7 @@ class QuizHistoryRepository implements BaseQuizHistoryRepository {
       if (value.docs.isNotEmpty) lastDocRef = value.docs.last;
     });
 
-    Query<QuizHistory> ref = _userQuizHistoryCollection(uid)
+    Query<QuizHistory> ref = _userQuizHistoryCollection
         .limit(quizHistoryLimitCount)
         .withConverter(
           fromFirestore: (snapshot, _) =>
@@ -122,7 +123,6 @@ class QuizHistoryRepository implements BaseQuizHistoryRepository {
     return ref;
   }
 
-  @override
   Future<List<String>> retrieveUserCompletedCategoryNameList() async {
     final User? currentUser = ref.watch(firebaseAuthProvider).currentUser;
     try {

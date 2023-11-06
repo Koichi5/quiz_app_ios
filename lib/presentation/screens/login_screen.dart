@@ -24,10 +24,6 @@ class LoginScreen extends HookConsumerWidget {
     final loginValidator = ref.watch(loginValidatorProvider);
     final loginValidatorNotifier = ref.watch(loginValidatorProvider.notifier);
 
-    void toggleObscureText() {
-      obscureTextControllerNotifier.state = !obscureText;
-    }
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -62,7 +58,9 @@ class LoginScreen extends HookConsumerWidget {
                   loginValidatorNotifier.setPassword(password);
                 },
                 suffixIcon: IconButton(
-                  onPressed: toggleObscureText,
+                  onPressed: () {
+                    obscureTextControllerNotifier.toggle();
+                  },
                   icon: Icon(
                       obscureText ? Icons.visibility_off : Icons.visibility),
                 ),

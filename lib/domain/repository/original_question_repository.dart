@@ -1,43 +1,43 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/question/question.dart';
+import 'package:quiz_app/domain/repository/auth_repository.dart';
 import 'package:quiz_app/general/custom_exception.dart';
 import 'package:quiz_app/general/general_provider.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-abstract class BaseOriginalQuestionRepository {
-  Future<Question> addOriginalQuestion(
-      {required String userId, required Question question});
-  Future<List<Question>> retrieveOriginalQuestionList({required String userId});
-  Future<List<Question>> retrieveLocalOriginalQuestionList(
-      {required String userId});
-  Future<void> deleteOriginalQuestion(
-      {required String userId, required String originalQuestionDocRef});
-}
+part 'original_question_repository.g.dart';
 
-final originalQuestionRepositoryProvider = Provider<OriginalQuestionRepository>(
-    (ref) => OriginalQuestionRepository(ref));
+// abstract class BaseOriginalQuestionRepository {
+//   Future<Question> addOriginalQuestion(
+//       {required String userId, required Question question});
+//   Future<List<Question>> retrieveOriginalQuestionList({required String userId});
+//   Future<List<Question>> retrieveLocalOriginalQuestionList(
+//       {required String userId});
+//   Future<void> deleteOriginalQuestion(
+//       {required String userId, required String originalQuestionDocRef});
+// }
 
-class OriginalQuestionRepository implements BaseOriginalQuestionRepository {
-  final Ref ref;
+// final originalQuestionRepositoryProvider = Provider<OriginalQuestionRepository>(
+//     (ref) => OriginalQuestionRepository(ref));
 
-  OriginalQuestionRepository(this.ref);
-
-  CollectionReference _userCollection(String userId) => ref
-      .watch(firebaseFirestoreProvider)
-      .collection("user")
-      .doc(userId)
-      .collection("originalQuestion");
+@Riverpod(keepAlive: true, dependencies: [firebaseFirestore, AuthRepository])
+class OriginalQuestionRepository extends _$OriginalQuestionRepository {
+  late final CollectionReference _userCollection;
 
   @override
-  Future<Question> addOriginalQuestion(
-      {required String userId, required Question question}) async {
-    try {
-      final originalQuestionRef = ref
-          .watch(firebaseFirestoreProvider)
-          .collection("user")
-          .doc(userId)
-          .collection("originalQuestion");
+  OriginalQuestionRepository build() {
+    final userId = ref.watch(authRepositoryProvider).getCurrentUser()!.uid;
+    _userCollection = ref
+        .watch(firebaseFirestoreProvider)
+        .collection("user")
+        .doc(userId)
+        .collection("originalQuestion");
+    return OriginalQuestionRepository();
+  }
 
+  Future<Question> addOriginalQuestion(
+      {required Question question}) async {
+    try {
       final originalQuestionWithDocRef = Question(
         id: question.id,
         text: question.text,
@@ -47,12 +47,12 @@ class OriginalQuestionRepository implements BaseOriginalQuestionRepository {
         options: [],
       );
       // originalQuestionDocRef が正しく記録されるために一度 originalQuestionDocRef を含まない状態で add する
-      final originalQuestion = await originalQuestionRef
+      final originalQuestion = await _userCollection
           .add(originalQuestionWithDocRef.toDocument());
       // add した後にドキュメントIDの取得を行い、 update で反映させる
       final originalQuestionDocRef = originalQuestion.id;
 
-      await originalQuestionRef.doc(originalQuestionDocRef).update({
+      await _userCollection.doc(originalQuestionDocRef).update({
         "options":
             question.options.map((option) => option.toDocument()).toList(),
         "originalQuestionDocRef": originalQuestionDocRef,
@@ -63,36 +63,31 @@ class OriginalQuestionRepository implements BaseOriginalQuestionRepository {
     }
   }
 
-  @override
-  Future<List<Question>> retrieveOriginalQuestionList(
-      {required String userId}) async {
+  Future<List<Question>> retrieveOriginalQuestionList() async {
     try {
-      return await retrieveQuery(userId: userId).then((ref) async => await ref
+      return await retrieveQuery().then((ref) async => await ref
           .get()
-          .then((value) async =>
-              await retrieveLocalOriginalQuestionList(userId: userId)));
+          .then((value) async => await retrieveLocalOriginalQuestionList()));
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
     }
   }
 
-  @override
-  Future<List<Question>> retrieveLocalOriginalQuestionList(
-      {required String userId}) async {
-    final snap = await _userCollection(userId)
-        .get(const GetOptions(source: Source.cache));
+  Future<List<Question>> retrieveLocalOriginalQuestionList() async {
+    final snap =
+        await _userCollection.get(const GetOptions(source: Source.cache));
     return snap.docs.map((doc) => Question.fromDocument(doc)).toList();
   }
 
-  Future<Query<Question>> retrieveQuery({required String userId}) async {
+  Future<Query<Question>> retrieveQuery() async {
     DocumentSnapshot? lastDocRef;
-    await _userCollection(userId)
+    await _userCollection
         .get(const GetOptions(source: Source.cache))
         .then((value) {
       if (value.docs.isNotEmpty) lastDocRef = value.docs.last;
     });
 
-    Query<Question> ref = _userCollection(userId).withConverter(
+    Query<Question> ref = _userCollection.withConverter(
         fromFirestore: (snapshot, _) => Question.fromJson(snapshot.data()!),
         toFirestore: (data, _) => data.toJson());
     if (lastDocRef != null) {
@@ -101,11 +96,10 @@ class OriginalQuestionRepository implements BaseOriginalQuestionRepository {
     return ref;
   }
 
-  @override
   Future<void> deleteOriginalQuestion(
-      {required String userId, required String originalQuestionDocRef}) async {
+      {required String originalQuestionDocRef}) async {
     try {
-      await _userCollection(userId).doc(originalQuestionDocRef).delete();
+      await _userCollection.doc(originalQuestionDocRef).delete();
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
     }

@@ -24,8 +24,8 @@ class SignupScreen extends HookConsumerWidget {
     final emailController = ref.watch(signupEmailControllerStateProvider);
     final passwordController = ref.watch(signupPasswordControllerStateProvider);
     final obscureText = ref.watch(signupObscureTextStateProvider);
-    final obscureTextControllerNotifier =
-        ref.watch(signupObscureTextStateProvider.notifier);
+    // final obscureTextControllerNotifier =
+    //     ref.watch(signupObscureTextStateProvider.notifier);
     final signupValidator = ref.watch(signupValidatorProvider);
     final signupValidatorNotifier = ref.watch(signupValidatorProvider.notifier);
 
@@ -59,7 +59,7 @@ class SignupScreen extends HookConsumerWidget {
                   true,
                   obscureText: obscureText,
                   toggleObscureText: () {
-                    obscureTextControllerNotifier.state = !obscureText;
+                    ref.watch(signupObscureTextStateProvider.notifier).toggle();
                   }),
               SizedBox(height: 0.04 * screenHeight),
               SignUpButton(emailController.text, passwordController.text),

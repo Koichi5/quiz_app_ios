@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottie/lottie.dart';
-import 'package:quiz_app/presentation/controller/question_controller.dart';
+import 'package:quiz_app/presentation/controller/weak_question_controller.dart';
 import 'package:quiz_app/presentation/screens/category_list_screen.dart';
 import 'package:quiz_app/presentation/screens/original_question_list_screen.dart';
 import 'package:quiz_app/presentation/screens/quiz_screen.dart';

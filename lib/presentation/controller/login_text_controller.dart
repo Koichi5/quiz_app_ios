@@ -1,10 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final loginEmailControllerStateProvider = StateProvider.autoDispose((ref) {
+part 'login_text_controller.g.dart';
+
+@riverpod
+TextEditingController loginEmailControllerState(
+    LoginEmailControllerStateRef ref) {
   return TextEditingController(text: '');
-});
-final loginPasswordControllerStateProvider = StateProvider.autoDispose((ref) {
+}
+
+@riverpod
+TextEditingController loginPasswordControllerState(
+    LoginPasswordControllerStateRef ref) {
   return TextEditingController(text: '');
-});
-final loginObscureTextStateProvider = StateProvider.autoDispose((ref) => true);
+}
+
+@riverpod
+class LoginObscureTextState extends _$LoginObscureTextState {
+  @override
+  bool build() => true;
+
+  void toggle() {
+    state = !state;
+  }
+}
+
+// final loginObscureTextStateProvider = StateProvider.autoDispose((ref) => true);

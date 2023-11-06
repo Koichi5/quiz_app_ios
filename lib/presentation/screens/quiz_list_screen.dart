@@ -49,7 +49,7 @@ class QuizListScreen extends HookConsumerWidget {
 
   Widget _buildQuizScreenWithCategory(
       BuildContext context, WidgetRef ref, Category category) {
-    final quizListState = ref.watch(quizControllerProvider(category));
+    final quizListState = ref.watch(quizControllerProvider(category: category));
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -72,7 +72,7 @@ class QuizListScreen extends HookConsumerWidget {
                   ? const Center(
                       child: Material(child: Text("クイズはありません")),
                     )
-                  : ref.watch(questionControllerProvider(quizzes.first)).when(
+                  : ref.watch(questionControllerProvider(quiz: quizzes.first)).when(
                         data: (questions) => questions.isEmpty
                             ? const Center(
                                 child: Text("問題が用意されていません"),

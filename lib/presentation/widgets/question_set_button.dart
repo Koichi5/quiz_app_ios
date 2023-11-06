@@ -43,14 +43,14 @@ class QuestionSetButton extends HookConsumerWidget {
           onPressed: ([bool mounted = true]) async {
             if (ref.watch(questionValidatorProvider).form.isValid) {
               await ref
-                  .watch(questionControllerProvider(quiz).notifier)
+                  .watch(questionControllerProvider(quiz: quiz).notifier)
                   .addQuestion(
                     text: text,
                     duration: duration,
                     optionsShuffled: false,
                     quiz: quiz,
                   );
-              ref.watch(categoryQuestionCountProvider.notifier).state++;
+              ref.watch(categoryQuestionCountProvider.notifier).increment();
               if (!mounted) return;
               Navigator.pop(context);
             }

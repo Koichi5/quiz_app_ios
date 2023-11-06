@@ -10,10 +10,10 @@ class CategorySetScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final idControllerProvider = ref.watch(categoryIdControllerProvider);
-    final nameControllerProvider = ref.watch(categoryNameControllerProvider);
+    final idControllerProvider = ref.watch(categoryIdControllerStateProvider);
+    final nameControllerProvider = ref.watch(categoryNameControllerStateProvider);
     final descriptionControllerProvider =
-        ref.watch(categoryDescriptionControllerProvider);
+        ref.watch(categoryDescriptionControllerStateProvider);
     final categoryValidator = ref.watch(categoryValidatorProvider);
     final categoryValidatorNotifier =
         ref.watch(categoryValidatorProvider.notifier);

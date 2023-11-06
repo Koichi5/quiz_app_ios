@@ -1,14 +1,14 @@
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/entity/quiz_form_entity/quiz_form_entity.dart';
 import 'package:quiz_app/domain/field/field.dart';
 import 'package:quiz_app/domain/quiz_form_state/quiz_form_state.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final quizValidatorProvider =
-    StateNotifierProvider<QuizValidatorProvider, QuizFormState>(
-        (ref) => QuizValidatorProvider());
+part 'quiz_validator_provider.g.dart';
 
-class QuizValidatorProvider extends StateNotifier<QuizFormState> {
-  QuizValidatorProvider() : super(QuizFormState(QuizFormEntity.empty()));
+@riverpod
+class QuizValidator extends _$QuizValidator {
+  @override
+  QuizFormState build() => QuizFormState(QuizFormEntity.empty());
 
   void setQuizId(String quizId) {
     final bool isQuizId = RegExp("[0-9]").hasMatch(quizId);

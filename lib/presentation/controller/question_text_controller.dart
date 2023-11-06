@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final questionIdControllerProvider = StateProvider.autoDispose((ref) {
-  return TextEditingController(text: '');
-});
+part 'question_text_controller.g.dart';
 
-final questionTextControllerProvider = StateProvider.autoDispose((ref) {
+@riverpod
+TextEditingController questionIdControllerState (QuestionIdControllerStateRef ref) {
   return TextEditingController(text: '');
-});
+}
 
-final questionDurationControllerProvider = StateProvider.autoDispose((ref) {
+@riverpod
+TextEditingController questionTextControllerState (QuestionTextControllerStateRef ref) {
   return TextEditingController(text: '');
-});
+}
+
+@riverpod
+TextEditingController questionDurationControllerState (QuestionDurationControllerStateRef ref) {
+  return TextEditingController(text: '');
+}

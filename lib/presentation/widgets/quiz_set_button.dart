@@ -31,13 +31,15 @@ class QuizSetButton extends HookConsumerWidget {
           onPressed: ([bool mounted = true]) async {
             if (ref.watch(quizValidatorProvider).form.isValid) {
               final quiz = await ref
-                  .watch(quizControllerProvider(category).notifier)
+                  .watch(quizControllerProvider(category: category).notifier)
                   .addQuiz(
                       title: title,
                       description: description,
                       questionsShuffled: false,
                       imagePath: "",
-                      categoryId: category.categoryId);
+                      categoryId: category.categoryId,
+                      category: category,
+                      );
               if (!mounted) return;
               Navigator.push(
                 context,

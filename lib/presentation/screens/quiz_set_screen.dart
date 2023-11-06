@@ -13,9 +13,9 @@ class QuizSetScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final titleControllerProvider = ref.watch(quizTitleControllerProvider);
+    final titleControllerProvider = ref.watch(quizTitleControllerStateProvider);
     final descriptionControllerProvider =
-        ref.watch(quizDescriptionControllerProvider);
+        ref.watch(quizDescriptionControllerStateProvider);
     final quizValidator = ref.watch(quizValidatorProvider);
     final quizValidatorNotifier = ref.watch(quizValidatorProvider.notifier);
 

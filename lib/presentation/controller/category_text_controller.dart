@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final categoryIdControllerProvider = StateProvider.autoDispose((ref) {
-  return TextEditingController(text: '');
-});
+part 'category_text_controller.g.dart';
 
-final categoryNameControllerProvider = StateProvider.autoDispose((ref) {
+@riverpod
+TextEditingController categoryIdControllerState(
+    CategoryIdControllerStateRef ref) {
   return TextEditingController(text: '');
-});
+}
 
-final categoryDescriptionControllerProvider = StateProvider.autoDispose((ref) {
+@riverpod
+TextEditingController categoryNameControllerState(
+    CategoryNameControllerStateRef ref) {
   return TextEditingController(text: '');
-});
+}
+
+@riverpod
+TextEditingController categoryDescriptionControllerState(
+    CategoryDescriptionControllerStateRef ref) {
+  return TextEditingController(text: '');
+}
+

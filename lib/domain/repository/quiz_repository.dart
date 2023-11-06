@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/category/category.dart';
 import 'package:quiz_app/domain/question/question.dart';
 import 'package:quiz_app/domain/quiz/quiz.dart';
 import 'package:quiz_app/general/custom_exception.dart';
 import 'package:quiz_app/general/general_provider.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'quiz_repository.g.dart';
 
 abstract class BaseQuizRepository {
   Future<Quiz> addQuiz({required Category category, required Quiz quiz});
@@ -12,13 +14,13 @@ abstract class BaseQuizRepository {
   Future<List<Quiz>> retrieveLocalQuizList({required Category category});
 }
 
-final quizRepositoryProvider =
-    Provider<QuizRepository>((ref) => QuizRepository(ref));
+// final quizRepositoryProvider =
+//     Provider<QuizRepository>((ref) => QuizRepository(ref));
 
-class QuizRepository implements BaseQuizRepository {
-  final Ref ref;
-
-  QuizRepository(this.ref);
+@Riverpod(keepAlive: true, dependencies: [firebaseFirestore])
+class QuizRepository extends _$QuizRepository {
+  @override
+  QuizRepository build() => QuizRepository();
 
   CollectionReference _quizCollection(String categoryDocRef) => ref
       .watch(firebaseFirestoreProvider)
@@ -26,7 +28,6 @@ class QuizRepository implements BaseQuizRepository {
       .doc(categoryDocRef)
       .collection("quiz");
 
-  @override
   Future<Quiz> addQuiz({required Category category, required Quiz quiz}) async {
     try {
       final quizRef = _quizCollection(category.categoryDocRef!);
@@ -52,7 +53,6 @@ class QuizRepository implements BaseQuizRepository {
     }
   }
 
-  @override
   Future<List<Quiz>> retrieveQuizList({required Category category}) async {
     try {
       return await retrieveQuery(category: category).then((ref) async =>
@@ -63,7 +63,6 @@ class QuizRepository implements BaseQuizRepository {
     }
   }
 
-  @override
   Future<List<Quiz>> retrieveLocalQuizList({required Category category}) async {
     final snap = await _quizCollection(category.categoryDocRef!)
         .get(const GetOptions(source: Source.cache));

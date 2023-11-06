@@ -25,7 +25,7 @@ void main() {
                   duration: 15,
                   optionsShuffled: false,
                   options: []),
-              userId: userId);
+              );
       final snapshot = await container!
           .read(firebaseFirestoreProvider)
           .collection('user')
@@ -41,7 +41,6 @@ void main() {
     });
 
     test('retrieveOriginalQuestionList', () async {
-      const userId = 'userId';
       await container!
           .read(originalQuestionRepositoryProvider)
           .addOriginalQuestion(
@@ -50,10 +49,10 @@ void main() {
                   duration: 15,
                   optionsShuffled: false,
                   options: []),
-              userId: userId);
+              );
       final originalQuestionList = await container!
           .read(originalQuestionRepositoryProvider)
-          .retrieveOriginalQuestionList(userId: userId);
+          .retrieveOriginalQuestionList();
       expect(originalQuestionList.length, 1);
       expect(originalQuestionList.first.text, equals('text'));
       expect(originalQuestionList.first.duration, equals(15));

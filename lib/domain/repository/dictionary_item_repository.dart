@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/dictionary_item/dictionary_item.dart';
 import 'package:quiz_app/general/custom_exception.dart';
 import 'package:quiz_app/general/general_provider.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'dictionary_item_repository.g.dart';
 
 abstract class BaseDictionaryItemRepository {
   Future addDictionaryItem(
@@ -13,18 +15,17 @@ abstract class BaseDictionaryItemRepository {
   Future<List<DictionaryItem>> retrieveLocalDictionaryItem();
 }
 
-final dictionaryItemRepositoryProvider =
-    Provider<DictionaryItemRepository>((ref) => DictionaryItemRepository(ref));
+// final dictionaryItemRepositoryProvider =
+//     Provider<DictionaryItemRepository>((ref) => DictionaryItemRepository(ref));
 
-class DictionaryItemRepository implements BaseDictionaryItemRepository {
-  final Ref ref;
-
-  DictionaryItemRepository(this.ref);
+@Riverpod(keepAlive: true, dependencies: [firebaseFirestore])
+class DictionaryItemRepository extends _$DictionaryItemRepository {
+  @override
+  DictionaryItemRepository build() => DictionaryItemRepository();
 
   CollectionReference get _dictionaryCollection =>
       ref.watch(firebaseFirestoreProvider).collection("dictionary");
 
-  @override
   Future addDictionaryItem({
     required List<String> dictionaryWordList,
     required List<String> dictionaryDescriptionList,
@@ -46,7 +47,6 @@ class DictionaryItemRepository implements BaseDictionaryItemRepository {
     }
   }
 
-  @override
   Future<List<DictionaryItem>> retrieveDictionaryItem() async {
     try {
       return await retrieveQuery().then((ref) async => await ref
@@ -57,7 +57,6 @@ class DictionaryItemRepository implements BaseDictionaryItemRepository {
     }
   }
 
-  @override
   Future<List<DictionaryItem>> retrieveLocalDictionaryItem() async {
     final snap = await _dictionaryCollection
         .orderBy("dictionaryWord")

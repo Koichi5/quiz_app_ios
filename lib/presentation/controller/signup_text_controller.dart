@@ -1,14 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final signupNameControllerStateProvider = StateProvider.autoDispose((ref) {
+part 'signup_text_controller.g.dart';
+
+@riverpod
+TextEditingController signupNameControllerState(
+    SignupNameControllerStateRef ref) {
   return TextEditingController(text: "");
-});
+}
 
-final signupEmailControllerStateProvider = StateProvider.autoDispose((ref) {
+@riverpod
+TextEditingController signupEmailControllerState(
+    SignupEmailControllerStateRef ref) {
   return TextEditingController(text: '');
-});
-final signupPasswordControllerStateProvider = StateProvider.autoDispose((ref) {
+}
+
+@riverpod
+TextEditingController signupPasswordControllerState(
+    SignupPasswordControllerStateRef ref) {
   return TextEditingController(text: '');
-});
-final signupObscureTextStateProvider = StateProvider.autoDispose((ref) => true);
+}
+
+@riverpod
+class SignupObscureTextState extends _$SignupObscureTextState {
+  @override
+  bool build() => true;
+
+  void toggle() {
+    state = !state;
+  }
+  // この記法だと動かない
+  // void toggle() => !state;
+}
+
+// final signupObscureTextStateProvider = StateProvider.autoDispose((ref) => true);

@@ -1,12 +1,14 @@
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/entity/signup_form_entity/signup_form_entity.dart';
 import 'package:quiz_app/domain/field/field.dart';
 import 'package:quiz_app/domain/signup_form_state/signup_form_state.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final signupValidatorProvider = StateNotifierProvider<SignupValidatorProvider, SignupFormState>((ref) => SignupValidatorProvider());
+part 'signup_validator_provider.g.dart';
 
-class SignupValidatorProvider extends StateNotifier<SignupFormState> {
-  SignupValidatorProvider() : super(SignupFormState(SignupFormEntity.empty()));
+@riverpod
+class SignupValidator extends _$SignupValidator {
+  @override
+  SignupFormState build() => SignupFormState(SignupFormEntity.empty());
 
   void setName(String name) {
     final bool isName = name != "";
