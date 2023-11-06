@@ -2,8 +2,8 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/question/question.dart';
-import 'package:quiz_app/domain/repository/weak_question_repository.dart';
-import 'package:quiz_app/presentation/controller/weak_question_controller.dart';
+import 'package:quiz_app/domain/repository/weak_question_repository/weak_question_repository.dart';
+import 'package:quiz_app/presentation/controller/weak_question_controller/weak_question_controller.dart';
 
 final weakQuestionDeleteStateProvider = StateProvider((ref) => false);
 

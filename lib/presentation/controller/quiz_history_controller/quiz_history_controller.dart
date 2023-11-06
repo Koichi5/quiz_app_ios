@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:quiz_app/domain/question/question.dart';
 import 'package:quiz_app/domain/quiz_history/quiz_history.dart';
-import 'package:quiz_app/domain/repository/quiz_history_repository.dart';
+import 'package:quiz_app/domain/repository/quiz_history_repository/quiz_history_repository.dart';
 import 'package:quiz_app/general/custom_exception.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

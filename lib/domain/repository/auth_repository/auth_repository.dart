@@ -8,24 +8,24 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 part 'auth_repository.g.dart';
 
-abstract class BaseAuthRepository {
-  Stream<User?> get authStateChanges;
-  Future<User?> signInAnnonymously();
-  Future<UserCredential?> createUserWithEmailAndPassword(
-      String email, String password);
-  Future<User?> signInWithEmailAndPassword(String email, String password);
-  Future<User?> signInWithGoogle();
-  Future<User?> signInWithApple();
-  User? getCurrentUser();
-  Future<void> signOut();
-}
+// abstract class BaseAuthRepository {
+//   Stream<User?> get authStateChanges;
+//   Future<User?> signInAnnonymously();
+//   Future<UserCredential?> createUserWithEmailAndPassword(
+//       String email, String password);
+//   Future<User?> signInWithEmailAndPassword(String email, String password);
+//   Future<User?> signInWithGoogle();
+//   Future<User?> signInWithApple();
+//   User? getCurrentUser();
+//   Future<void> signOut();
+// }
 
 @Riverpod(keepAlive: true, dependencies: [firebaseAuth])
 class AuthRepository extends _$AuthRepository {
   @override
   AuthRepository build() => AuthRepository();
 
-    void _handleAuthErrors(FirebaseAuthException e) {
+  void _handleAuthErrors(FirebaseAuthException e) {
     Map<String, Map<String, String>> errorMessages = {
       '[firebase_auth/invalid-email]': {
         'title': "メールアドレスの形式が正しくありません",

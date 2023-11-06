@@ -7,33 +7,35 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'question_repository.g.dart';
 
-abstract class BaseQuestionRepository {
-  Future<Question> addQuestion(
-      {required Quiz quiz, required Question question});
-  Future<List<Question>> retrieveQuestionList({required Quiz quiz});
-  Future<List<Question>> retrieveLocalQuestionList({required Quiz quiz});
-}
+// abstract class BaseQuestionRepository {
+//   Future<Question> addQuestion(
+//       {required Quiz quiz, required Question question});
+//   Future<List<Question>> retrieveQuestionList({required Quiz quiz});
+//   Future<List<Question>> retrieveLocalQuestionList({required Quiz quiz});
+// }
 
 // final questionRepositoryProvider =
 //     Provider<QuestionRepository>((ref) => QuestionRepository(ref));
 
 @Riverpod(keepAlive: true, dependencies: [firebaseFirestore])
 class QuestionRepository extends _$QuestionRepository {
+  late final CollectionReference _questionsCollection;
   @override
-  QuestionRepository build() => QuestionRepository();
-
-  CollectionReference _questionsCollection(Quiz quiz) => ref
+  QuestionRepository build({required Quiz quiz}) {
+    _questionsCollection = ref
       .watch(firebaseFirestoreProvider)
       .collection("category")
       .doc(quiz.categoryDocRef)
       .collection("quiz")
       .doc(quiz.quizDocRef)
       .collection("questions");
+    return QuestionRepository();
+  }
 
   Future<Question> addQuestion(
-      {required Quiz quiz, required Question question}) async {
+      {required Question question}) async {
     try {
-      final questionRef = _questionsCollection(quiz).doc(quiz.questionDocRef);
+      final questionRef = _questionsCollection.doc(quiz.questionDocRef);
       final questionWithDocRef =
           question.copyWith(questionDocRef: quiz.questionDocRef);
 
@@ -49,31 +51,31 @@ class QuestionRepository extends _$QuestionRepository {
     }
   }
 
-  Future<List<Question>> retrieveQuestionList({required Quiz quiz}) async {
+  Future<List<Question>> retrieveQuestionList() async {
     try {
-      return await retrieveQuery(quiz: quiz).then((ref) async => await ref
+      return await retrieveQuery().then((ref) async => await ref
           .get()
-          .then((value) async => await retrieveLocalQuestionList(quiz: quiz)));
+          .then((value) async => await retrieveLocalQuestionList()));
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
     }
   }
 
-  Future<List<Question>> retrieveLocalQuestionList({required Quiz quiz}) async {
-    final snap = await _questionsCollection(quiz)
+  Future<List<Question>> retrieveLocalQuestionList() async {
+    final snap = await _questionsCollection
         .get(const GetOptions(source: Source.cache));
     return snap.docs.map((doc) => Question.fromDocument(doc)).toList();
   }
 
-  Future<Query<Question>> retrieveQuery({required Quiz quiz}) async {
+  Future<Query<Question>> retrieveQuery() async {
     DocumentSnapshot? lastDocRef;
-    await _questionsCollection(quiz)
+    await _questionsCollection
         .get(const GetOptions(source: Source.cache))
         .then((value) {
       if (value.docs.isNotEmpty) lastDocRef = value.docs.last;
     });
 
-    Query<Question> ref = _questionsCollection(quiz).withConverter(
+    Query<Question> ref = _questionsCollection.withConverter(
         fromFirestore: (snapshot, _) => Question.fromJson(snapshot.data()!),
         toFirestore: (data, _) => data.toJson());
     if (lastDocRef != null) {

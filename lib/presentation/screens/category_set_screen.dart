@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quiz_app/presentation/controller/category_text_controller.dart';
+import 'package:quiz_app/presentation/controller/category_text_controller/category_text_controller.dart';
 import 'package:quiz_app/presentation/controller/validator/category_validator_provider.dart';
 import 'package:quiz_app/presentation/widgets/category_set_button.dart';
 import 'package:quiz_app/presentation/widgets/custom_text_field.dart';

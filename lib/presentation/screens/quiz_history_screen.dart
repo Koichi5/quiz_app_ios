@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quiz_app/domain/quiz_history/quiz_history.dart';
-import 'package:quiz_app/presentation/controller/quiz_history_controller.dart';
+import 'package:quiz_app/presentation/controller/quiz_history_controller/quiz_history_controller.dart';
 import 'package:quiz_app/presentation/widgets/quiz_history_card.dart';
 
 class QuizHistoryScreen extends HookConsumerWidget {

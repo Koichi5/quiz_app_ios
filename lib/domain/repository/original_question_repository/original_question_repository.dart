@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quiz_app/domain/question/question.dart';
-import 'package:quiz_app/domain/repository/auth_repository.dart';
+import 'package:quiz_app/domain/repository/auth_repository/auth_repository.dart';
 import 'package:quiz_app/general/custom_exception.dart';
 import 'package:quiz_app/general/general_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

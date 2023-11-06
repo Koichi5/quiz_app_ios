@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quiz_app/domain/option/option.dart';
 import 'package:quiz_app/domain/question/question.dart';
 import 'package:quiz_app/domain/quiz/quiz.dart';
-import 'package:quiz_app/domain/repository/question_repository.dart';
+import 'package:quiz_app/domain/repository/question_repository/question_repository.dart';
 import 'package:quiz_app/general/custom_exception.dart';
-import 'package:quiz_app/presentation/controller/option_text_controller.dart';
+import 'package:quiz_app/presentation/controller/option_text_controller/option_text_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'question_controller.g.dart';
@@ -36,8 +36,8 @@ class QuestionController extends _$QuestionController {
   Future<List<Question>> retrieveQuestionList({required Quiz quiz}) async {
     try {
       final questionList = await ref
-          .watch(questionRepositoryProvider)
-          .retrieveQuestionList(quiz: quiz);
+          .watch(questionRepositoryProvider(quiz: quiz))
+          .retrieveQuestionList();
       return questionList;
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
@@ -76,8 +76,8 @@ class QuestionController extends _$QuestionController {
       ],
     );
     final questionWithDocRef = await ref
-        .watch(questionRepositoryProvider)
-        .addQuestion(question: question, quiz: quiz);
+        .watch(questionRepositoryProvider(quiz: quiz))
+        .addQuestion(question: question);
     state.whenData((questionList) => state = AsyncValue.data(
         questionList..add(question.copyWith(id: questionWithDocRef.id))));
     return question;

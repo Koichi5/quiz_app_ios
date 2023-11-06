@@ -2,7 +2,7 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/question/question.dart';
-import 'package:quiz_app/domain/repository/original_question_repository.dart';
+import 'package:quiz_app/domain/repository/original_question_repository/original_question_repository.dart';
 import 'package:quiz_app/general/general_provider.dart';
 
 void main() {

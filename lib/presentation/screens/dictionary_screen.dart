@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quiz_app/domain/dictionary_item/dictionary_item.dart';
-import 'package:quiz_app/presentation/controller/dictionary_item_controller.dart';
+import 'package:quiz_app/presentation/controller/dictionary_item_controller/dictionary_item_controller.dart';
 import 'package:quiz_app/presentation/widgets/dictionary_card.dart';
 
 class DictionaryScreen extends HookConsumerWidget {

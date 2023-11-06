@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quiz_app/domain/category/category.dart';
 import 'package:quiz_app/domain/quiz/quiz.dart';
-import 'package:quiz_app/domain/repository/quiz_repository.dart';
+import 'package:quiz_app/domain/repository/quiz_repository/quiz_repository.dart';
 import 'package:quiz_app/general/custom_exception.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

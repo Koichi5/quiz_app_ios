@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/question/question.dart';
 import 'package:quiz_app/domain/quiz_history/quiz_history.dart';
-import 'package:quiz_app/domain/repository/quiz_history_repository.dart';
+import 'package:quiz_app/domain/repository/quiz_history_repository/quiz_history_repository.dart';
 import 'package:quiz_app/general/general_provider.dart';
 
 void main() {

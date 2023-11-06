@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quiz_app/presentation/controller/category_controller.dart';
+import 'package:quiz_app/presentation/controller/category_contoller/category_controller.dart';
 import 'package:quiz_app/presentation/controller/validator/category_validator_provider.dart';
 import 'package:quiz_app/presentation/screens/quiz_set_screen.dart';
 

@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quiz_app/domain/option/option.dart';
 import 'package:quiz_app/domain/question/question.dart';
-import 'package:quiz_app/domain/repository/original_question_repository.dart';
+import 'package:quiz_app/domain/repository/original_question_repository/original_question_repository.dart';
 import 'package:quiz_app/general/custom_exception.dart';
-import 'package:quiz_app/presentation/controller/option_text_controller.dart';
+import 'package:quiz_app/presentation/controller/option_text_controller/option_text_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'original_question_controller.g.dart';
