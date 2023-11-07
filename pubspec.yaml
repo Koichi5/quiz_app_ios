@@ -74,6 +74,10 @@ flutter_icons:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: Noto Sans JP
+      fonts:
+        - asset: assets/fonts/Noto_Sans_JP/static/NotoSansJP-Regular.ttf
 
   assets:
     - assets/

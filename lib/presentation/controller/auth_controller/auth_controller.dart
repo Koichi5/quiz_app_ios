@@ -9,49 +9,45 @@ part 'auth_controller.g.dart';
 
 @Riverpod(keepAlive: true, dependencies: [AuthRepository])
 class AuthController extends _$AuthController {
-  late final AuthRepository _authRepository;
-
   @override
   AuthController build() {
-    log('auth controller build fired');
-    _authRepository = ref.watch(authRepositoryProvider);
-    return AuthController();
+    return this;
   }
 
   User? getCurrentUser() {
-    return _authRepository.getCurrentUser();
+    return ref.watch(authRepositoryProvider.notifier).getCurrentUser();
   }
 
   Future<User?> signInAnnonymously() async {
     log('auth controller signin annonymously fired');
-    User? user = await _authRepository.signInAnnonymously();
+    User? user = await ref.watch(authRepositoryProvider.notifier).signInAnnonymously();
     return user;
   }
 
   Future<void> createUserWithEmailAndPassword(
       String email, String password) async {
-    await _authRepository.createUserWithEmailAndPassword(email, password);
+    await ref.watch(authRepositoryProvider.notifier).createUserWithEmailAndPassword(email, password);
   }
 
   Future<User?> signInWithEmailAndPassword(
       String email, String password) async {
     User? user =
-        await _authRepository.signInWithEmailAndPassword(email, password);
+        await ref.watch(authRepositoryProvider.notifier).signInWithEmailAndPassword(email, password);
     return user;
   }
 
   Future<User?> signInWithGoogle() async {
-    User? user = await _authRepository.signInWithGoogle();
+    User? user = await ref.watch(authRepositoryProvider.notifier).signInWithGoogle();
     return user;
   }
 
   Future<User?> signInWithApple() async {
-    User? user = await _authRepository.signInWithApple();
+    User? user = await ref.watch(authRepositoryProvider.notifier).signInWithApple();
     return user;
   }
 
   Future<void> signOut() async {
-    await _authRepository.signOut();
+    await ref.watch(authRepositoryProvider.notifier).signOut();
   }
 }
 
@@ -60,7 +56,7 @@ class AuthController extends _$AuthController {
 
 // class AuthController extends StateNotifier<User?> {
 // final Ref ref;
-late final AuthRepository _authRepository;
+// late final AuthRepository _authRepository;
   // StreamSubscription<User?>? _authStateChangesSubscription;
 
   // AuthController(this.ref) : super(null) {

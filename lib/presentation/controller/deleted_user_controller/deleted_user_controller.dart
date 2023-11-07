@@ -8,7 +8,7 @@ part 'deleted_user_controller.g.dart';
 @Riverpod(keepAlive: true, dependencies: [DeletedUserRepository])
 class DeletedUserController extends _$DeletedUserController {
   @override
-  DeletedUserController build() => DeletedUserController();
+  DeletedUserController build() => this;
 
     Future<void> deleteUser() async {
     try {

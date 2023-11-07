@@ -7,14 +7,14 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'category_repository.g.dart';
 
-abstract class BaseCategoryRepository {
-  Future<Category> addCategory({required Category category});
-  Future<List<Category>> retrieveCategoryList();
-  Future<List<Category>> retrieveLocalCategoryList();
-  Future<Category> retrieveCategoryById({required String quizCategoryDocRef});
-  Future<void> editCategoryQuestionCount(
-      {required int categoryQuestionCount, required String categoryDocRef});
-}
+// abstract class BaseCategoryRepository {
+//   Future<Category> addCategory({required Category category});
+//   Future<List<Category>> retrieveCategoryList();
+//   Future<List<Category>> retrieveLocalCategoryList();
+//   Future<Category> retrieveCategoryById({required String quizCategoryDocRef});
+//   Future<void> editCategoryQuestionCount(
+//       {required int categoryQuestionCount, required String categoryDocRef});
+// }
 
 // final categoryRepositoryProvider =
 //     Provider<CategoryRepository>((ref) => CategoryRepository(ref));
@@ -22,7 +22,7 @@ abstract class BaseCategoryRepository {
 @Riverpod(keepAlive: true, dependencies: [firebaseFirestore])
 class CategoryRepository extends _$CategoryRepository {
   @override
-  CategoryRepository build() => CategoryRepository();
+  CategoryRepository build() => this;
 
   CollectionReference get _categoryCollection =>
       ref.watch(firebaseFirestoreProvider).collection("category");

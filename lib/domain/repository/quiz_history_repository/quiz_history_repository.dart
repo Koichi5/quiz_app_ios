@@ -31,7 +31,7 @@ class QuizHistoryRepository extends _$QuizHistoryRepository {
         .collection("user")
         .doc(userId)
         .collection("quizHistory");
-    return QuizHistoryRepository();
+    return this;
   }
 
   Future<String> addQuizHistory(

@@ -32,7 +32,7 @@ class OriginalQuestionRepository extends _$OriginalQuestionRepository {
         .collection("user")
         .doc(userId)
         .collection("originalQuestion");
-    return OriginalQuestionRepository();
+    return this;
   }
 
   Future<Question> addOriginalQuestion(

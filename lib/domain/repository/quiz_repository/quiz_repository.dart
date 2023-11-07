@@ -20,7 +20,7 @@ abstract class BaseQuizRepository {
 @Riverpod(keepAlive: true, dependencies: [firebaseFirestore])
 class QuizRepository extends _$QuizRepository {
   @override
-  QuizRepository build() => QuizRepository();
+  QuizRepository build() => this;
 
   CollectionReference _quizCollection(String categoryDocRef) => ref
       .watch(firebaseFirestoreProvider)

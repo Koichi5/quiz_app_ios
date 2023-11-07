@@ -23,7 +23,7 @@ part 'auth_repository.g.dart';
 @Riverpod(keepAlive: true, dependencies: [firebaseAuth])
 class AuthRepository extends _$AuthRepository {
   @override
-  AuthRepository build() => AuthRepository();
+  AuthRepository build() => this;
 
   void _handleAuthErrors(FirebaseAuthException e) {
     Map<String, Map<String, String>> errorMessages = {

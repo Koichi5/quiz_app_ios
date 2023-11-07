@@ -6,14 +6,14 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'dictionary_item_repository.g.dart';
 
-abstract class BaseDictionaryItemRepository {
-  Future addDictionaryItem(
-      {required List<String> dictionaryWordList,
-      required List<String> dictionaryDescriptionList,
-      required List<String> dictionaryWordUrlList});
-  Future<List<DictionaryItem>> retrieveDictionaryItem();
-  Future<List<DictionaryItem>> retrieveLocalDictionaryItem();
-}
+// abstract class BaseDictionaryItemRepository {
+//   Future addDictionaryItem(
+//       {required List<String> dictionaryWordList,
+//       required List<String> dictionaryDescriptionList,
+//       required List<String> dictionaryWordUrlList});
+//   Future<List<DictionaryItem>> retrieveDictionaryItem();
+//   Future<List<DictionaryItem>> retrieveLocalDictionaryItem();
+// }
 
 // final dictionaryItemRepositoryProvider =
 //     Provider<DictionaryItemRepository>((ref) => DictionaryItemRepository(ref));
@@ -21,7 +21,7 @@ abstract class BaseDictionaryItemRepository {
 @Riverpod(keepAlive: true, dependencies: [firebaseFirestore])
 class DictionaryItemRepository extends _$DictionaryItemRepository {
   @override
-  DictionaryItemRepository build() => DictionaryItemRepository();
+  DictionaryItemRepository build() => this;
 
   CollectionReference get _dictionaryCollection =>
       ref.watch(firebaseFirestoreProvider).collection("dictionary");

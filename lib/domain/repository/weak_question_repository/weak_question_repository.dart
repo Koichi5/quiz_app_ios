@@ -30,7 +30,7 @@ class WeakQuestionRepository extends _$WeakQuestionRepository {
         .collection("user")
         .doc(userId)
         .collection("weakQuestion");
-    return WeakQuestionRepository();
+    return this;
   }
 
   Future<Question> addWeakQuestion({required Question question}) async {

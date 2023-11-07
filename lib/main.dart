@@ -44,8 +44,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Quiz-app',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
-      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: lightColorScheme,
+        fontFamily: "Noto Sans JP",
+      ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: darkColorScheme,
+        fontFamily: "Noto Sans JP",
+      ),
       routes: {
         '/home': (BuildContext context) => const HomeScreen(),
         '/signup': (BuildContext context) => const SignupScreen(),

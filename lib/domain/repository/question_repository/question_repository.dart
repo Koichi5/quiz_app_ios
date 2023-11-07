@@ -29,7 +29,7 @@ class QuestionRepository extends _$QuestionRepository {
       .collection("quiz")
       .doc(quiz.quizDocRef)
       .collection("questions");
-    return QuestionRepository();
+    return this;
   }
 
   Future<Question> addQuestion(
