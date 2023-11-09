@@ -7,16 +7,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'weak_question_repository.g.dart';
 
-// abstract class BaseWeakQuestionRepository {
-//   Future<Question> addWeakQuestion({required Question question});
-//   Future<List<Question>> retrieveWeakQuestionList();
-//   Future<List<Question>> retrieveLocalWeakQuestionList({required String uid});
-//   Future<void> deleteWeakQuestion({required String weakQuestionDocRef});
-// }
-
-// final weakQuestionRepositoryProvider =
-//     Provider<WeakQuestionRepository>((ref) => WeakQuestionRepository(ref));
-
 @Riverpod(
     keepAlive: true,
     dependencies: [firebaseFirestore, firebaseAuth, AuthRepository])

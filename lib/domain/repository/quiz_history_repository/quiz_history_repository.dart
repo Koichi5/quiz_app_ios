@@ -8,18 +8,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'quiz_history_repository.g.dart';
 
-// abstract class BaseQuizHistoryRepository {
-//   Future<String> addQuizHistory(
-//       {required String userId, required QuizHistory quizHistory});
-//   Future<List<QuizHistory>> retrieveQuizHistoryList();
-//   Future<List<QuizHistory>> retrieveLocatQuizHistoryList(
-//       {required String uid, required int quizHistoryLimitCount});
-//   Future<List<String>> retrieveUserCompletedCategoryNameList();
-// }
-
-// final quizHistoryRepositoryProvider =
-//     Provider<QuizHistoryRepository>((ref) => QuizHistoryRepository(ref));
-
 @Riverpod(keepAlive: true, dependencies: [firebaseFirestore, firebaseAuth, AuthRepository])
 class QuizHistoryRepository extends _$QuizHistoryRepository {
   late final CollectionReference _userQuizHistoryCollection;

@@ -5,12 +5,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'category_validator_provider.g.dart';
 
-// @riverpod
-// CategoryValidatorProvider
-// final categoryValidatorProvider =
-//     StateNotifierProvider<CategoryValidatorProvider, CategoryFormState>(
-//         (ref) => CategoryValidatorProvider());
-
 @riverpod
 class CategoryValidator extends _$CategoryValidator {
   @override

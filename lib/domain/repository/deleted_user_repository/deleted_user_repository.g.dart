@@ -7,7 +7,7 @@ part of 'deleted_user_repository.dart';
 // **************************************************************************
 
 String _$deletedUserRepositoryHash() =>
-    r'ef4a79751677c6e73dde97f69c4623c1de16aa2d';
+    r'c313ff89f779cc5b4afa01fbb0bc51d3d1639650';
 
 /// See also [DeletedUserRepository].
 @ProviderFor(DeletedUserRepository)

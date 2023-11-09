@@ -7,7 +7,7 @@ part of 'weak_question_repository.dart';
 // **************************************************************************
 
 String _$weakQuestionRepositoryHash() =>
-    r'1664f6d77a8b456c99d8477ff79b9c7dd98c8e54';
+    r'678bb5e2502796048f362f8f2c3fced468c23893';
 
 /// See also [WeakQuestionRepository].
 @ProviderFor(WeakQuestionRepository)

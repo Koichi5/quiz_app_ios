@@ -8,25 +8,9 @@ import 'package:quiz_app/presentation/controller/option_text_controller/option_t
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'question_controller.g.dart';
-// final questionControllerProvider = StateNotifierProvider.family
-//     .autoDispose<QuestionController, AsyncValue<List<Question>>, Quiz>(
-//         (ref, quiz) {
-//   final user = ref.read(authControllerProvider).getCurrentUser();
-//   return QuestionController(ref, user?.uid, quiz);
-// });
 
 @Riverpod(keepAlive: true, dependencies: [QuestionRepository])
 class QuestionController extends _$QuestionController {
-  // final Ref ref;
-  // final String? _userId;
-  // final Quiz quiz;
-
-  // QuestionController(this.ref, this._userId, this.quiz)
-  //     : super(const AsyncValue.loading()) {
-  //   if (_userId != null) {
-  //     retrieveQuestionList(quiz: quiz);
-  //   }
-  // }
 
   @override
   Future<List<Question>> build({required Quiz quiz}) {

@@ -24,7 +24,7 @@ final categoryQuestionCountProvider =
 
 typedef _$CategoryQuestionCount = AutoDisposeNotifier<int>;
 String _$categoryControllerHash() =>
-    r'8b203f1d16c3262a741c9bd55594b49e7922a34d';
+    r'3266dd8b53beaa8ed470b6484ef4c270d1018cc1';
 
 /// See also [CategoryController].
 @ProviderFor(CategoryController)

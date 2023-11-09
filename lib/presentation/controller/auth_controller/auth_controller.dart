@@ -9,106 +9,50 @@ part 'auth_controller.g.dart';
 
 @Riverpod(keepAlive: true, dependencies: [AuthRepository])
 class AuthController extends _$AuthController {
+  late final AuthRepository _authRepositoryNotifier;
   @override
   AuthController build() {
+    _authRepositoryNotifier = ref.watch(authRepositoryProvider.notifier);
     return this;
   }
 
   User? getCurrentUser() {
-    return ref.watch(authRepositoryProvider.notifier).getCurrentUser();
+    return _authRepositoryNotifier.getCurrentUser();
   }
 
   Future<User?> signInAnnonymously() async {
     log('auth controller signin annonymously fired');
-    User? user = await ref.watch(authRepositoryProvider.notifier).signInAnnonymously();
+    User? user =
+        await _authRepositoryNotifier.signInAnnonymously();
     return user;
   }
 
   Future<void> createUserWithEmailAndPassword(
       String email, String password) async {
-    await ref.watch(authRepositoryProvider.notifier).createUserWithEmailAndPassword(email, password);
+    await _authRepositoryNotifier
+        .createUserWithEmailAndPassword(email, password);
   }
 
   Future<User?> signInWithEmailAndPassword(
       String email, String password) async {
-    User? user =
-        await ref.watch(authRepositoryProvider.notifier).signInWithEmailAndPassword(email, password);
+    User? user = await _authRepositoryNotifier
+        .signInWithEmailAndPassword(email, password);
     return user;
   }
 
   Future<User?> signInWithGoogle() async {
-    User? user = await ref.watch(authRepositoryProvider.notifier).signInWithGoogle();
+    User? user =
+        await _authRepositoryNotifier.signInWithGoogle();
     return user;
   }
 
   Future<User?> signInWithApple() async {
-    User? user = await ref.watch(authRepositoryProvider.notifier).signInWithApple();
+    User? user =
+        await _authRepositoryNotifier.signInWithApple();
     return user;
   }
 
   Future<void> signOut() async {
-    await ref.watch(authRepositoryProvider.notifier).signOut();
+    await _authRepositoryNotifier.signOut();
   }
 }
-
-// final authControllerProvider = StateNotifierProvider<AuthController, User?>(
-//     (ref) => AuthController(ref)..appStarted());
-
-// class AuthController extends StateNotifier<User?> {
-// final Ref ref;
-// late final AuthRepository _authRepository;
-  // StreamSubscription<User?>? _authStateChangesSubscription;
-
-  // AuthController(this.ref) : super(null) {
-  //   _authRepository = ref.watch(authRepositoryProvider);
-  //   _initializeAuthListener();
-  // }
-
-  // void _initializeAuthListener() {
-  //   _authStateChangesSubscription?.cancel();
-  //   _authStateChangesSubscription = _authRepository.authStateChanges.listen(
-  //     (user) => state = user,
-  //   );
-  // }
-
-  // @override
-  // void dispose() {
-  //   _authStateChangesSubscription?.cancel();
-  //   super.dispose();
-  // }
-
-  // void appStarted() async {
-  //   _authRepository.getCurrentUser();
-  // }
-
-  // Future<User?> signInAnnonymously() async {
-  //   User? user = await _authRepository.signInAnnonymously();
-  //   return user;
-  // }
-
-  // Future<void> createUserWithEmailAndPassword(
-  //     String email, String password) async {
-  //   await _authRepository.createUserWithEmailAndPassword(email, password);
-  // }
-
-  // Future<User?> signInWithEmailAndPassword(
-  //     String email, String password) async {
-  //   User? user =
-  //       await _authRepository.signInWithEmailAndPassword(email, password);
-  //   return user;
-  // }
-
-  // Future<User?> signInWithGoogle() async {
-  //   User? user = await _authRepository.signInWithGoogle();
-  //   return user;
-  // }
-
-  // Future<User?> signInWithApple() async {
-  //   User? user = await _authRepository.signInWithApple();
-  //   return user;
-  // }
-
-  // Future<void> signOut() async {
-  //   await _authRepository.signOut();
-  // }
-// }

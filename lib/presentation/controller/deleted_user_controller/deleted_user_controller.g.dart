@@ -7,7 +7,7 @@ part of 'deleted_user_controller.dart';
 // **************************************************************************
 
 String _$deletedUserControllerHash() =>
-    r'15b55dc198a041dfe92872ed03f67c5fb937871f';
+    r'67150cd888691d46943de58abfac764fb3c49816';
 
 /// See also [DeletedUserController].
 @ProviderFor(DeletedUserController)

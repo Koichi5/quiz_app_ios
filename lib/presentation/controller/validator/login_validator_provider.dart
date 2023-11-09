@@ -5,8 +5,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'login_validator_provider.g.dart';
 
-// final loginValidatorProvider = StateNotifierProvider<LoginValidatorProvider, LoginFormState>((ref) => LoginValidatorProvider());
-
 @riverpod
 class LoginValidator extends _$LoginValidator {
   @override

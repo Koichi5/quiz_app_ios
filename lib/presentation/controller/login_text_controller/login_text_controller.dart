@@ -24,5 +24,3 @@ class LoginObscureTextState extends _$LoginObscureTextState {
     state = !state;
   }
 }
-
-// final loginObscureTextStateProvider = StateProvider.autoDispose((ref) => true);

@@ -7,7 +7,7 @@ part of 'quiz_history_repository.dart';
 // **************************************************************************
 
 String _$quizHistoryRepositoryHash() =>
-    r'91077f05894a890fca8a8942aeb8ae50c7c62d7d';
+    r'0d17ac42a09d0f03316bb2000f30dda6c9b5d456';
 
 /// See also [QuizHistoryRepository].
 @ProviderFor(QuizHistoryRepository)

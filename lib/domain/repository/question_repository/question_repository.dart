@@ -7,16 +7,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'question_repository.g.dart';
 
-// abstract class BaseQuestionRepository {
-//   Future<Question> addQuestion(
-//       {required Quiz quiz, required Question question});
-//   Future<List<Question>> retrieveQuestionList({required Quiz quiz});
-//   Future<List<Question>> retrieveLocalQuestionList({required Quiz quiz});
-// }
-
-// final questionRepositoryProvider =
-//     Provider<QuestionRepository>((ref) => QuestionRepository(ref));
-
 @Riverpod(keepAlive: true, dependencies: [firebaseFirestore])
 class QuestionRepository extends _$QuestionRepository {
   late final CollectionReference _questionsCollection;

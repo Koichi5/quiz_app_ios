@@ -20,15 +20,18 @@ class CategoryQuestionCount extends _$CategoryQuestionCount {
 
 @Riverpod(keepAlive: true, dependencies: [AuthRepository, CategoryRepository])
 class CategoryController extends _$CategoryController {
+  late final CategoryRepository _categoryRepositoryNotifier;
   @override
   Future<List<Category>> build() {
+    _categoryRepositoryNotifier =
+        ref.watch(categoryRepositoryProvider.notifier);
     return retrieveCategoryList();
   }
 
   Future<List<Category>> retrieveCategoryList() async {
     try {
       final categoryList =
-          await ref.watch(categoryRepositoryProvider).retrieveCategoryList();
+          await _categoryRepositoryNotifier.retrieveCategoryList();
       return categoryList;
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
@@ -38,9 +41,8 @@ class CategoryController extends _$CategoryController {
   Future<Category> retrieveCategoryById(
       {required String quizCategoryDocRef}) async {
     try {
-      final category = await ref
-          .watch(categoryRepositoryProvider)
-          .retrieveCategoryById(quizCategoryDocRef: quizCategoryDocRef);
+      final category = await _categoryRepositoryNotifier.retrieveCategoryById(
+          quizCategoryDocRef: quizCategoryDocRef);
       return category;
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
@@ -62,9 +64,8 @@ class CategoryController extends _$CategoryController {
       categoryQuestionCount: 0,
       imagePath: "assets/images/category_images/category_image1.png",
     );
-    final categoryWithDocRef = await ref
-        .watch(categoryRepositoryProvider)
-        .addCategory(category: category);
+    final categoryWithDocRef =
+        await _categoryRepositoryNotifier.addCategory(category: category);
     state.whenData((categoryList) => state = AsyncValue.data(categoryList
       ..add(category.copyWith(id: categoryWithDocRef.categoryDocRef))));
     return categoryWithDocRef;
@@ -73,84 +74,9 @@ class CategoryController extends _$CategoryController {
   Future<void> editCategoryQuestionCount(
       {required int categoryQuestionCount,
       required String categoryDocRef}) async {
-    await ref.watch(categoryRepositoryProvider).editCategoryQuestionCount(
-        categoryQuestionCount: categoryQuestionCount,
-        categoryDocRef: categoryDocRef);
+    await _categoryRepositoryNotifier.editCategoryQuestionCount(
+      categoryQuestionCount: categoryQuestionCount,
+      categoryDocRef: categoryDocRef,
+    );
   }
 }
-
-// final categoryQuestionCountProvider = StateProvider((ref) => 0);
-
-// final categoryControllerProvider =
-//     StateNotifierProvider<CategoryController, AsyncValue<List<Category>>>(
-//         (ref) {
-//   final user = ref.watch(authControllerProvider).getCurrentUser();
-//   return CategoryController(ref, user?.uid);
-// });
-
-// // FIXME: user.uid がnullになる可能性を残したままの実装はいかがなものか？
-// class CategoryController extends StateNotifier<AsyncValue<List<Category>>> {
-//   final Ref ref;
-//   final String? _userId;
-//   late final CategoryRepository _categoryRepository;
-
-//   CategoryController(this.ref, this._userId)
-//       : super(const AsyncValue.loading()) {
-//     _categoryRepository = ref.watch(categoryRepositoryProvider);
-//     if (_userId != null) {
-//       retrieveCategoryList();
-//     }
-//   }
-
-//   Future<void> retrieveCategoryList() async {
-//     try {
-//       final categoryList = await _categoryRepository.retrieveCategoryList();
-//       if (mounted) {
-//         state = AsyncValue.data(categoryList);
-//       }
-//     } on FirebaseException catch (e) {
-//       throw CustomException(message: e.message);
-//     }
-//   }
-
-//   Future<Category> retrieveCategoryById(
-//       {required String quizCategoryDocRef}) async {
-//     try {
-//       final category = await _categoryRepository.retrieveCategoryById(
-//           quizCategoryDocRef: quizCategoryDocRef);
-//       return category;
-//     } on FirebaseException catch (e) {
-//       throw CustomException(message: e.message);
-//     }
-//   }
-
-//   Future<Category> addCategory(
-//       {String? id,
-//       required int categoryId,
-//       required String name,
-//       required String description,
-//       required DateTime createdAt,
-//       String? imagePath}) async {
-//     final category = Category(
-//       id: id,
-//       categoryId: categoryId,
-//       name: name,
-//       description: description,
-//       categoryQuestionCount: 0,
-//       imagePath: "assets/images/category_images/category_image1.png",
-//     );
-//     final categoryWithDocRef =
-//         await _categoryRepository.addCategory(category: category);
-//     state.whenData((categoryList) => state = AsyncValue.data(categoryList
-//       ..add(category.copyWith(id: categoryWithDocRef.categoryDocRef))));
-//     return categoryWithDocRef;
-//   }
-
-//   Future<void> editCategoryQuestionCount(
-//       {required int categoryQuestionCount,
-//       required String categoryDocRef}) async {
-//     await _categoryRepository.editCategoryQuestionCount(
-//         categoryQuestionCount: categoryQuestionCount,
-//         categoryDocRef: categoryDocRef);
-//   }
-// }

@@ -7,16 +7,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'quiz_history_controller.g.dart';
 
-// final quizHistoryExceptionProvider =
-//     StateProvider<CustomException?>((_) => null);
-
-// final quizHistoryControllerProvider =
-//     StateNotifierProvider<QuizHistoryController, AsyncValue<List<QuizHistory>>>(
-//         (ref) {
-//   final user = ref.watch(authControllerProvider).getCurrentUser();
-//   return QuizHistoryController(ref, user?.uid);
-// });
-
 @Riverpod(keepAlive: true, dependencies: [QuizHistoryRepository])
 class QuizHistoryController extends _$QuizHistoryController {
   @override

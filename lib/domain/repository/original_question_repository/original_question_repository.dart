@@ -7,19 +7,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'original_question_repository.g.dart';
 
-// abstract class BaseOriginalQuestionRepository {
-//   Future<Question> addOriginalQuestion(
-//       {required String userId, required Question question});
-//   Future<List<Question>> retrieveOriginalQuestionList({required String userId});
-//   Future<List<Question>> retrieveLocalOriginalQuestionList(
-//       {required String userId});
-//   Future<void> deleteOriginalQuestion(
-//       {required String userId, required String originalQuestionDocRef});
-// }
-
-// final originalQuestionRepositoryProvider = Provider<OriginalQuestionRepository>(
-//     (ref) => OriginalQuestionRepository(ref));
-
 @Riverpod(keepAlive: true, dependencies: [firebaseFirestore, AuthRepository])
 class OriginalQuestionRepository extends _$OriginalQuestionRepository {
   late final CollectionReference _userCollection;

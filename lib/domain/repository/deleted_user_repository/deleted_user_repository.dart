@@ -7,13 +7,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'deleted_user_repository.g.dart';
 
-// abstract class BaseDeletedUserRepository {
-//   Future<void> deleteUser();
-// }
-
-// final deletedUserRepositoryProvider =
-//     Provider<DeletedUserRepository>((ref) => DeletedUserRepository(ref));
-
 @Riverpod(keepAlive: true, dependencies: [AuthRepository, firebaseFirestore])
 class DeletedUserRepository extends _$DeletedUserRepository {
   @override
