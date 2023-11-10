@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/option_form_state/option_form_state.dart';
 import 'package:quiz_app/domain/question_form_state/question_form_state.dart';
-import 'package:quiz_app/presentation/controller/option_text_controller.dart';
-import 'package:quiz_app/presentation/controller/question_text_controller.dart';
+import 'package:quiz_app/presentation/controller/option_text_controller/option_text_controller.dart';
+import 'package:quiz_app/presentation/controller/question_text_controller/question_text_controller.dart';
 import 'package:quiz_app/presentation/controller/validator/option_validator_provider.dart';
 import 'package:quiz_app/presentation/controller/validator/question_validator_provider.dart';
 import 'package:quiz_app/presentation/widgets/custom_text_field.dart';
@@ -15,12 +15,10 @@ class OriginalQuestionSetScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final screenSize = MediaQuery.of(context).size;
-    final textControllerProvider = ref.watch(questionTextControllerProvider);
+    final textControllerProvider =
+        ref.watch(questionTextControllerStateProvider);
     final questionValidator = ref.watch(questionValidatorProvider);
-    final questionValidatorNotifier =
-        ref.watch(questionValidatorProvider.notifier);
     final optionValidator = ref.watch(optionValidatorProvider);
-    final optionValidatorNotifier = ref.watch(optionValidatorProvider.notifier);
 
     return Scaffold(
       appBar: _buildAppBar(),
@@ -35,9 +33,8 @@ class OriginalQuestionSetScreen extends HookConsumerWidget {
                 screenSize,
                 textControllerProvider,
                 questionValidator,
-                questionValidatorNotifier,
                 optionValidator,
-                optionValidatorNotifier),
+                ),
           ),
         ),
       ),
@@ -57,20 +54,20 @@ class OriginalQuestionSetScreen extends HookConsumerWidget {
       Size screenSize,
       TextEditingController textControllerProvider,
       QuestionFormState questionValidator,
-      QuestionValidatorProvider questionValidatorNotifier,
-      OptionFormState optionValidator,
-      OptionValidatorProvider optionValidatorNotifier) {
+      OptionFormState optionValidator) {
     return [
       _buildCustomTextField(
           screenSize: screenSize,
           title: "問題文",
           controller: textControllerProvider,
           error: questionValidator.form.text.errorMessage,
-          onChanged: (text) => questionValidatorNotifier.setQuestionText(text)),
+          onChanged: (text) {
+            ref.watch(questionValidatorProvider.notifier).setQuestionText(text);
+          }),
       SizedBox(height: screenSize.height * 0.05),
       _buildOptionHeader(screenSize),
       ..._buildOptions(
-          context, ref, screenSize, optionValidator, optionValidatorNotifier),
+          context, ref, screenSize, optionValidator),
       const SizedBox(height: 8),
       OriginalQuestionSetButton(
           text: textControllerProvider.text, duration: "10"),
@@ -119,25 +116,24 @@ class OriginalQuestionSetScreen extends HookConsumerWidget {
       BuildContext context,
       WidgetRef ref,
       Size screenSize,
-      OptionFormState optionValidator,
-      OptionValidatorProvider optionValidatorNotifier) {
+      OptionFormState optionValidator) {
     final options = [
-      ref.watch(firstOptionTextControllerProvider),
-      ref.watch(secondOptionTextControllerProvider),
-      ref.watch(thirdOptionTextControllerProvider),
-      ref.watch(fourthOptionTextControllerProvider),
+      ref.watch(firstOptionTextControllerStateProvider),
+      ref.watch(secondOptionTextControllerStateProvider),
+      ref.watch(thirdOptionTextControllerStateProvider),
+      ref.watch(fourthOptionTextControllerStateProvider),
     ];
     final isCorrectOptions = [
-      ref.watch(firstOptionIsCorrectProvider),
-      ref.watch(secondOptionIsCorrectProvider),
-      ref.watch(thirdOptionIsCorrectProvider),
-      ref.watch(fourthOptionIsCorrectProvider),
+      ref.watch(firstOptionIsCorrectStateProvider),
+      ref.watch(secondOptionIsCorrectStateProvider),
+      ref.watch(thirdOptionIsCorrectStateProvider),
+      ref.watch(fourthOptionIsCorrectStateProvider),
     ];
     final notifiers = [
-      ref.watch(firstOptionIsCorrectProvider.notifier),
-      ref.watch(secondOptionIsCorrectProvider.notifier),
-      ref.watch(thirdOptionIsCorrectProvider.notifier),
-      ref.watch(fourthOptionIsCorrectProvider.notifier),
+      ref.watch(firstOptionIsCorrectStateProvider.notifier),
+      ref.watch(secondOptionIsCorrectStateProvider.notifier),
+      ref.watch(thirdOptionIsCorrectStateProvider.notifier),
+      ref.watch(fourthOptionIsCorrectStateProvider.notifier),
     ];
 
     return List.generate(4, (index) {
@@ -156,17 +152,20 @@ class OriginalQuestionSetScreen extends HookConsumerWidget {
                     controller: options[index],
                     error: optionValidator.form.text.errorMessage,
                     onChanged: (optionText) =>
-                        optionValidatorNotifier.setOptionText(optionText),
+                        ref.watch(optionValidatorProvider.notifier).setOptionText(optionText),
                   ),
                 ),
                 Switch(
                   value: isCorrectOptions[index],
-                  onChanged: (value) => notifiers[index].state = value,
+                  onChanged: (value) {
+                    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+                    notifiers[index].state = value;
+                  },
                 ),
               ],
             ),
           ),
-      SizedBox(height: screenSize.height * 0.05),
+          SizedBox(height: screenSize.height * 0.05),
         ],
       );
     });

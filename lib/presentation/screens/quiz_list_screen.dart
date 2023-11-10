@@ -4,8 +4,8 @@ import 'package:lottie/lottie.dart';
 import 'package:quiz_app/domain/category/category.dart';
 import 'package:quiz_app/domain/question/question.dart';
 import 'package:quiz_app/domain/quiz/quiz.dart';
-import 'package:quiz_app/presentation/controller/question_controller.dart';
-import 'package:quiz_app/presentation/controller/quiz_controller.dart';
+import 'package:quiz_app/presentation/controller/question_controller/question_controller.dart';
+import 'package:quiz_app/presentation/controller/quiz_controller/quiz_controller.dart';
 import 'package:quiz_app/presentation/screens/quiz_screen.dart';
 
 class QuizListScreen extends HookConsumerWidget {
@@ -49,7 +49,7 @@ class QuizListScreen extends HookConsumerWidget {
 
   Widget _buildQuizScreenWithCategory(
       BuildContext context, WidgetRef ref, Category category) {
-    final quizListState = ref.watch(quizControllerProvider(category));
+    final quizListState = ref.watch(quizControllerProvider(category: category));
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -72,7 +72,7 @@ class QuizListScreen extends HookConsumerWidget {
                   ? const Center(
                       child: Material(child: Text("クイズはありません")),
                     )
-                  : ref.watch(questionControllerProvider(quizzes.first)).when(
+                  : ref.watch(questionControllerProvider(quiz: quizzes.first)).when(
                         data: (questions) => questions.isEmpty
                             ? const Center(
                                 child: Text("問題が用意されていません"),

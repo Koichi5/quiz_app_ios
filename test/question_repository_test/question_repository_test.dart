@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/option/option.dart';
 import 'package:quiz_app/domain/question/question.dart';
 import 'package:quiz_app/domain/quiz/quiz.dart';
-import 'package:quiz_app/domain/repository/question_repository.dart';
+import 'package:quiz_app/domain/repository/question_repository/question_repository.dart';
 import 'package:quiz_app/general/general_provider.dart';
 
 void main() {
@@ -41,14 +41,13 @@ void main() {
         ],
       );
 
-      await container!.read(questionRepositoryProvider).addQuestion(
-            quiz: quiz,
+      await container!.read(questionRepositoryProvider(quiz: quiz)).addQuestion(
             question: question,
           );
 
       final questionList = await container!
-          .read(questionRepositoryProvider)
-          .retrieveQuestionList(quiz: quiz);
+          .read(questionRepositoryProvider(quiz: quiz))
+          .retrieveQuestionList();
 
       expect(questionList.length, equals(1));
       expect(questionList.first.text, equals('question text'));

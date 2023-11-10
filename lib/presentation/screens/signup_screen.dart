@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quiz_app/domain/repository/auth_repository.dart';
-import 'package:quiz_app/presentation/controller/auth_controller.dart';
-import 'package:quiz_app/presentation/controller/signup_text_controller.dart';
+import 'package:quiz_app/domain/repository/auth_repository/auth_repository.dart';
+import 'package:quiz_app/presentation/controller/auth_controller/auth_controller.dart';
+import 'package:quiz_app/presentation/controller/signup_text_controller/signup_text_controller.dart';
 import 'package:quiz_app/presentation/controller/validator/signup_validator_provider.dart';
 import 'package:quiz_app/presentation/screens/home_screen.dart';
 import 'package:quiz_app/presentation/widgets/apple_signin_button.dart';
@@ -24,8 +24,8 @@ class SignupScreen extends HookConsumerWidget {
     final emailController = ref.watch(signupEmailControllerStateProvider);
     final passwordController = ref.watch(signupPasswordControllerStateProvider);
     final obscureText = ref.watch(signupObscureTextStateProvider);
-    final obscureTextControllerNotifier =
-        ref.watch(signupObscureTextStateProvider.notifier);
+    // final obscureTextControllerNotifier =
+    //     ref.watch(signupObscureTextStateProvider.notifier);
     final signupValidator = ref.watch(signupValidatorProvider);
     final signupValidatorNotifier = ref.watch(signupValidatorProvider.notifier);
 
@@ -59,7 +59,7 @@ class SignupScreen extends HookConsumerWidget {
                   true,
                   obscureText: obscureText,
                   toggleObscureText: () {
-                    obscureTextControllerNotifier.state = !obscureText;
+                    ref.watch(signupObscureTextStateProvider.notifier).toggle();
                   }),
               SizedBox(height: 0.04 * screenHeight),
               SignUpButton(emailController.text, passwordController.text),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/category/category.dart';
-import 'package:quiz_app/presentation/controller/quiz_controller.dart';
+import 'package:quiz_app/presentation/controller/quiz_controller/quiz_controller.dart';
 import 'package:quiz_app/presentation/controller/validator/quiz_validator_provider.dart';
 import 'package:quiz_app/presentation/screens/question_set_screen.dart';
 
@@ -31,13 +31,15 @@ class QuizSetButton extends HookConsumerWidget {
           onPressed: ([bool mounted = true]) async {
             if (ref.watch(quizValidatorProvider).form.isValid) {
               final quiz = await ref
-                  .watch(quizControllerProvider(category).notifier)
+                  .watch(quizControllerProvider(category: category).notifier)
                   .addQuiz(
                       title: title,
                       description: description,
                       questionsShuffled: false,
                       imagePath: "",
-                      categoryId: category.categoryId);
+                      categoryId: category.categoryId,
+                      category: category,
+                      );
               if (!mounted) return;
               Navigator.push(
                 context,

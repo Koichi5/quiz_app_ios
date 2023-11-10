@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quiz_app/presentation/controller/category_text_controller.dart';
+import 'package:quiz_app/presentation/controller/category_text_controller/category_text_controller.dart';
 import 'package:quiz_app/presentation/controller/validator/category_validator_provider.dart';
 import 'package:quiz_app/presentation/widgets/category_set_button.dart';
 import 'package:quiz_app/presentation/widgets/custom_text_field.dart';
@@ -10,10 +10,10 @@ class CategorySetScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final idControllerProvider = ref.watch(categoryIdControllerProvider);
-    final nameControllerProvider = ref.watch(categoryNameControllerProvider);
+    final idControllerProvider = ref.watch(categoryIdControllerStateProvider);
+    final nameControllerProvider = ref.watch(categoryNameControllerStateProvider);
     final descriptionControllerProvider =
-        ref.watch(categoryDescriptionControllerProvider);
+        ref.watch(categoryDescriptionControllerStateProvider);
     final categoryValidator = ref.watch(categoryValidatorProvider);
     final categoryValidatorNotifier =
         ref.watch(categoryValidatorProvider.notifier);

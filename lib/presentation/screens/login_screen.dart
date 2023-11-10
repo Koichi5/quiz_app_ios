@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quiz_app/presentation/controller/login_text_controller.dart';
+import 'package:quiz_app/presentation/controller/login_text_controller/login_text_controller.dart';
 import 'package:quiz_app/presentation/controller/validator/login_validator_provider.dart';
 import 'package:quiz_app/presentation/screens/signup_screen.dart';
 import 'package:quiz_app/presentation/widgets/apple_signin_button.dart';
@@ -23,10 +23,6 @@ class LoginScreen extends HookConsumerWidget {
         ref.watch(loginObscureTextStateProvider.notifier);
     final loginValidator = ref.watch(loginValidatorProvider);
     final loginValidatorNotifier = ref.watch(loginValidatorProvider.notifier);
-
-    void toggleObscureText() {
-      obscureTextControllerNotifier.state = !obscureText;
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -62,7 +58,9 @@ class LoginScreen extends HookConsumerWidget {
                   loginValidatorNotifier.setPassword(password);
                 },
                 suffixIcon: IconButton(
-                  onPressed: toggleObscureText,
+                  onPressed: () {
+                    obscureTextControllerNotifier.toggle();
+                  },
                   icon: Icon(
                       obscureText ? Icons.visibility_off : Icons.visibility),
                 ),

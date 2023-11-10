@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/category/category.dart';
-import 'package:quiz_app/presentation/controller/quiz_text_controller.dart';
+import 'package:quiz_app/presentation/controller/quiz_text_controller/quiz_text_controller.dart';
 import 'package:quiz_app/presentation/controller/validator/quiz_validator_provider.dart';
 import 'package:quiz_app/presentation/widgets/custom_text_field.dart';
 import 'package:quiz_app/presentation/widgets/quiz_set_button.dart';
@@ -13,9 +13,9 @@ class QuizSetScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final titleControllerProvider = ref.watch(quizTitleControllerProvider);
+    final titleControllerProvider = ref.watch(quizTitleControllerStateProvider);
     final descriptionControllerProvider =
-        ref.watch(quizDescriptionControllerProvider);
+        ref.watch(quizDescriptionControllerStateProvider);
     final quizValidator = ref.watch(quizValidatorProvider);
     final quizValidatorNotifier = ref.watch(quizValidatorProvider.notifier);
 

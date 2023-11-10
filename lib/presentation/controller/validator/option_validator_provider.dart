@@ -1,15 +1,14 @@
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/entity/option_form_entity/option_form_entity.dart';
 import 'package:quiz_app/domain/field/field.dart';
 import 'package:quiz_app/domain/option_form_state/option_form_state.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final optionValidatorProvider =
-StateNotifierProvider<OptionValidatorProvider, OptionFormState>(
-        (ref) => OptionValidatorProvider());
+part 'option_validator_provider.g.dart';
 
-class OptionValidatorProvider extends StateNotifier<OptionFormState> {
-  OptionValidatorProvider()
-      : super(OptionFormState(OptionFormEntity.empty()));
+@riverpod
+class OptionValidator extends _$OptionValidator {
+  @override
+  OptionFormState build() => OptionFormState(OptionFormEntity.empty());
 
   void setOptionId(String optionId) {
     final bool isOptionId = RegExp("[0-9]").hasMatch(optionId);

@@ -1,12 +1,14 @@
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/entity/login_form_entity/login_form_entity.dart';
 import 'package:quiz_app/domain/field/field.dart';
 import 'package:quiz_app/domain/login_form_state/login_form_state.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final loginValidatorProvider = StateNotifierProvider<LoginValidatorProvider, LoginFormState>((ref) => LoginValidatorProvider());
+part 'login_validator_provider.g.dart';
 
-class LoginValidatorProvider extends StateNotifier<LoginFormState> {
-  LoginValidatorProvider() : super(LoginFormState(LoginFormEntity.empty()));
+@riverpod
+class LoginValidator extends _$LoginValidator {
+  @override
+  LoginFormState build() => LoginFormState(LoginFormEntity.empty());
 
   void setEmail(String email) {
     final bool isEmail = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
