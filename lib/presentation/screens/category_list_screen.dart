@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 import 'package:quiz_app/domain/category/category.dart';
 import 'package:quiz_app/presentation/controller/category_contoller/category_controller.dart';
 import 'package:quiz_app/presentation/widgets/category_card.dart';
+import 'package:quiz_app/presentation/widgets/category_list_skelton_card.dart';
 
 class CategoryListScreen extends HookConsumerWidget {
   const CategoryListScreen({Key? key}) : super(key: key);
@@ -61,9 +62,13 @@ class CategoryListScreen extends HookConsumerWidget {
   }
 
   Widget _buildLoadingState() {
-    return Center(
-      child: Lottie.asset("assets/json_files/loading.json",
-          width: 200, height: 200),
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: 10,
+      itemBuilder: (BuildContext context, int index) {
+        return const CategoryListSkeltonCard();
+      },
     );
   }
 }
