@@ -7,7 +7,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'deleted_user_repository.g.dart';
 
-@Riverpod(keepAlive: true, dependencies: [AuthRepository, firebaseFirestore])
+// @Riverpod(keepAlive: true, dependencies: [AuthRepository, firebaseFirestore])
+@riverpod
 class DeletedUserRepository extends _$DeletedUserRepository {
   @override
   DeletedUserRepository build() => this;

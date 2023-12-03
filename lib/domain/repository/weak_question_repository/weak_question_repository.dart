@@ -7,9 +7,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'weak_question_repository.g.dart';
 
-@Riverpod(
-    keepAlive: true,
-    dependencies: [firebaseFirestore, firebaseAuth, AuthRepository])
+// @Riverpod(
+//     keepAlive: true,
+//     dependencies: [firebaseFirestore, firebaseAuth, AuthRepository])
+@riverpod
 class WeakQuestionRepository extends _$WeakQuestionRepository {
   late final CollectionReference _weakQuestionsCollection;
   @override

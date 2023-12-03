@@ -7,32 +7,21 @@ part of 'weak_question_repository.dart';
 // **************************************************************************
 
 String _$weakQuestionRepositoryHash() =>
-    r'678bb5e2502796048f362f8f2c3fced468c23893';
+    r'd14cf2d615ea4b8e163d8e8742bdfc6fcebbe97d';
 
 /// See also [WeakQuestionRepository].
 @ProviderFor(WeakQuestionRepository)
-final weakQuestionRepositoryProvider =
-    NotifierProvider<WeakQuestionRepository, WeakQuestionRepository>.internal(
+final weakQuestionRepositoryProvider = AutoDisposeNotifierProvider<
+    WeakQuestionRepository, WeakQuestionRepository>.internal(
   WeakQuestionRepository.new,
   name: r'weakQuestionRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$weakQuestionRepositoryHash,
-  dependencies: <ProviderOrFamily>[
-    firebaseFirestoreProvider,
-    firebaseAuthProvider,
-    authRepositoryProvider
-  ],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    firebaseFirestoreProvider,
-    ...?firebaseFirestoreProvider.allTransitiveDependencies,
-    firebaseAuthProvider,
-    ...?firebaseAuthProvider.allTransitiveDependencies,
-    authRepositoryProvider,
-    ...?authRepositoryProvider.allTransitiveDependencies
-  },
+  dependencies: null,
+  allTransitiveDependencies: null,
 );
 
-typedef _$WeakQuestionRepository = Notifier<WeakQuestionRepository>;
+typedef _$WeakQuestionRepository = AutoDisposeNotifier<WeakQuestionRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

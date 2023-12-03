@@ -7,24 +7,22 @@ part of 'dictionary_item_repository.dart';
 // **************************************************************************
 
 String _$dictionaryItemRepositoryHash() =>
-    r'96e69c63749f636b195f28c5bcca117dfe3656d7';
+    r'c734853675c5b02e1be8b56ae90a7f0142b1a20f';
 
 /// See also [DictionaryItemRepository].
 @ProviderFor(DictionaryItemRepository)
-final dictionaryItemRepositoryProvider = NotifierProvider<
+final dictionaryItemRepositoryProvider = AutoDisposeNotifierProvider<
     DictionaryItemRepository, DictionaryItemRepository>.internal(
   DictionaryItemRepository.new,
   name: r'dictionaryItemRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$dictionaryItemRepositoryHash,
-  dependencies: <ProviderOrFamily>[firebaseFirestoreProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    firebaseFirestoreProvider,
-    ...?firebaseFirestoreProvider.allTransitiveDependencies
-  },
+  dependencies: null,
+  allTransitiveDependencies: null,
 );
 
-typedef _$DictionaryItemRepository = Notifier<DictionaryItemRepository>;
+typedef _$DictionaryItemRepository
+    = AutoDisposeNotifier<DictionaryItemRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -7,29 +7,22 @@ part of 'original_question_repository.dart';
 // **************************************************************************
 
 String _$originalQuestionRepositoryHash() =>
-    r'04e0384f544ed5edf78994b76052096e0020a646';
+    r'69f9f52d43c6a1e78ceac877fe4e2cc73ad80387';
 
 /// See also [OriginalQuestionRepository].
 @ProviderFor(OriginalQuestionRepository)
-final originalQuestionRepositoryProvider = NotifierProvider<
+final originalQuestionRepositoryProvider = AutoDisposeNotifierProvider<
     OriginalQuestionRepository, OriginalQuestionRepository>.internal(
   OriginalQuestionRepository.new,
   name: r'originalQuestionRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$originalQuestionRepositoryHash,
-  dependencies: <ProviderOrFamily>[
-    firebaseFirestoreProvider,
-    authRepositoryProvider
-  ],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    firebaseFirestoreProvider,
-    ...?firebaseFirestoreProvider.allTransitiveDependencies,
-    authRepositoryProvider,
-    ...?authRepositoryProvider.allTransitiveDependencies
-  },
+  dependencies: null,
+  allTransitiveDependencies: null,
 );
 
-typedef _$OriginalQuestionRepository = Notifier<OriginalQuestionRepository>;
+typedef _$OriginalQuestionRepository
+    = AutoDisposeNotifier<OriginalQuestionRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

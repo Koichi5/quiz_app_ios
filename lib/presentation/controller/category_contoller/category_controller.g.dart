@@ -24,7 +24,7 @@ final categoryQuestionCountProvider =
 
 typedef _$CategoryQuestionCount = AutoDisposeNotifier<int>;
 String _$categoryControllerHash() =>
-    r'3266dd8b53beaa8ed470b6484ef4c270d1018cc1';
+    r'430e3765b578fb2f52e5009e3bfec0cb4979970d';
 
 /// See also [CategoryController].
 @ProviderFor(CategoryController)
@@ -35,13 +35,8 @@ final categoryControllerProvider =
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$categoryControllerHash,
-  dependencies: <ProviderOrFamily>[
-    authRepositoryProvider,
-    categoryRepositoryProvider
-  ],
+  dependencies: <ProviderOrFamily>[categoryRepositoryProvider],
   allTransitiveDependencies: <ProviderOrFamily>{
-    authRepositoryProvider,
-    ...?authRepositoryProvider.allTransitiveDependencies,
     categoryRepositoryProvider,
     ...?categoryRepositoryProvider.allTransitiveDependencies
   },

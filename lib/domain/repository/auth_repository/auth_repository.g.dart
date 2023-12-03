@@ -6,24 +6,21 @@ part of 'auth_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authRepositoryHash() => r'31043903858cfe7fdffea65773d2086216796d89';
+String _$authRepositoryHash() => r'36c9fe7a8551b545c51fff98c52c90c90d49b98e';
 
 /// See also [AuthRepository].
 @ProviderFor(AuthRepository)
 final authRepositoryProvider =
-    NotifierProvider<AuthRepository, AuthRepository>.internal(
+    AutoDisposeNotifierProvider<AuthRepository, AuthRepository>.internal(
   AuthRepository.new,
   name: r'authRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$authRepositoryHash,
-  dependencies: <ProviderOrFamily>[firebaseAuthProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    firebaseAuthProvider,
-    ...?firebaseAuthProvider.allTransitiveDependencies
-  },
+  dependencies: null,
+  allTransitiveDependencies: null,
 );
 
-typedef _$AuthRepository = Notifier<AuthRepository>;
+typedef _$AuthRepository = AutoDisposeNotifier<AuthRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

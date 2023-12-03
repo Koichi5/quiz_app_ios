@@ -8,7 +8,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'quiz_history_repository.g.dart';
 
-@Riverpod(keepAlive: true, dependencies: [firebaseFirestore, firebaseAuth, AuthRepository])
+// @Riverpod(keepAlive: true, dependencies: [firebaseFirestore, firebaseAuth, AuthRepository])
+@riverpod
 class QuizHistoryRepository extends _$QuizHistoryRepository {
   late final CollectionReference _userQuizHistoryCollection;
   @override
