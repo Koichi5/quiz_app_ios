@@ -7,29 +7,21 @@ part of 'deleted_user_repository.dart';
 // **************************************************************************
 
 String _$deletedUserRepositoryHash() =>
-    r'c313ff89f779cc5b4afa01fbb0bc51d3d1639650';
+    r'92a4747dda5cb66740c832de68e56574ccff0700';
 
 /// See also [DeletedUserRepository].
 @ProviderFor(DeletedUserRepository)
-final deletedUserRepositoryProvider =
-    NotifierProvider<DeletedUserRepository, DeletedUserRepository>.internal(
+final deletedUserRepositoryProvider = AutoDisposeNotifierProvider<
+    DeletedUserRepository, DeletedUserRepository>.internal(
   DeletedUserRepository.new,
   name: r'deletedUserRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$deletedUserRepositoryHash,
-  dependencies: <ProviderOrFamily>[
-    authRepositoryProvider,
-    firebaseFirestoreProvider
-  ],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    authRepositoryProvider,
-    ...?authRepositoryProvider.allTransitiveDependencies,
-    firebaseFirestoreProvider,
-    ...?firebaseFirestoreProvider.allTransitiveDependencies
-  },
+  dependencies: null,
+  allTransitiveDependencies: null,
 );
 
-typedef _$DeletedUserRepository = Notifier<DeletedUserRepository>;
+typedef _$DeletedUserRepository = AutoDisposeNotifier<DeletedUserRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

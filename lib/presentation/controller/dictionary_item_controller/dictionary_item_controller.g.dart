@@ -7,24 +7,22 @@ part of 'dictionary_item_controller.dart';
 // **************************************************************************
 
 String _$dictionaryItemControllerHash() =>
-    r'63382c4c5df56e8e63ded3702ffefee89011a65d';
+    r'a3e48dac83376da977e26e72ef60ee2dffb73468';
 
 /// See also [DictionaryItemController].
 @ProviderFor(DictionaryItemController)
-final dictionaryItemControllerProvider = AsyncNotifierProvider<
+final dictionaryItemControllerProvider = AutoDisposeAsyncNotifierProvider<
     DictionaryItemController, List<DictionaryItem>>.internal(
   DictionaryItemController.new,
   name: r'dictionaryItemControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$dictionaryItemControllerHash,
-  dependencies: <ProviderOrFamily>[dictionaryItemRepositoryProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    dictionaryItemRepositoryProvider,
-    ...?dictionaryItemRepositoryProvider.allTransitiveDependencies
-  },
+  dependencies: null,
+  allTransitiveDependencies: null,
 );
 
-typedef _$DictionaryItemController = AsyncNotifier<List<DictionaryItem>>;
+typedef _$DictionaryItemController
+    = AutoDisposeAsyncNotifier<List<DictionaryItem>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

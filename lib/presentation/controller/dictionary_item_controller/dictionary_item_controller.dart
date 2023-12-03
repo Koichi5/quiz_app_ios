@@ -6,7 +6,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'dictionary_item_controller.g.dart';
 
-@Riverpod(keepAlive: true, dependencies: [DictionaryItemRepository])
+// @Riverpod(keepAlive: true, dependencies: [DictionaryItemRepository])
+@riverpod
 class DictionaryItemController extends _$DictionaryItemController {
   @override
   Future<List<DictionaryItem>> build() {

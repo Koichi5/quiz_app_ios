@@ -7,7 +7,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_controller.g.dart';
 
-@Riverpod(keepAlive: true, dependencies: [AuthRepository])
+// @Riverpod(keepAlive: true, dependencies: [AuthRepository])
+@riverpod
 class AuthController extends _$AuthController {
   late final AuthRepository _authRepositoryNotifier;
   @override

@@ -7,12 +7,12 @@ part of 'weak_question_controller.dart';
 // **************************************************************************
 
 String _$weakQuestionControllerHash() =>
-    r'ba4c9f1fc4d0b2d9324dfd544c2260f7d8ea4255';
+    r'd708f7a1a5630317fe383c5e43df20d65227ec9f';
 
 /// See also [WeakQuestionController].
 @ProviderFor(WeakQuestionController)
-final weakQuestionControllerProvider =
-    AsyncNotifierProvider<WeakQuestionController, List<Question>>.internal(
+final weakQuestionControllerProvider = AutoDisposeAsyncNotifierProvider<
+    WeakQuestionController, List<Question>>.internal(
   WeakQuestionController.new,
   name: r'weakQuestionControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,6 +22,6 @@ final weakQuestionControllerProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$WeakQuestionController = AsyncNotifier<List<Question>>;
+typedef _$WeakQuestionController = AutoDisposeAsyncNotifier<List<Question>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

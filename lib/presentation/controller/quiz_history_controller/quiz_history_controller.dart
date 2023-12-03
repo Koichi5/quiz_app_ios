@@ -7,7 +7,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'quiz_history_controller.g.dart';
 
-@Riverpod(keepAlive: true, dependencies: [QuizHistoryRepository])
+// @Riverpod(keepAlive: true, dependencies: [QuizHistoryRepository])
+@riverpod
 class QuizHistoryController extends _$QuizHistoryController {
   @override
   Future<List<QuizHistory>> build() {
