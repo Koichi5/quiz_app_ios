@@ -21,32 +21,33 @@ class QuestionOption extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-        decoration: BoxDecoration(
-            color: ref.watch(optionGestureProvider)
-                ? option.isCorrect
-                    ? Theme.of(context).colorScheme.primaryContainer
-                    : Theme.of(context).colorScheme.background
-                : Theme.of(context).colorScheme.background,
-            border: Border.all(
-              width: 0.7,
-              color: isDarkMode(context)
-                  ? Theme.of(context).colorScheme.secondary
-                  : Theme.of(context).colorScheme.onBackground,
-            ),
-            borderRadius: const BorderRadius.all(Radius.circular(50))),
-        width: MediaQuery.of(context).size.width * 0.9,
-        padding: const EdgeInsets.all(10),
-        alignment: Alignment.centerLeft,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            option.text,
-            style: TextStyle(
-              fontSize: option.text.length > 13 ? 20 : 23,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            textAlign: TextAlign.left,
+      decoration: BoxDecoration(
+          color: ref.watch(optionGestureProvider)
+              ? option.isCorrect
+                  ? Theme.of(context).colorScheme.primaryContainer
+                  : Theme.of(context).colorScheme.background
+              : Theme.of(context).colorScheme.background,
+          border: Border.all(
+            width: 0.7,
+            color: isDarkMode(context)
+                ? Theme.of(context).colorScheme.secondary
+                : Theme.of(context).colorScheme.onBackground,
           ),
-        ));
+          borderRadius: const BorderRadius.all(Radius.circular(50))),
+      width: MediaQuery.of(context).size.width * 0.9,
+      padding: const EdgeInsets.all(10),
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          option.text,
+          style: TextStyle(
+            fontSize: option.text.length > 13 ? 20 : 23,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          textAlign: TextAlign.left,
+        ),
+      ),
+    );
   }
 }
