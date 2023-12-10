@@ -37,6 +37,7 @@ dependencies:
   fake_cloud_firestore: ^2.4.1+1
   firebase_auth_mocks: ^0.12.0
   riverpod_annotation: ^2.3.0
+  nil: ^1.1.1
 
 dev_dependencies:
   flutter_test:
