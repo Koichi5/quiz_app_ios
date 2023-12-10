@@ -7,7 +7,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'original_question_repository.g.dart';
 
-// @Riverpod(keepAlive: true, dependencies: [firebaseFirestore, AuthRepository])
 @riverpod
 class OriginalQuestionRepository extends _$OriginalQuestionRepository {
   late final CollectionReference _userCollection;

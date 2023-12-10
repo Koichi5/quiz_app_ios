@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CustomAlertDialog {
-  static void showCustomAlert(BuildContext context, String title, String message,
+  static void showCustomAlert(
+      BuildContext context, String title, String message,
       {String buttonText = "OK"}) {
     var alert = AlertDialog(
       title: Text(title),
@@ -15,9 +16,10 @@ class CustomAlertDialog {
       ],
     );
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

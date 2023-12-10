@@ -14,7 +14,7 @@ final List homePageList = [
   const CategoryListScreen(),
   const ReviewScreen(),
   OriginalQuestionListScreen(),
-  SettingScreen(),
+  const SettingScreen(),
 ];
 
 class HomeScreen extends HookConsumerWidget {

@@ -49,10 +49,11 @@ class WeakQuestionCard extends HookConsumerWidget {
                         );
                     if (!mounted) return;
                     showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (context) {
-                          return SimpleDialog(children: [
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) {
+                        return SimpleDialog(
+                          children: [
                             const Padding(
                               padding: EdgeInsets.all(10.0),
                               child: Center(
@@ -63,17 +64,20 @@ class WeakQuestionCard extends HookConsumerWidget {
                               ),
                             ),
                             TextButton(
-                                onPressed: ([bool mounted = true]) async {
-                                  await ref
-                                      .watch(weakQuestionControllerProvider
-                                          .notifier)
-                                      .retrieveWeakQuestionList();
-                                  if (!mounted) return;
-                                  Navigator.pop(context);
-                                },
-                                child: const Text("戻る"))
-                          ]);
-                        });
+                              onPressed: ([bool mounted = true]) async {
+                                await ref
+                                    .watch(
+                                        weakQuestionControllerProvider.notifier)
+                                    .retrieveWeakQuestionList();
+                                if (!mounted) return;
+                                Navigator.pop(context);
+                              },
+                              child: const Text("戻る"),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                   child: const Text("覚えた！"),
                 ),

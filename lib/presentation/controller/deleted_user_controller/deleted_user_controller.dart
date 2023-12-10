@@ -5,7 +5,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'deleted_user_controller.g.dart';
 
-// @Riverpod(keepAlive: true, dependencies: [DeletedUserRepository])
 @riverpod
 class DeletedUserController extends _$DeletedUserController {
   @override

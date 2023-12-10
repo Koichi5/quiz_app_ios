@@ -8,7 +8,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'original_question_controller.g.dart';
 
-// @Riverpod(keepAlive: true)
 @riverpod
 class OriginalQuestionController extends _$OriginalQuestionController {
   late final OriginalQuestionRepository _originalQuestionRepositoryNotifier;

@@ -8,7 +8,6 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 part 'auth_repository.g.dart';
 
-// @Riverpod(keepAlive: true, dependencies: [firebaseAuth])
 @riverpod
 class AuthRepository extends _$AuthRepository {
   @override

@@ -6,7 +6,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'weak_question_controller.g.dart';
 
-// @Riverpod(keepAlive: true)
 @riverpod
 class WeakQuestionController extends _$WeakQuestionController {
   @override

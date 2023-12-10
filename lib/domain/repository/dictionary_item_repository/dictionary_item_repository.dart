@@ -6,7 +6,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'dictionary_item_repository.g.dart';
 
-// @Riverpod(keepAlive: true, dependencies: [firebaseFirestore])
 @riverpod
 class DictionaryItemRepository extends _$DictionaryItemRepository {
   @override
