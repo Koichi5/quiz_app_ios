@@ -133,16 +133,22 @@ class _QuizScreenState extends ConsumerState<QuizScreen>
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Text(
-                    "${ref.watch(currentQuestionIndexProvider)} / ${questionList.length}"),
+                  "${ref.watch(currentQuestionIndexProvider)} / ${questionList.length}",
+                ),
               ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
                   padding: const EdgeInsets.all(15.0),
-                  child: Text(
-                    question?.text ?? "",
-                    style: const TextStyle(
-                      fontSize: 18,
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.2,
+                    child: Flexible(
+                      child: Text(
+                        question?.text ?? "",
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
                     ),
                   ),
                 ),
