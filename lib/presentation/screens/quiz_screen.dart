@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
@@ -104,21 +105,19 @@ class _QuizScreenState extends ConsumerState<QuizScreen>
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          quizQuestion(),
-          questionOptions(),
-          QuizProgress(question, progressTimer,
-              remainTime: _remainTime,
-              engine: engine,
-              questionList: questionList,
-              playIncorrectSoundFile: _playIncorrectSoundFile),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        quizQuestion(),
+        questionOptions(),
+        QuizProgress(question, progressTimer,
+            remainTime: _remainTime,
+            engine: engine,
+            questionList: questionList,
+            playIncorrectSoundFile: _playIncorrectSoundFile),
+      ],
     );
   }
 
@@ -142,13 +141,13 @@ class _QuizScreenState extends ConsumerState<QuizScreen>
                   padding: const EdgeInsets.all(15.0),
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.2,
-                    child: Flexible(
-                      child: Text(
-                        question?.text ?? "",
-                        style: const TextStyle(
-                          fontSize: 18,
-                        ),
+                    child: AutoSizeText(
+                      question?.text ?? "",
+                      style: const TextStyle(
+                        fontSize: 18,
                       ),
+                      minFontSize: 16,
+                      maxLines: 3,
                     ),
                   ),
                 ),
