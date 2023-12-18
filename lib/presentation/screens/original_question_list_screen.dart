@@ -9,11 +9,7 @@ import 'package:quiz_app/presentation/widgets/original_question_list_card.dart';
 import 'original_question_set_screen.dart';
 
 class OriginalQuestionListScreen extends HookConsumerWidget {
-  OriginalQuestionListScreen({Key? key}) : super(key: key);
-
-  final List<String> dictionaryWordList = [];
-  final List<String> dictionaryDescriptionList = [];
-  final List<String> dictionaryUrlList = [];
+  const OriginalQuestionListScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
