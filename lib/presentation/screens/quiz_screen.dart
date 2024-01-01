@@ -13,7 +13,7 @@ import 'package:quiz_app/domain/quiz/quiz.dart';
 import 'package:quiz_app/general/custom_exception.dart';
 import 'package:quiz_app/general/general_provider.dart';
 import 'package:quiz_app/presentation/controller/quiz_history_controller/quiz_history_controller.dart';
-import 'package:quiz_app/presentation/screens/quiz_result_screen.dart';
+import 'package:quiz_app/presentation/routes/routes.dart';
 import 'package:quiz_app/presentation/widgets/question_option.dart';
 import 'package:quiz_app/presentation/widgets/time_indicator.dart';
 
@@ -25,12 +25,6 @@ final currentQuestionTextProvider = StateProvider<String?>((ref) => "");
 
 // ignore: must_be_immutable
 class QuizScreen extends StatefulHookConsumerWidget {
-  static const routeName = '/quiz';
-  Category? category;
-  Quiz? quiz;
-  final List<Question> questionList;
-  final WidgetRef ref;
-
   QuizScreen(
       {this.category,
       this.quiz,
@@ -38,6 +32,13 @@ class QuizScreen extends StatefulHookConsumerWidget {
       required this.ref,
       Key? key})
       : super(key: key);
+
+  static String get routeName => 'quiz';
+  static String get routeLocation => '/$routeName';
+  Category? category;
+  Quiz? quiz;
+  final List<Question> questionList;
+  final WidgetRef ref;
 
   @override
   ConsumerState<QuizScreen> createState() =>
@@ -340,17 +341,14 @@ class _QuizScreenState extends ConsumerState<QuizScreen>
             questionList: questionList,
           );
     }
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => QuizResultScreen(
-          result: QuizResult(questionList: questionList, totalCorrect: total),
-          takenQuestions: takenQuestions,
-          answerIsCorrectList: answerIsCorrectList,
-          questionList: questionList,
-        ),
+    QuizResultRoute(
+      $extra: QuizResult(
+        questionList: questionList,
+        totalCorrect: total,
+        takenQuestions: takenQuestions,
+        answerIsCorrectList: answerIsCorrectList,
       ),
-    );
+    ).pushReplacement(context);
   }
 
   void onStop() {

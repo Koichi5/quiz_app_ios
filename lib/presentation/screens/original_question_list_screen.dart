@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quiz_app/domain/question/question.dart';
 import 'package:quiz_app/presentation/controller/original_question_controller/original_question_controller.dart';
+import 'package:quiz_app/presentation/routes/routes.dart';
 import 'package:quiz_app/presentation/screens/quiz_screen.dart';
 import 'package:quiz_app/presentation/widgets/original_question_list_card.dart';
 
-import 'original_question_set_screen.dart';
-
 class OriginalQuestionListScreen extends HookConsumerWidget {
   const OriginalQuestionListScreen({Key? key}) : super(key: key);
+
+  static String get routeName => 'original-question-list';
+  static String get routeLocation => '/$routeName';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,10 +34,9 @@ class OriginalQuestionListScreen extends HookConsumerWidget {
       title: const Text("オリジナル問題"),
       actions: [
         IconButton(
-          onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const OriginalQuestionSetScreen())),
+          onPressed: () {
+            const OriginalQuestionSetRoute().go(context);
+          },
           icon: Icon(Icons.add, color: Theme.of(context).colorScheme.primary),
         ),
       ],
@@ -119,17 +121,30 @@ class OriginalQuestionListScreen extends HookConsumerWidget {
       data: (originalQuestionList) => originalQuestionList.isEmpty
           ? const SizedBox()
           : FloatingActionButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Scaffold(
-                    appBar: _buildQuizAppBar(context, ref),
-                    body: QuizScreen(
-                        ref: ref,
-                        questionList: originalQuestionState.asData!.value),
-                  ),
-                ),
-              ),
+              onPressed: () {
+                OriginalQuestionQuizRoute($extra: originalQuestionList)
+                    .go(context);
+
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => OriginalQuestionQuizScreen(
+                //       originalQuestionList: originalQuestionList,
+                //     ),
+                //   ),
+                // );
+              },
+              // onPressed: () => Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => Scaffold(
+              //       appBar: _buildQuizAppBar(context, ref),
+              //       body: QuizScreen(
+              //           ref: ref,
+              //           questionList: originalQuestionState.asData!.value),
+              //     ),
+              //   ),
+              // ),
               child: const Icon(Icons.play_arrow),
             ),
       error: (error, _) =>
@@ -142,7 +157,7 @@ class OriginalQuestionListScreen extends HookConsumerWidget {
     return AppBar(
       leading: IconButton(
         onPressed: () {
-          Navigator.pop(context);
+          context.pop();
           ref.watch(currentQuestionIndexProvider.notifier).state = 1;
         },
         icon: const Icon(Icons.arrow_back_ios),

@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/repository/auth_repository/auth_repository.dart';
 import 'package:quiz_app/presentation/controller/auth_controller/auth_controller.dart';
 import 'package:quiz_app/presentation/controller/validator/signup_validator_provider.dart';
-import 'package:quiz_app/presentation/screens/home_screen.dart';
+import 'package:quiz_app/presentation/routes/routes.dart';
 
 class SignUpButton extends HookConsumerWidget {
   const SignUpButton(this.email, this.password, {super.key});
@@ -27,13 +27,13 @@ class SignUpButton extends HookConsumerWidget {
                     : Theme.of(context).colorScheme.secondary),
             onPressed: ([bool mounted = true]) async {
               if (ref.watch(signupValidatorProvider).form.isValid) {
-                await ref.watch(authControllerProvider.notifier).createUserWithEmailAndPassword(
-                    email, password);
+                await ref
+                    .watch(authControllerProvider.notifier)
+                    .createUserWithEmailAndPassword(email, password);
                 User? user = authRepositoryProviderNotifier.getCurrentUser();
                 if (user != null) {
-                  if(!mounted) return;
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => const HomeScreen()));
+                  if (!mounted) return;
+                  const CategoryListRoute().pushReplacement(context);
                 }
               } else {
                 null;

@@ -1,12 +1,13 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final StateProvider<int> bottomNavBarSelectedIndexProvider =
-    StateProvider((ref) => 0);
+// final StateProvider<int> bottomNavBarSelectedIndexProvider =
+//     StateProvider((ref) => 0);
 
 class BottomNavBar extends HookConsumerWidget {
-  BottomNavBar({Key? key}) : super(key: key);
+  BottomNavBar({super.key, required this.navigationShell});
 
   final Map<String, IconData> bottomContentList = {
     "ホーム": Icons.home,
@@ -15,18 +16,18 @@ class BottomNavBar extends HookConsumerWidget {
     "設定": Icons.settings,
   };
 
+  final StatefulNavigationShell navigationShell;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bottomNavBarSelectedIndex =
-        ref.watch(bottomNavBarSelectedIndexProvider);
-    final bottomNavBarSelectedIndexNotifier =
-        ref.watch(bottomNavBarSelectedIndexProvider.notifier);
-
     return BottomNavyBar(
       items: _buildBottomNavyBarItems(context),
-      selectedIndex: bottomNavBarSelectedIndex,
+      selectedIndex: navigationShell.currentIndex,
       onItemSelected: (index) {
-        bottomNavBarSelectedIndexNotifier.state = index;
+        navigationShell.goBranch(
+          index,
+          initialLocation: index == navigationShell.currentIndex,
+        );
       },
     );
   }

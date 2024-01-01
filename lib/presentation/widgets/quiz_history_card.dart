@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:quiz_app/domain/quiz_history/quiz_history.dart';
 import 'package:quiz_app/presentation/controller/category_contoller/category_controller.dart';
-import 'package:quiz_app/presentation/screens/quiz_list_screen.dart';
+import 'package:quiz_app/presentation/routes/routes.dart';
 import 'package:quiz_app/presentation/screens/quiz_screen.dart';
 
 class QuizHistoryCard extends HookConsumerWidget {
@@ -98,13 +98,7 @@ class QuizHistoryCard extends HookConsumerWidget {
                         ref.watch(currentQuestionIndexProvider.notifier).state =
                             1;
                         if (!mounted) return;
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                QuizListScreen(category: category),
-                          ),
-                        );
+                        QuizListRoute($extra: category).go(context);
                       },
                       child: Text(
                         "再チャレンジ",

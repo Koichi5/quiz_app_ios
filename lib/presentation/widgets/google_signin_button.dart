@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/repository/auth_repository/auth_repository.dart';
 import 'package:quiz_app/general/general_provider.dart';
 import 'package:quiz_app/presentation/controller/auth_controller/auth_controller.dart';
-import 'package:quiz_app/presentation/screens/home_screen.dart';
+import 'package:quiz_app/presentation/routes/routes.dart';
 
 class GoogleSignInButton extends HookConsumerWidget {
   const GoogleSignInButton({Key? key}) : super(key: key);
@@ -33,8 +33,7 @@ class GoogleSignInButton extends HookConsumerWidget {
               User? user = authRepository.getCurrentUser();
               if (user != null) {
                 if (!mounted) return;
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const HomeScreen()));
+                const CategoryListRoute().go(context);
               }
             },
             child: Row(

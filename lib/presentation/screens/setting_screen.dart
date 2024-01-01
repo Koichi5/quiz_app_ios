@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/general/general_provider.dart';
 import 'package:quiz_app/presentation/controller/auth_controller/auth_controller.dart';
 import 'package:quiz_app/presentation/controller/deleted_user_controller/deleted_user_controller.dart';
-import 'package:quiz_app/presentation/screens/dictionary_screen.dart';
-import 'package:quiz_app/presentation/screens/login_screen.dart';
+import 'package:quiz_app/presentation/routes/routes.dart';
 import 'package:quiz_app/presentation/widgets/link_button.dart';
 
 class SettingScreen extends HookConsumerWidget {
   const SettingScreen({Key? key}) : super(key: key);
 
+  static String get routeName => 'setting';
+  static String get routeLocation => '/$routeName';
   static const _labelTextList = [
     "利用規約",
     "プライバシーポリシー",
@@ -67,8 +69,7 @@ class SettingScreen extends HookConsumerWidget {
       () => linkButton.launchUriWithString(context, _linkURLs[1]),
       () => linkButton.launchUriWithString(context, _linkURLs[2]),
       () => linkButton.launchUriWithString(context, _linkURLs[3]),
-      () => Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const DictionaryScreen())),
+      () => const DictionaryRoute().go(context),
       () => _showLogoutDialog(context, ref),
       () => _showDeleteAccountDialog(context, ref),
     ];
@@ -83,8 +84,7 @@ class SettingScreen extends HookConsumerWidget {
         () async {
           await ref.watch(authControllerProvider.notifier).signOut();
           if (ref.watch(firebaseAuthProvider).currentUser == null) {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const LoginScreen()));
+            // LoginRoute().pushReplacement(context);
           }
         },
       ),
@@ -99,8 +99,7 @@ class SettingScreen extends HookConsumerWidget {
         "アカウントを削除しますか？",
         () async {
           await ref.watch(deletedUserControllerProvider.notifier).deleteUser();
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()));
+          const LoginRoute().pushReplacement(context);
         },
       ),
     );
@@ -118,7 +117,9 @@ class SettingScreen extends HookConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  context.pop();
+                },
                 child: const Text("いいえ")),
             TextButton(
               onPressed: onConfirm,

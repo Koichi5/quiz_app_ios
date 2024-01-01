@@ -1,36 +1,49 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quiz_app/presentation/controller/weak_question_controller/weak_question_controller.dart';
-import 'package:quiz_app/presentation/screens/category_list_screen.dart';
-import 'package:quiz_app/presentation/screens/original_question_list_screen.dart';
-import 'package:quiz_app/presentation/screens/quiz_screen.dart';
-import 'package:quiz_app/presentation/screens/review_screen.dart';
+import 'package:quiz_app/presentation/routes/routes.dart';
 import 'package:quiz_app/presentation/widgets/bottom_nav_bar.dart';
 import 'package:quiz_app/presentation/widgets/segmented_button.dart';
-import 'setting_screen.dart';
 
-final List homePageList = [
-  const CategoryListScreen(),
-  const ReviewScreen(),
-  OriginalQuestionListScreen(),
-  const SettingScreen(),
-];
+// final List homePageList = [
+//   const CategoryListScreen(),
+//   const ReviewScreen(),
+//   const OriginalQuestionListScreen(),
+//   const SettingScreen(),
+// ];
 
 class HomeScreen extends HookConsumerWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({
+    super.key,
+    required this.navigationShell,
+    required this.children,
+  });
+
+  static String get routeName => 'home';
+  static String get routeLocation => '/';
+
+  final StatefulNavigationShell navigationShell;
+  final List<Widget> children;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bottomNavBarSelectedIndex =
-        ref.watch(bottomNavBarSelectedIndexProvider);
+    // final bottomNavBarSelectedIndex =
+    //     ref.watch(bottomNavBarSelectedIndexProvider);
 
     return Scaffold(
-        appBar: _buildAppBar(bottomNavBarSelectedIndex),
-        bottomNavigationBar: BottomNavBar(),
-        body: homePageList[bottomNavBarSelectedIndex],
+        appBar: _buildAppBar(navigationShell.currentIndex),
+        body: BranchContainer(
+          currentIndex: navigationShell.currentIndex,
+          children: children,
+        ),
+        bottomNavigationBar: BottomNavBar(
+          navigationShell: navigationShell,
+        ),
         floatingActionButton: _buildFloatingActionButton(
-            context, ref, bottomNavBarSelectedIndex));
+            context, ref, navigationShell.currentIndex));
   }
 
   AppBar? _buildAppBar(int index) {
@@ -58,30 +71,7 @@ class HomeScreen extends HookConsumerWidget {
             if (weakQuestionList.isNotEmpty) {
               return FloatingActionButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Scaffold(
-                        appBar: AppBar(
-                          leading: IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                              ref
-                                  .watch(currentQuestionIndexProvider.notifier)
-                                  .state = 1;
-                            },
-                            icon: const Icon(Icons.arrow_back_ios),
-                          ),
-                          centerTitle: true,
-                          title: const Text("苦手問題"),
-                        ),
-                        body: QuizScreen(
-                          ref: ref,
-                          questionList: weakQuestionList,
-                        ),
-                      ),
-                    ),
-                  );
+                  WeakQuestionQuizRoute($extra: weakQuestionList).go(context);
                 },
                 child: const Icon(Icons.play_arrow),
               );
@@ -113,3 +103,51 @@ class HomeScreen extends HookConsumerWidget {
         );
   }
 }
+
+class BranchContainer extends StatelessWidget {
+  const BranchContainer(
+      {super.key, required this.currentIndex, required this.children});
+
+  final int currentIndex;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+        children: children.mapIndexed(
+      (int index, Widget child) {
+        if (index == currentIndex) {
+          return _branchNavigatorWrapper(index, child);
+        } else {
+          return const SizedBox();
+        }
+      },
+    ).toList());
+  }
+
+  Widget _branchNavigatorWrapper(int index, Widget navigator) => IgnorePointer(
+        ignoring: index != currentIndex,
+        child: TickerMode(
+          enabled: index == currentIndex,
+          child: navigator,
+        ),
+      );
+}
+// Widget _bodyBuilder(
+//     {required int currentIndex, required List<Widget> children}) {
+//         Widget _branchNavigatorWrapper(int index, Widget navigator) => IgnorePointer(
+//         ignoring: index != currentIndex,
+//         child: TickerMode(
+//           enabled: index == currentIndex,
+//           child: navigator,
+//         ),
+//       );
+//   return Stack(
+//     children: children.mapIndexed((int index, Widget child) {
+//       if(index == currentIndex) {
+//         return _branchNavigatorWrapper(index, navigator)
+//       }
+//     }),
+//   );
+// }
+

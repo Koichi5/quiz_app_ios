@@ -1,5 +1,6 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/question/question.dart';
 import 'package:quiz_app/domain/repository/weak_question_repository/weak_question_repository.dart';
@@ -70,7 +71,7 @@ class WeakQuestionCard extends HookConsumerWidget {
                                         weakQuestionControllerProvider.notifier)
                                     .retrieveWeakQuestionList();
                                 if (!mounted) return;
-                                Navigator.pop(context);
+                                context.pop();
                               },
                               child: const Text("戻る"),
                             ),

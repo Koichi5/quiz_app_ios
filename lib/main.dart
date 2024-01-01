@@ -1,16 +1,14 @@
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/firebase_options.dart';
-import 'package:quiz_app/presentation/screens/home_screen.dart';
-import 'package:quiz_app/presentation/screens/login_screen.dart';
-import 'package:quiz_app/presentation/screens/signup_screen.dart';
+import 'package:quiz_app/general/custom_exception.dart';
+import 'package:quiz_app/presentation/routes/routes.dart';
 
 import 'color_schemes.g.dart';
-import 'presentation/screens/intro_slider_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +26,9 @@ void main() async {
       );
       await AppTrackingTransparency.requestTrackingAuthorization();
     }
-  } on PlatformException {}
+  } on PlatformException catch (e) {
+    throw CustomException(message: e.message);
+  }
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -36,12 +36,38 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+final rotuerProvider = Provider<GoRouter>(
+  (ref) {
+    // final authStateStream = FirebaseAuth.instance.authStateChanges();
+    // User? authState;
+
+    // authStateStream.listen((User? user) {
+    //   authState = user;
+    // });
+
+    return GoRouter(
+      debugLogDiagnostics: true,
+      routes: $appRoutes,
+      // redirect: (context, state) {
+      // final isSplash = state.uri.toString() == HomeScreen.routeLocation;
+      // if (isSplash) {
+      //   return authState == null
+      //       ? IntroSliderScreen.routeLocation
+      //       : HomeScreen.routeLocation;
+      // }
+      // return null;
+      // },
+    );
+  },
+);
+
+class MyApp extends ConsumerWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(rotuerProvider);
+    return MaterialApp.router(
       title: 'Quiz-app',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -54,25 +80,26 @@ class MyApp extends StatelessWidget {
         colorScheme: darkColorScheme,
         fontFamily: "Noto Sans JP",
       ),
-      routes: {
-        '/home': (BuildContext context) => const HomeScreen(),
-        '/signup': (BuildContext context) => const SignupScreen(),
-        '/login': (BuildContext context) => const LoginScreen(),
-      },
-      home: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const SizedBox();
-          }
-          if (snapshot.hasData) {
-            // User が null でなない、つまりサインイン済みのホーム画面へ
-            return const HomeScreen();
-          }
-          // User が null である、つまり未サインインのサインイン画面へ
-          return const IntroSliderScreen();
-        },
-      ),
+      routerConfig: router,
+      // routes: {
+      //   '/home': (BuildContext context) => const HomeScreen(),
+      //   '/signup': (BuildContext context) => const SignupScreen(),
+      //   '/login': (BuildContext context) => const LoginScreen(),
+      // },
+      // home: StreamBuilder<User?>(
+      //   stream: FirebaseAuth.instance.authStateChanges(),
+      //   builder: (context, snapshot) {
+      //     if (snapshot.connectionState == ConnectionState.waiting) {
+      //       return const SizedBox();
+      //     }
+      //     if (snapshot.hasData) {
+      //       // User が null でなない、つまりサインイン済みのホーム画面へ
+      //       return const HomeScreen();
+      //     }
+      //     // User が null である、つまり未サインインのサインイン画面へ
+      //     return const IntroSliderScreen();
+      //   },
+      // ),
     );
   }
 }

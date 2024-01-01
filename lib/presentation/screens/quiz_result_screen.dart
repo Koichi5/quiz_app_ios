@@ -2,27 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quiz_app/domain/dto/quiz_result.dart';
-import 'package:quiz_app/domain/question/question.dart';
+import 'package:quiz_app/presentation/routes/routes.dart';
 import 'package:quiz_app/presentation/screens/quiz_screen.dart';
 import 'package:quiz_app/presentation/widgets/result_question_list_card.dart';
-import 'home_screen.dart';
 
 class QuizResultScreen extends HookConsumerWidget {
-  static const routeName = '/quizResult';
+  const QuizResultScreen({required this.result, Key? key}) : super(key: key);
+
+  static String get routeName => 'quiz-result';
+  static String get routeLocation => '/$routeName';
+
   final QuizResult result;
-  final List<int> takenQuestions;
-  final List<bool> answerIsCorrectList;
-  final List<Question> questionList;
 
-  const QuizResultScreen(
-      {required this.result,
-      required this.takenQuestions,
-      required this.answerIsCorrectList,
-      required this.questionList,
-      Key? key})
-      : super(key: key);
-
-  bool get hasError => questionList.length != answerIsCorrectList.length;
+  bool get hasError =>
+      result.questionList.length != result.answerIsCorrectList.length;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -94,15 +87,16 @@ class QuizResultScreen extends HookConsumerWidget {
 
   Widget _resultQuestionList(BuildContext context) {
     return ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: result.questionList.length,
-        itemBuilder: (BuildContext context, int index) {
-          final question = questionList[takenQuestions[index]];
-          final answerIsCorrect = answerIsCorrectList[index];
-          return ResultQuestionListCard(
-              question: question, answerIsCorrect: answerIsCorrect);
-        });
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: result.questionList.length,
+      itemBuilder: (BuildContext context, int index) {
+        final question = result.questionList[result.takenQuestions[index]];
+        final answerIsCorrect = result.answerIsCorrectList[index];
+        return ResultQuestionListCard(
+            question: question, answerIsCorrect: answerIsCorrect);
+      },
+    );
   }
 
   Widget _bottomButtons(BuildContext context, WidgetRef ref) {
@@ -124,29 +118,39 @@ class QuizResultScreen extends HookConsumerWidget {
       child: TextButton(
         onPressed: () {
           ref.watch(currentQuestionIndexProvider.notifier).state = 1;
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Scaffold(
-                appBar: AppBar(
-                  leading: IconButton(
-                    icon: const Icon(Icons.arrow_back_ios),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      ref.watch(currentQuestionIndexProvider.notifier).state =
-                          1;
-                    },
-                  ),
-                  centerTitle: true,
-                  title: const Text("再挑戦"),
-                ),
-                body: QuizScreen(
-                  questionList: result.questionList,
-                  ref: ref,
-                ),
-              ),
-            ),
-          );
+          // RetryQuizRoute($extra: result.questionList).go(context);
+
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => RetryQuizScreen(
+          //       questionList: result.questionList,
+          //     ),
+          //   ),
+          // );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => Scaffold(
+          //       appBar: AppBar(
+          //         leading: IconButton(
+          //           icon: const Icon(Icons.arrow_back_ios),
+          //           onPressed: () {
+          //             context.pop();
+          //             ref.watch(currentQuestionIndexProvider.notifier).state =
+          //                 1;
+          //           },
+          //         ),
+          //         centerTitle: true,
+          //         title: const Text("再挑戦"),
+          //       ),
+          //       body: QuizScreen(
+          //         questionList: result.questionList,
+          //         ref: ref,
+          //       ),
+          //     ),
+          //   ),
+          // );
         },
         child: Text(
           "再挑戦",
@@ -160,8 +164,10 @@ class QuizResultScreen extends HookConsumerWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: ElevatedButton(
-        onPressed: () => Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const HomeScreen())),
+        onPressed: () {
+          // const HomeRoute().pushReplacement(context);
+          const CategoryListRoute().pushReplacement(context);
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: Theme.of(context).colorScheme.primary,
         ),

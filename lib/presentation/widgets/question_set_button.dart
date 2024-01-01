@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/quiz/quiz.dart';
 import 'package:quiz_app/presentation/controller/category_contoller/category_controller.dart';
@@ -52,7 +53,7 @@ class QuestionSetButton extends HookConsumerWidget {
                   );
               ref.watch(categoryQuestionCountProvider.notifier).increment();
               if (!mounted) return;
-              Navigator.pop(context);
+              context.pop();
             }
           },
           child: Text(

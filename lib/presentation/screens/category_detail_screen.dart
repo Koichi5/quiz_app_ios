@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/category/category.dart';
-import 'package:quiz_app/presentation/screens/quiz_list_screen.dart';
+import 'package:quiz_app/presentation/routes/routes.dart';
 
 final weakQuestionInCategoryCountProvider = StateProvider((ref) => 0);
 
@@ -10,6 +11,8 @@ class CategoryDetailScreen extends HookConsumerWidget {
       : super(key: key);
 
   final Category category;
+  static String get routeName => 'category-detail';
+  static String get routeLocation => '/$routeName';
 
   String _calcProcessTime(int categoryCount) {
     final processTime = categoryCount * 10;
@@ -96,14 +99,7 @@ class CategoryDetailScreen extends HookConsumerWidget {
                           width: MediaQuery.of(context).size.width * 0.9,
                           child: ElevatedButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => QuizListScreen(
-                                    category: category,
-                                  ),
-                                ),
-                              );
+                              QuizListRoute($extra: category).go(context);
                             },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor:
@@ -133,7 +129,7 @@ class CategoryDetailScreen extends HookConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 50.0),
       child: IconButton(
         onPressed: () {
-          Navigator.pop(context);
+          context.pop();
         },
         icon: const Icon(Icons.arrow_back_ios),
       ),

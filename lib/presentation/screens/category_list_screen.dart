@@ -8,6 +8,9 @@ import 'package:quiz_app/presentation/widgets/category_card.dart';
 class CategoryListScreen extends HookConsumerWidget {
   const CategoryListScreen({Key? key}) : super(key: key);
 
+  static String get routeName => 'category-list';
+  static String get routeLocation => '/$routeName';
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final categoryListState = ref.watch(categoryControllerProvider);

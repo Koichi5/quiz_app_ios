@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quiz_app/domain/question/question.dart';
@@ -46,7 +47,7 @@ class ResultQuestionListCard extends HookConsumerWidget {
                                       ),
                                       TextButton(
                                         onPressed: () {
-                                          Navigator.pop(context);
+                                          context.pop();
                                         },
                                         child: const Text("戻る"),
                                       ),
@@ -78,7 +79,7 @@ class ResultQuestionListCard extends HookConsumerWidget {
                                                 weakQuestionRepositoryProvider)
                                             .retrieveWeakQuestionList();
                                         if (!mounted) return;
-                                        Navigator.pop(context);
+                                        context.pop();
                                       },
                                       child: const Text("戻る"),
                                     ),

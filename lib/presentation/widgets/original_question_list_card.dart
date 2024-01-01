@@ -1,5 +1,6 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/option/option.dart';
 import 'package:quiz_app/domain/question/question.dart';
@@ -38,7 +39,7 @@ class OriginalQuestionListCard extends HookConsumerWidget {
                   await ref
                       .watch(originalQuestionControllerProvider.notifier)
                       .retrieveOriginalQuestionList();
-                  Navigator.pop(context);
+                  context.pop();
                 },
                 child: const Text("戻る"),
               )

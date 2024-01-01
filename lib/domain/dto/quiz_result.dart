@@ -8,5 +8,7 @@ class QuizResult with _$QuizResult {
   const factory QuizResult({
     required List<Question> questionList,
     required double totalCorrect,
+    required List<int> takenQuestions,
+    required List<bool> answerIsCorrectList,
   }) = _QuizResult;
 }

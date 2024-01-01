@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/domain/category/category.dart';
 import 'package:quiz_app/presentation/controller/weak_question_controller/weak_question_controller.dart';
+import 'package:quiz_app/presentation/routes/routes.dart';
 import 'package:quiz_app/presentation/screens/category_detail_screen.dart';
 
 class CategoryCard extends HookConsumerWidget {
@@ -68,13 +69,8 @@ class CategoryCard extends HookConsumerWidget {
       }
     });
     if (!mounted) return;
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CategoryDetailScreen(
-          category: category,
-        ),
-      ),
-    );
+    CategoryDetailRoute(
+      $extra: category,
+    ).go(context);
   }
 }

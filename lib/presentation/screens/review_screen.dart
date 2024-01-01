@@ -12,6 +12,9 @@ final List<Widget> _reviewScreens = [
 class ReviewScreen extends HookConsumerWidget {
   const ReviewScreen({Key? key}) : super(key: key);
 
+  static String get routeName => 'review';
+  static String get routeLocation => '/$routeName';
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentPageIndex = ref.watch(currentSelectedIndexProvider);

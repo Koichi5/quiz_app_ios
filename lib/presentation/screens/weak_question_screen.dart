@@ -7,6 +7,8 @@ import 'package:quiz_app/presentation/widgets/weak_question_card.dart';
 class WeakQuestionScreen extends HookConsumerWidget {
   const WeakQuestionScreen({Key? key}) : super(key: key);
 
+  static String get routeName => 'weak-question';
+  static String get routeLocation => '/$routeName';
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final weakQuestionState = ref.watch(weakQuestionControllerProvider);

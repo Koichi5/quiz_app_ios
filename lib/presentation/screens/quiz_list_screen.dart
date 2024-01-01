@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quiz_app/domain/category/category.dart';
@@ -9,16 +10,18 @@ import 'package:quiz_app/presentation/controller/quiz_controller/quiz_controller
 import 'package:quiz_app/presentation/screens/quiz_screen.dart';
 
 class QuizListScreen extends HookConsumerWidget {
-  final Category? category;
-  final List<Question>? questionList;
-  final List<Quiz>? quizList;
-
   const QuizListScreen({
     this.category,
     this.questionList,
     this.quizList,
     Key? key,
   }) : super(key: key);
+
+  static String get routeName => 'quiz-list';
+  static String get routeLocation => '/$routeName';
+  final Category? category;
+  final List<Question>? questionList;
+  final List<Quiz>? quizList;
 
   Widget _buildErrorScreen(BuildContext context) {
     return Scaffold(
@@ -54,7 +57,7 @@ class QuizListScreen extends HookConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            context.pop();
             ref.watch(currentQuestionIndexProvider.notifier).state = 1;
           },
           icon: const Icon(Icons.arrow_back_ios),
@@ -72,7 +75,9 @@ class QuizListScreen extends HookConsumerWidget {
                   ? const Center(
                       child: Material(child: Text("クイズはありません")),
                     )
-                  : ref.watch(questionControllerProvider(quiz: quizzes.first)).when(
+                  : ref
+                      .watch(questionControllerProvider(quiz: quizzes.first))
+                      .when(
                         data: (questions) => questions.isEmpty
                             ? const Center(
                                 child: Text("問題が用意されていません"),
@@ -81,7 +86,8 @@ class QuizListScreen extends HookConsumerWidget {
                                 ref: ref,
                                 category: category,
                                 quiz: quizzes.first,
-                                questionList: questions),
+                                questionList: questions,
+                              ),
                         error: (error, _) => Center(
                           child: Container(
                             color: Colors.white,
@@ -143,7 +149,7 @@ class QuizListScreen extends HookConsumerWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
-            Navigator.pop(context);
+            context.pop();
             ref.watch(currentQuestionIndexProvider.notifier).state = 1;
           },
         ),

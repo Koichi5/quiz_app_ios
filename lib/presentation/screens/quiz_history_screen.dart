@@ -6,9 +6,10 @@ import 'package:quiz_app/presentation/controller/quiz_history_controller/quiz_hi
 import 'package:quiz_app/presentation/widgets/quiz_history_card.dart';
 
 class QuizHistoryScreen extends HookConsumerWidget {
-  static const routeName = '/quizHistory';
-
   const QuizHistoryScreen({Key? key}) : super(key: key);
+
+  static String get routeName => 'quiz-history';
+  static String get routeLocation => '/$routeName';
 
   Widget _buildLoading() {
     return Center(

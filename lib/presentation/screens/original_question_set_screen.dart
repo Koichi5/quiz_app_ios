@@ -12,6 +12,9 @@ import 'package:quiz_app/presentation/widgets/original_question_set_button.dart'
 class OriginalQuestionSetScreen extends HookConsumerWidget {
   const OriginalQuestionSetScreen({Key? key}) : super(key: key);
 
+  static String get routeName => 'original-question-set';
+  static String get routeLocation => '/$routeName';
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final screenSize = MediaQuery.of(context).size;
@@ -28,13 +31,13 @@ class OriginalQuestionSetScreen extends HookConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: _buildContent(
-                context,
-                ref,
-                screenSize,
-                textControllerProvider,
-                questionValidator,
-                optionValidator,
-                ),
+              context,
+              ref,
+              screenSize,
+              textControllerProvider,
+              questionValidator,
+              optionValidator,
+            ),
           ),
         ),
       ),
@@ -66,8 +69,7 @@ class OriginalQuestionSetScreen extends HookConsumerWidget {
           }),
       SizedBox(height: screenSize.height * 0.05),
       _buildOptionHeader(screenSize),
-      ..._buildOptions(
-          context, ref, screenSize, optionValidator),
+      ..._buildOptions(context, ref, screenSize, optionValidator),
       const SizedBox(height: 8),
       OriginalQuestionSetButton(
           text: textControllerProvider.text, duration: "10"),
@@ -112,11 +114,8 @@ class OriginalQuestionSetScreen extends HookConsumerWidget {
     );
   }
 
-  List<Widget> _buildOptions(
-      BuildContext context,
-      WidgetRef ref,
-      Size screenSize,
-      OptionFormState optionValidator) {
+  List<Widget> _buildOptions(BuildContext context, WidgetRef ref,
+      Size screenSize, OptionFormState optionValidator) {
     final options = [
       ref.watch(firstOptionTextControllerStateProvider),
       ref.watch(secondOptionTextControllerStateProvider),
@@ -151,8 +150,9 @@ class OriginalQuestionSetScreen extends HookConsumerWidget {
                     title: "選択肢${index + 1}",
                     controller: options[index],
                     error: optionValidator.form.text.errorMessage,
-                    onChanged: (optionText) =>
-                        ref.watch(optionValidatorProvider.notifier).setOptionText(optionText),
+                    onChanged: (optionText) => ref
+                        .watch(optionValidatorProvider.notifier)
+                        .setOptionText(optionText),
                   ),
                 ),
                 Switch(

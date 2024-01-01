@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$QuizResult {
   List<Question> get questionList => throw _privateConstructorUsedError;
   double get totalCorrect => throw _privateConstructorUsedError;
+  List<int> get takenQuestions => throw _privateConstructorUsedError;
+  List<bool> get answerIsCorrectList => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $QuizResultCopyWith<QuizResult> get copyWith =>
@@ -30,7 +32,11 @@ abstract class $QuizResultCopyWith<$Res> {
           QuizResult value, $Res Function(QuizResult) then) =
       _$QuizResultCopyWithImpl<$Res, QuizResult>;
   @useResult
-  $Res call({List<Question> questionList, double totalCorrect});
+  $Res call(
+      {List<Question> questionList,
+      double totalCorrect,
+      List<int> takenQuestions,
+      List<bool> answerIsCorrectList});
 }
 
 /// @nodoc
@@ -48,6 +54,8 @@ class _$QuizResultCopyWithImpl<$Res, $Val extends QuizResult>
   $Res call({
     Object? questionList = null,
     Object? totalCorrect = null,
+    Object? takenQuestions = null,
+    Object? answerIsCorrectList = null,
   }) {
     return _then(_value.copyWith(
       questionList: null == questionList
@@ -58,6 +66,14 @@ class _$QuizResultCopyWithImpl<$Res, $Val extends QuizResult>
           ? _value.totalCorrect
           : totalCorrect // ignore: cast_nullable_to_non_nullable
               as double,
+      takenQuestions: null == takenQuestions
+          ? _value.takenQuestions
+          : takenQuestions // ignore: cast_nullable_to_non_nullable
+              as List<int>,
+      answerIsCorrectList: null == answerIsCorrectList
+          ? _value.answerIsCorrectList
+          : answerIsCorrectList // ignore: cast_nullable_to_non_nullable
+              as List<bool>,
     ) as $Val);
   }
 }
@@ -70,7 +86,11 @@ abstract class _$$_QuizResultCopyWith<$Res>
       __$$_QuizResultCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<Question> questionList, double totalCorrect});
+  $Res call(
+      {List<Question> questionList,
+      double totalCorrect,
+      List<int> takenQuestions,
+      List<bool> answerIsCorrectList});
 }
 
 /// @nodoc
@@ -86,6 +106,8 @@ class __$$_QuizResultCopyWithImpl<$Res>
   $Res call({
     Object? questionList = null,
     Object? totalCorrect = null,
+    Object? takenQuestions = null,
+    Object? answerIsCorrectList = null,
   }) {
     return _then(_$_QuizResult(
       questionList: null == questionList
@@ -96,6 +118,14 @@ class __$$_QuizResultCopyWithImpl<$Res>
           ? _value.totalCorrect
           : totalCorrect // ignore: cast_nullable_to_non_nullable
               as double,
+      takenQuestions: null == takenQuestions
+          ? _value._takenQuestions
+          : takenQuestions // ignore: cast_nullable_to_non_nullable
+              as List<int>,
+      answerIsCorrectList: null == answerIsCorrectList
+          ? _value._answerIsCorrectList
+          : answerIsCorrectList // ignore: cast_nullable_to_non_nullable
+              as List<bool>,
     ));
   }
 }
@@ -104,8 +134,13 @@ class __$$_QuizResultCopyWithImpl<$Res>
 
 class _$_QuizResult implements _QuizResult {
   const _$_QuizResult(
-      {required final List<Question> questionList, required this.totalCorrect})
-      : _questionList = questionList;
+      {required final List<Question> questionList,
+      required this.totalCorrect,
+      required final List<int> takenQuestions,
+      required final List<bool> answerIsCorrectList})
+      : _questionList = questionList,
+        _takenQuestions = takenQuestions,
+        _answerIsCorrectList = answerIsCorrectList;
 
   final List<Question> _questionList;
   @override
@@ -117,10 +152,26 @@ class _$_QuizResult implements _QuizResult {
 
   @override
   final double totalCorrect;
+  final List<int> _takenQuestions;
+  @override
+  List<int> get takenQuestions {
+    if (_takenQuestions is EqualUnmodifiableListView) return _takenQuestions;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_takenQuestions);
+  }
+
+  final List<bool> _answerIsCorrectList;
+  @override
+  List<bool> get answerIsCorrectList {
+    if (_answerIsCorrectList is EqualUnmodifiableListView)
+      return _answerIsCorrectList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_answerIsCorrectList);
+  }
 
   @override
   String toString() {
-    return 'QuizResult(questionList: $questionList, totalCorrect: $totalCorrect)';
+    return 'QuizResult(questionList: $questionList, totalCorrect: $totalCorrect, takenQuestions: $takenQuestions, answerIsCorrectList: $answerIsCorrectList)';
   }
 
   @override
@@ -131,12 +182,20 @@ class _$_QuizResult implements _QuizResult {
             const DeepCollectionEquality()
                 .equals(other._questionList, _questionList) &&
             (identical(other.totalCorrect, totalCorrect) ||
-                other.totalCorrect == totalCorrect));
+                other.totalCorrect == totalCorrect) &&
+            const DeepCollectionEquality()
+                .equals(other._takenQuestions, _takenQuestions) &&
+            const DeepCollectionEquality()
+                .equals(other._answerIsCorrectList, _answerIsCorrectList));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_questionList), totalCorrect);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_questionList),
+      totalCorrect,
+      const DeepCollectionEquality().hash(_takenQuestions),
+      const DeepCollectionEquality().hash(_answerIsCorrectList));
 
   @JsonKey(ignore: true)
   @override
@@ -148,12 +207,18 @@ class _$_QuizResult implements _QuizResult {
 abstract class _QuizResult implements QuizResult {
   const factory _QuizResult(
       {required final List<Question> questionList,
-      required final double totalCorrect}) = _$_QuizResult;
+      required final double totalCorrect,
+      required final List<int> takenQuestions,
+      required final List<bool> answerIsCorrectList}) = _$_QuizResult;
 
   @override
   List<Question> get questionList;
   @override
   double get totalCorrect;
+  @override
+  List<int> get takenQuestions;
+  @override
+  List<bool> get answerIsCorrectList;
   @override
   @JsonKey(ignore: true)
   _$$_QuizResultCopyWith<_$_QuizResult> get copyWith =>

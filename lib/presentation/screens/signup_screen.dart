@@ -6,7 +6,7 @@ import 'package:quiz_app/domain/repository/auth_repository/auth_repository.dart'
 import 'package:quiz_app/presentation/controller/auth_controller/auth_controller.dart';
 import 'package:quiz_app/presentation/controller/signup_text_controller/signup_text_controller.dart';
 import 'package:quiz_app/presentation/controller/validator/signup_validator_provider.dart';
-import 'package:quiz_app/presentation/screens/home_screen.dart';
+import 'package:quiz_app/presentation/routes/routes.dart';
 import 'package:quiz_app/presentation/widgets/apple_signin_button.dart';
 import 'package:quiz_app/presentation/widgets/custom_text_field.dart';
 import 'package:quiz_app/presentation/widgets/google_signin_button.dart';
@@ -15,6 +15,9 @@ import 'package:quiz_app/presentation/widgets/signup_button.dart';
 
 class SignupScreen extends HookConsumerWidget {
   const SignupScreen({Key? key}) : super(key: key);
+
+  static String get routeName => 'signup';
+  static String get routeLocation => '/$routeName';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -132,9 +135,7 @@ class SignupScreen extends HookConsumerWidget {
           await ref.watch(authControllerProvider.notifier).signInAnnonymously();
           User? user = ref.watch(authRepositoryProvider).getCurrentUser();
           if (user != null) {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const HomeScreen()),
-            );
+            const CategoryListRoute().pushReplacement(context);
           }
         },
         child: Text(
@@ -162,7 +163,7 @@ class SignupScreen extends HookConsumerWidget {
         width: 0.9 * screenWidth,
         child: TextButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/login');
+            const LoginRoute().go(context);
           },
           child: const Text("アカウントをお持ちの方はこちら",
               style: TextStyle(fontWeight: FontWeight.bold)),

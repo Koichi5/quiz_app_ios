@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiz_app/presentation/controller/original_question_controller/original_question_controller.dart';
 import 'package:quiz_app/presentation/controller/validator/option_validator_provider.dart';
@@ -39,7 +40,9 @@ class OriginalQuestionSetButton extends HookConsumerWidget {
                 ),
               ),
               TextButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  context.pop();
+                },
                 child: const Text("戻る"),
               ),
             ],
@@ -72,7 +75,7 @@ class OriginalQuestionSetButton extends HookConsumerWidget {
                 return;
               }
               if (!mounted) return;
-              Navigator.pop(context);
+              context.pop();
             }
           },
           child: Text(
